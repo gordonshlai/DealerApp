@@ -15,7 +15,7 @@ import AppText from "../components/AppText";
 // import authApi from "../api/auth";
 // import useAuth from "../auth/useAuth";
 import useApi from "../hooks/useApi";
-// import ActivityIndicator from "../components/ActivityIndicator";
+import ActivityIndicator from "../components/ActivityIndicator";
 import {
   AppErrorMessage,
   AppInfoMessage,
@@ -61,8 +61,9 @@ const ResetPasswordScreen = ({ navigation }) => {
   //   logIn(result.data);
   // };
   const endpoint = "auth/reset";
-  const resetPassword = ({ email }) => client.post(endpoint, { email });
-  const resetPasswordApi = useApi(resetPassword);
+  const resetPasswordApi = useApi(({ email }) =>
+    client.post(endpoint, { email })
+  );
 
   const handleSubmit = async ({ email }) => {
     const result = await resetPasswordApi.request({ email });
@@ -82,7 +83,7 @@ const ResetPasswordScreen = ({ navigation }) => {
         source={require("../assets/background.jpg")}
       />
 
-      {/* <ActivityIndicator visible={loginApi.loading} /> */}
+      <ActivityIndicator visible={resetPasswordApi.loading} />
       <View style={styles.container}>
         <Screen style={styles.screen}>
           <KeyboardAvoidingView

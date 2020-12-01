@@ -24,6 +24,7 @@ import {
 } from "../components/forms";
 import Screen from "../components/Screen";
 import useApi from "../hooks/useApi";
+import authStorage from "../auth/storage";
 
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
@@ -63,14 +64,7 @@ const SignInScreen2 = ({ navigation, route }) => {
     const result = await loginApi.request({ password });
     if (!result.ok) return setError(result.data.message);
     logIn(result.data.token);
-
-    console.log(result);
-
-    let token = result.data.token;
-    client.headers["Authorization"] = "Bearer " + token;
-    client.get("/api/user").then((response) => {
-      console.log(response.data);
-    });
+    const user = await client.get("/api/user");
   };
 
   return (
@@ -112,11 +106,7 @@ const SignInScreen2 = ({ navigation, route }) => {
                   secureTextEntry
                   textContentType="password"
                 />
-                <AppErrorMessage
-                  error={error}
-                  // error={"Invalid email and/or password."}
-                  visible={error}
-                />
+                <AppErrorMessage error={error} visible={error} />
                 <SubmitButton
                   color={defaultStyles.colors.success}
                   icon="login"

@@ -10,4 +10,10 @@ export default Object.freeze({
   REGISTER_2: "Register2",
   REGISTER_3: "Register3",
   RESET_PASSWORD: "ResetPassword",
+
+  TRADE: "Trade",
+  INVENTORY: "Inventory",
+  NEW_CAR: "NewCar",
+  MESSAGE: "Message",
+  ACCOUNT: "Account",
 });

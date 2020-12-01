@@ -24,7 +24,7 @@ import {
   SubmitButton,
 } from "../components/forms";
 import Screen from "../components/Screen";
-// import useApi from "../hooks/useApi";
+import useApi from "../hooks/useApi";
 
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
@@ -83,7 +83,6 @@ function RegisterScreen2({ navigation, route }) {
     const result = await registerApi.request({ password });
     if (!result.ok) return setError(result.data.message);
     navigation.navigate(routes.REGISTER_3);
-    console.log("Registerd and logged in");
   };
 
   return (

@@ -19,41 +19,45 @@ function AppButton({
 }) {
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: color }]}
-      // style={[styles.button, { backgroundColor: defaultStyles.colors[color] }]}
+      style={[
+        styles.button,
+        { backgroundColor: color, padding: color === null ? 5 : 15 },
+      ]}
       onPress={onPress}
     >
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={20}
+          size={18}
           color={
             color === defaultStyles.colors.primary ||
             color === defaultStyles.colors.secondary ||
             color === defaultStyles.colors.success ||
             color === defaultStyles.colors.warning
               ? defaultStyles.colors.white
-              : defaultStyles.colors.black
+              : defaultStyles.colors.primary
           }
           style={styles.icon}
         />
       )}
-      <Text
-        style={[
-          styles.text,
-          {
-            color:
-              color === defaultStyles.colors.primary ||
-              color === defaultStyles.colors.secondary ||
-              color === defaultStyles.colors.success ||
-              color === defaultStyles.colors.warning
-                ? defaultStyles.colors.white
-                : defaultStyles.colors.black,
-          },
-        ]}
-      >
-        {title}
-      </Text>
+      {title && (
+        <Text
+          style={[
+            styles.text,
+            {
+              color:
+                color === defaultStyles.colors.primary ||
+                color === defaultStyles.colors.secondary ||
+                color === defaultStyles.colors.success ||
+                color === defaultStyles.colors.warning
+                  ? defaultStyles.colors.white
+                  : defaultStyles.colors.primary,
+            },
+          ]}
+        >
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 }
@@ -64,9 +68,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    padding: 15,
     width: "100%",
-    marginVertical: 10,
+    marginVertical: 7,
   },
   text: {
     fontSize: 18,

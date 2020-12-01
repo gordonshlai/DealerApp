@@ -8,7 +8,7 @@ import Constants from "expo-constants";
 
 const settings = {
   dev: {
-    apiUrl: "http://d78b7a9e8c36.ngrok.io/app/",
+    apiUrl: "http://d235f33e3a21.ngrok.io/app/",
   },
   staging: {
     apiUrl: "https://dealer.azor.laravel/api/app/",

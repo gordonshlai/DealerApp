@@ -21,7 +21,7 @@ const apiClient = create({
 apiClient.addAsyncRequestTransform(async (request) => {
   const authToken = await authStorage.getToken();
   if (!authToken) return;
-  request.headers["Authorization"] = authToken;
+  request.headers["Authorization"] = "Bearer " + authToken;
 });
 
 const get = apiClient.get;
@@ -32,15 +32,16 @@ const get = apiClient.get;
  * @param {object} params - the parameters passes to the request
  * @param {AxiosRequestConfig} axiosConfig - Axios request configuration
  */
-apiClient.get = async (url, params, axiosConfig) => {
-  const response = await get(url, params, axiosConfig);
-  if (response.ok) {
-    cache.store(url, response.data);
-    return response;
-  }
 
-  const data = await cache.get(url);
-  return data ? { ok: true, data } : response;
-};
+// apiClient.get = async (url, params, axiosConfig) => {
+//   const response = await get(url, params, axiosConfig);
+//   if (response.ok) {
+//     cache.store(url, response.data);
+//     return response;
+//   }
+
+//   const data = await cache.get(url);
+//   return data ? { ok: true, data } : response;
+// };
 
 export default apiClient;

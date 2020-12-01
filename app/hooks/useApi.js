@@ -1,4 +1,5 @@
 import { useState } from "react";
+import useAuth from "../auth/useAuth";
 
 /**
  * A custom hook handling any api calls, including capability to handle the following states:
@@ -10,11 +11,14 @@ export default useApi = (apiFunc) => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { logOut } = useAuth();
 
   const request = async (...args) => {
     setLoading(true);
     const response = await apiFunc(...args);
     setLoading(false);
+
+    if (response.status === 401) return logOut();
 
     setError(!response.ok);
     setData(response.data);
