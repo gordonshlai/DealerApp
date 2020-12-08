@@ -20,17 +20,13 @@ function AppButton({
 }) {
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        { backgroundColor: color, padding: color === null ? 5 : 15 },
-        style,
-      ]}
+      style={[styles.button, { backgroundColor: color }, style]}
       onPress={onPress}
     >
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={18}
+          size={16}
           color={
             color === null
               ? defaultStyles.colors.primary
@@ -64,16 +60,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    width: "100%",
-    marginVertical: 7,
+    marginVertical: 5,
+    marginHorizontal: 10,
+    padding: 5,
   },
   text: {
     fontSize: 18,
-    textTransform: "uppercase",
     fontWeight: "bold",
   },
   icon: {
-    marginHorizontal: 10,
+    marginHorizontal: 5,
   },
 });
 

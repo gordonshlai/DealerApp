@@ -17,9 +17,10 @@ function IconButton({
   color = defaultStyles.colors.primary,
   size = 24,
   onPress,
+  style,
 }) {
   return (
-    <TouchableOpacity style={styles.container} onPress={onPress}>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <MaterialCommunityIcons name={name} size={size} color={color} />
     </TouchableOpacity>
   );

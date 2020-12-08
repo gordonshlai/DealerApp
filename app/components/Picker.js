@@ -40,12 +40,6 @@ function Picker({ icon, items, onSelectItem, selectedItem, width = "100%" }) {
       </TouchableWithoutFeedback>
       <Modal visible={modalVisible} animationType="slide">
         <Screen>
-          <AppButton
-            icon="close"
-            title="Close"
-            color={null}
-            onPress={() => setModalVisible(false)}
-          />
           <FlatList
             data={items}
             keyExtractor={(item) => item}
@@ -68,6 +62,12 @@ function Picker({ icon, items, onSelectItem, selectedItem, width = "100%" }) {
                 ) : null}
               </TouchableOpacity>
             )}
+          />
+          <AppButton
+            icon="close"
+            title="Close"
+            color={null}
+            onPress={() => setModalVisible(false)}
           />
         </Screen>
       </Modal>

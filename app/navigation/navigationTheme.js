@@ -11,6 +11,7 @@ export default {
   colors: {
     ...DefaultTheme.colors,
     primary: colors.primary,
+    secondary: colors.secondary,
     background: colors.lightGrey,
   },
 };

@@ -4,16 +4,21 @@
  */
 export default Object.freeze({
   WELCOME: "Welcome",
-  SIGN_IN_1: "SignIn1",
-  SIGN_IN_2: "SignIn2",
-  REGISTER_1: "Register1",
-  REGISTER_2: "Register2",
-  REGISTER_3: "Register3",
-  RESET_PASSWORD: "ResetPassword",
+  SIGN_IN_1: "Sign In 1",
+  SIGN_IN_2: "Sign In 2",
+  REGISTER_1: "Register 1",
+  REGISTER_2: "Register 2",
+  REGISTER_3: "Register 3",
+  RESET_PASSWORD: "Reset Password",
 
   TRADE: "Trade",
+  TRADE_DETAIL: "Trade Detail",
+
   INVENTORY: "Inventory",
-  NEW_CAR: "NewCar",
+
+  NEW_CAR: "New Car",
+  VEHICLE_DETAIL: "Vehicle detail",
+
   MESSAGE: "Message",
   ACCOUNT: "Account",
 });

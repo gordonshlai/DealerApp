@@ -8,13 +8,13 @@ import Constants from "expo-constants";
 
 const settings = {
   dev: {
-    apiUrl: "http://d235f33e3a21.ngrok.io/app/",
+    apiUrl: "https://gsket.warrantywise.co.uk/app/",
   },
   staging: {
-    apiUrl: "https://dealer.azor.laravel/api/app/",
+    apiUrl: "https://gsket.warrantywise.co.uk/app/",
   },
   prod: {
-    apiUrl: "https://dealer.warrantywise.co.uk/api/app/",
+    apiUrl: "https://gsket.warrantywise.co.uk/app/",
   },
 };
 

@@ -62,6 +62,7 @@ const SignInScreen2 = ({ navigation, route }) => {
 
   const handleSubmit = async ({ password }) => {
     const result = await loginApi.request({ password });
+    console.log(result);
     if (!result.ok) return setError(result.data.message);
     logIn(result.data.token);
     const user = await client.get("/api/user");

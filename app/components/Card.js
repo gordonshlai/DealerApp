@@ -1,11 +1,12 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity } from "react-native";
-import { Image } from "react-native-expo-image-cache";
+import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+// import { Image } from "react-native-expo-image-cache";
 
 import AppText from "./AppText";
 import defaultStyles from "../config/styles";
 import Info from "./Info";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Registration from "./Registration";
 
 function Card({
   title,
@@ -19,12 +20,22 @@ function Card({
   onPress,
   imageUrl,
 }) {
+  const numberWithCommas = (x) => {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  };
+
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={styles.card}>
         <View style={styles.imageContainer}>
           {imageUrl ? (
-            <Image style={styles.image} tint="light" uri={imageUrl} />
+            <Image
+              style={styles.image}
+              tint="light"
+              source={{ uri: imageUrl }}
+            />
           ) : (
             <MaterialCommunityIcons name="car" size={200} color="white" />
           )}
@@ -37,14 +48,14 @@ function Card({
           </View>
           <View style={styles.secondLine}>
             <Info name="calendar" text={year} />
-            <Info name="speedometer" text={mileage + " mi"} />
+            <Info name="speedometer" text={numberWithCommas(mileage) + " mi"} />
             <Info name="engine" text={engineCapacity + " cc"} />
           </View>
           <View style={styles.thirdLine}>
             <AppText style={styles.priceAsking} numberOfLines={1}>
-              £{priceAsking === "0.00" ? " POA" : priceAsking}
+              £{priceAsking === "0.00" ? " POA" : numberWithCommas(priceAsking)}
             </AppText>
-            <AppText style={styles.registration}>{registration}</AppText>
+            <Registration registration={registration} />
           </View>
         </View>
       </View>
@@ -88,16 +99,6 @@ const styles = StyleSheet.create({
   },
   thirdLine: {
     flexDirection: "row",
-  },
-  registration: {
-    fontSize: 16,
-    fontWeight: "bold",
-    alignSelf: "center",
-    borderRadius: 5,
-    borderWidth: 1,
-    backgroundColor: defaultStyles.colors.warning,
-    justifyContent: "flex-end",
-    paddingHorizontal: 5,
   },
   priceAsking: {
     color: defaultStyles.colors.success,

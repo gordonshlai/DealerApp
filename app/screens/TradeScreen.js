@@ -5,6 +5,7 @@ import {
   View,
   Modal,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import AppButton from "../components/AppButton";
 import LoadingVehicles from "../components/LoadingVehicles";
@@ -20,6 +21,7 @@ import useApi from "../hooks/useApi";
 import defaultStyles from "../config/styles";
 import { ListItemSeparator } from "../components/lists";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import routes from "../navigation/routes";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -138,11 +140,7 @@ function HomeScreen({ navigation }) {
             <AppText style={styles.errorMessage}>
               Couldn't retrieve the vehicles.
             </AppText>
-            <AppButton
-              style={styles.retryButton}
-              title="Retry"
-              onPress={handleRefresh}
-            />
+            <AppButton title="Retry" onPress={handleRefresh} />
           </>
         ) : (
           <>
@@ -183,7 +181,7 @@ function HomeScreen({ navigation }) {
                   priceAsking={item.price_asking}
                   registration={item.registration}
                   imageUrl={item.thumb ? item.thumb.url : ""}
-                  onPress={() => console.log(item)}
+                  onPress={() => navigation.navigate(routes.TRADE_DETAIL, item)}
                 />
               )}
               refreshing={refreshing}
@@ -204,32 +202,35 @@ function HomeScreen({ navigation }) {
         )}
       </Screen>
       <Modal visible={filterModalVisible} animationType="slide">
-        <Screen style={styles.modal}>
-          <AppText style={styles.modalTitle}>Filter</AppText>
-          <AppText>Vehicle Make</AppText>
-          <Picker
-            icon="car-side"
-            items={makesArray}
-            onSelectItem={(make) => {
-              setFilter({
-                make: make.toLowerCase(),
-                seller: filter.seller,
-                env: filter.env,
-              });
-            }}
-            selectedItem={filter.make.toUpperCase()}
-          />
-          <AppButton title="Apply filter" onPress={applyFilter} />
-        </Screen>
+        <View style={styles.modal}>
+          <ScrollView>
+            <View style={styles.modalCard}>
+              <AppText style={styles.modalTitle}>Vehicle Make</AppText>
+              <Picker
+                icon="car-side"
+                items={makesArray}
+                onSelectItem={(make) => {
+                  setFilter({
+                    make: make.toLowerCase(),
+                    seller: filter.seller,
+                    env: filter.env,
+                  });
+                }}
+                selectedItem={filter.make.toUpperCase()}
+              />
+              <AppButton title="Apply filter" onPress={applyFilter} />
+            </View>
+            <AppButton
+              icon="close"
+              color={null}
+              title="close"
+              onPress={() => setFilterModalVisible(false)}
+            />
+          </ScrollView>
+        </View>
       </Modal>
       <Modal visible={sortByModalVisible} animationType="slide">
         <Screen style={{ padding: 20 }}>
-          <AppButton
-            icon="close"
-            title="Close"
-            color={null}
-            onPress={() => setSortByModalVisible(false)}
-          />
           <FlatList
             data={sortByDisplayArray}
             keyExtractor={(item) => item}
@@ -259,6 +260,12 @@ function HomeScreen({ navigation }) {
               </TouchableOpacity>
             )}
           />
+          <AppButton
+            icon="close"
+            title="Close"
+            color={null}
+            onPress={() => setSortByModalVisible(false)}
+          />
         </Screen>
       </Modal>
     </>
@@ -272,7 +279,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   filterButtonContainer: {
-    width: "25%",
+    width: "35%",
   },
   noMatchingVehicles: {
     fontSize: 24,
@@ -288,12 +295,17 @@ const styles = StyleSheet.create({
   screen: {
     paddingHorizontal: 20,
   },
-  retryButton: {
-    justifyContent: "flex-end",
-  },
   modal: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 50,
+    backgroundColor: defaultStyles.colors.lightGrey,
+    flex: 1,
+  },
+  modalCard: {
     backgroundColor: defaultStyles.colors.white,
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 10,
   },
   modalTitle: {
     alignSelf: "center",
