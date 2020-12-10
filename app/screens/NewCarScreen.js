@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+} from "react-native";
 import * as Yup from "yup";
 
 import client from "../api/client";
@@ -34,6 +39,7 @@ function NewCarScreen({ navigation }) {
     );
     if (!result.ok)
       return setError("Vehicle with the given registration was not found.");
+    console.log(result.data);
     navigation.navigate(routes.VEHICLE_DETAIL, result.data);
   };
 
@@ -41,34 +47,42 @@ function NewCarScreen({ navigation }) {
     <>
       <ActivityIndicator visible={registrationLookupApi.loading} />
       <ScrollView>
-        <Screen style={styles.screen}>
-          <AppText
-            style={[styles.title, { color: defaultStyles.colors.primary }]}
-          >
-            ADD A NEW CAR
-          </AppText>
-          <AppForm
-            initialValues={{ registration: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <AppText style={styles.title}>Registration Lookup</AppText>
-            <AppErrorMessage error={error} visible={error} />
-            <RegistrationPlateInput name="registration" />
-            <SubmitButton
-              icon="magnify"
-              color={defaultStyles.colors.success}
-              title="Find"
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
+          <Screen style={styles.screen}>
+            <View style={styles.card}>
+              <AppText style={styles.title}>ADD A NEW CAR</AppText>
+              <AppForm
+                initialValues={{ registration: "" }}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+              >
+                <RegistrationPlateInput
+                  name="registration"
+                  onContentSizeChange={() => setError("")}
+                />
+                <AppErrorMessage error={error} visible={error} />
+                <SubmitButton
+                  icon="magnify"
+                  color={defaultStyles.colors.success}
+                  title="Find"
+                />
+              </AppForm>
+              <AppButton
+                title="Without registration"
+                color={defaultStyles.colors.secondary}
+                onPress={() => navigation.navigate(routes.VEHICLE_DETAIL)}
+              />
+            </View>
+            <AppButton
+              icon="cancel"
+              color={null}
+              title="cancel"
+              onPress={() => navigation.goBack()}
             />
-          </AppForm>
-          <AppText style={styles.title}>OR</AppText>
-          <AppButton
-            icon="pencil"
-            title="Manually enter vehicle details"
-            color={defaultStyles.colors.secondary}
-            onPress={() => navigation.navigate(routes.VEHICLE_DETAIL)}
-          />
-        </Screen>
+          </Screen>
+        </KeyboardAvoidingView>
       </ScrollView>
     </>
   );
@@ -86,9 +100,10 @@ const styles = StyleSheet.create({
   },
   title: {
     alignSelf: "center",
+    color: defaultStyles.colors.primary,
     fontSize: 24,
     fontWeight: "bold",
-    marginVertical: 20,
+    marginBottom: 20,
   },
 });
 

@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textTransform: "uppercase",
     fontWeight: "bold",
+    textAlign: "center",
   },
   icon: {
     marginHorizontal: 10,

@@ -11,17 +11,37 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
-import defaultStyles from "../config/styles";
 import Screen from "./Screen";
 import { ListItemSeparator } from "../components/lists";
 
-function Picker({ icon, items, onSelectItem, selectedItem, width = "100%" }) {
+import defaultStyles from "../config/styles";
+
+function Picker({
+  icon,
+  items,
+  onSelectItem,
+  selectedItem,
+  placeholder,
+  width = "100%",
+  disabled = false,
+}) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <>
-      <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
-        <View style={[styles.container, { width }]}>
+      <TouchableWithoutFeedback
+        onPress={() => setModalVisible(true)}
+        disabled={disabled}
+      >
+        <View
+          style={[
+            styles.container,
+            {
+              width,
+              backgroundColor: disabled ? defaultStyles.colors.white : "white",
+            },
+          ]}
+        >
           {icon && (
             <MaterialCommunityIcons
               name={icon}
@@ -30,11 +50,15 @@ function Picker({ icon, items, onSelectItem, selectedItem, width = "100%" }) {
               style={styles.icon}
             />
           )}
-          <AppText style={styles.text}>{selectedItem}</AppText>
+          {selectedItem ? (
+            <AppText style={styles.text}>{selectedItem}</AppText>
+          ) : (
+            <AppText style={styles.placeholder}>{placeholder}</AppText>
+          )}
           <MaterialCommunityIcons
             name="chevron-down"
             size={20}
-            color={defaultStyles.colors.mediumGrey}
+            color={disabled ? "#bbb" : defaultStyles.colors.mediumGrey}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -77,7 +101,6 @@ function Picker({ icon, items, onSelectItem, selectedItem, width = "100%" }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
     borderRadius: 5,
     flexDirection: "row",
     padding: 15,
@@ -88,6 +111,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   text: {
+    flex: 1,
+  },
+  placeholder: {
+    color: "#bbb",
     flex: 1,
   },
   listItem: {

@@ -23,7 +23,7 @@ const AppTextInput = ({ icon, width = "100%", ...otherProps }) => {
         />
       )}
       <TextInput
-        placeholderTextColor={defaultStyles.colors.mediumGrey}
+        placeholderTextColor={"#bbb"}
         style={[defaultStyles.text, styles.text]}
         {...otherProps}
       />

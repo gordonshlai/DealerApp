@@ -98,14 +98,14 @@ function TradeDetailScreen({ route, navigation }) {
             </View>
           ) : (
             <>
-              {getVehicleApi.data.images && (
-                <View style={styles.informationContainer}>
+              <View style={[styles.informationContainer, { padding: 0 }]}>
+                {getVehicleApi.data.images && (
                   <View style={styles.imageContainer}>
                     {getVehicleApi.data.images.length !== 0 ? (
                       <Slider
                         images={getVehicleApi.data.images}
-                        height={350}
-                        width={Dimensions.get("window").width - 60}
+                        height={300}
+                        width={Dimensions.get("window").width - 20}
                       />
                     ) : (
                       <MaterialCommunityIcons
@@ -115,108 +115,113 @@ function TradeDetailScreen({ route, navigation }) {
                       />
                     )}
                   </View>
-                </View>
-              )}
+                )}
+                <View style={{ padding: 20 }}>
+                  <AppText style={styles.title} numberOfLines={2}>
+                    {getVehicleApi.data.title}
+                  </AppText>
+                  <AppText style={styles.tagline} numberOfLines={2}>
+                    {getVehicleApi.data.tagline}
+                  </AppText>
+                  <View style={[styles.detailRow, { marginBottom: 15 }]}>
+                    {getVehicleApi.data.registration && (
+                      <View style={styles.detailField}>
+                        <Registration
+                          registration={getVehicleApi.data.registration}
+                          style={{ fontSize: 24 }}
+                        />
+                      </View>
+                    )}
+                    {getVehicleApi.data.mileage && (
+                      <View style={styles.detailField}>
+                        <Info
+                          name="speedometer"
+                          text={
+                            numberWithCommas(getVehicleApi.data.mileage) + " mi"
+                          }
+                          textStyle={{ fontWeight: "bold" }}
+                          size={24}
+                        />
+                      </View>
+                    )}
+                  </View>
 
-              <View style={styles.informationContainer}>
-                <AppText style={styles.title} numberOfLines={2}>
-                  {getVehicleApi.data.title}
-                </AppText>
-                <AppText style={styles.tagline} numberOfLines={2}>
-                  {getVehicleApi.data.tagline}
-                </AppText>
-                <View style={[styles.detailRow, { marginBottom: 15 }]}>
-                  {getVehicleApi.data.registration && (
-                    <View style={styles.detailField}>
-                      <Registration
-                        registration={getVehicleApi.data.registration}
-                        style={{ fontSize: 24 }}
-                      />
-                    </View>
-                  )}
-                  {getVehicleApi.data.mileage && (
-                    <View style={styles.detailField}>
-                      <Info
-                        name="speedometer"
-                        text={
-                          numberWithCommas(getVehicleApi.data.mileage) + " mi"
-                        }
-                        textStyle={{ fontWeight: "bold" }}
-                        size={24}
-                      />
-                    </View>
-                  )}
-                </View>
+                  <View style={styles.detailRow}>
+                    {getVehicleApi.data.price_asking && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Asking Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: defaultStyles.colors.success },
+                          ]}
+                        >
+                          {getVehicleApi.data.price_asking === "0.00"
+                            ? " POA"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_asking)}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.price_cap && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Guide Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: defaultStyles.colors.secondary },
+                          ]}
+                        >
+                          {getVehicleApi.data.price_cap === "0.00"
+                            ? "N/A"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_cap)}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
 
-                <View style={styles.detailRow}>
-                  {getVehicleApi.data.price_asking && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>Asking Price</AppText>
-                      <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: defaultStyles.colors.success },
-                        ]}
-                      >
-                        {getVehicleApi.data.price_asking === "0.00"
-                          ? " POA"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_asking)}
-                      </AppText>
-                    </View>
-                  )}
-                  {getVehicleApi.data.price_cap && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>Guide Price</AppText>
-                      <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: defaultStyles.colors.secondary },
-                        ]}
-                      >
-                        {getVehicleApi.data.price_cap === "0.00"
-                          ? "N/A"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_cap)}
-                      </AppText>
-                    </View>
-                  )}
+                  <View style={[styles.detailRow, { marginBottom: 10 }]}>
+                    {getVehicleApi.data.listed_at && (
+                      <View style={styles.detailField}>
+                        <AppText style={[styles.detailTitle]}>
+                          Listed On
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: defaultStyles.colors.secondary },
+                          ]}
+                        >
+                          {dayjs(getVehicleApi.data.listed_at).format(
+                            "DD/MM/YYYY"
+                          )}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.offers_count && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>Offers</AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: defaultStyles.colors.black },
+                          ]}
+                        >
+                          {getVehicleApi.data.offers_count}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
+                  <AppButton
+                    title="interested?"
+                    onPress={() => setModalVisible(true)}
+                  />
                 </View>
-
-                <View style={[styles.detailRow, { marginBottom: 10 }]}>
-                  {getVehicleApi.data.listed_at && (
-                    <View style={styles.detailField}>
-                      <AppText style={[styles.detailTitle]}>Listed On</AppText>
-                      <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: defaultStyles.colors.secondary },
-                        ]}
-                      >
-                        {dayjs(getVehicleApi.data.listed_at).format(
-                          "DD/MM/YYYY"
-                        )}
-                      </AppText>
-                    </View>
-                  )}
-                  {getVehicleApi.data.offers_count && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>Offers</AppText>
-                      <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: defaultStyles.colors.black },
-                        ]}
-                      >
-                        {getVehicleApi.data.offers_count}
-                      </AppText>
-                    </View>
-                  )}
-                </View>
-                <AppButton
-                  title="interested?"
-                  onPress={() => setModalVisible(true)}
-                />
               </View>
 
               <View style={styles.informationContainer}>
@@ -410,7 +415,7 @@ function TradeDetailScreen({ route, navigation }) {
         </ScrollView>
 
         <Modal visible={modalVisible} animationType="slide">
-          <Screen style={styles.modal}>
+          <View style={styles.modal}>
             <ScrollView>
               <View style={styles.modalCard}>
                 <AppText style={styles.modalTitle}>Enquire</AppText>
@@ -451,17 +456,23 @@ function TradeDetailScreen({ route, navigation }) {
                 onPress={() => setModalVisible(false)}
               />
             </ScrollView>
-          </Screen>
+          </View>
         </Modal>
         <Modal visible={disclaimerVisible} animationType="fade">
-          <Disclaimer
-            onAcceptPress={() => {
-              setDisclaimerVisible(!disclaimerVisible);
-            }}
-            onCancelPress={() => {
-              setDisclaimerVisible(!disclaimerVisible);
-            }}
-          />
+          <View style={styles.modal}>
+            <ScrollView>
+              <View style={styles.modalCard}>
+                <Disclaimer
+                  onAcceptPress={() => {
+                    setDisclaimerVisible(!disclaimerVisible);
+                  }}
+                  onCancelPress={() => {
+                    setDisclaimerVisible(!disclaimerVisible);
+                  }}
+                />
+              </View>
+            </ScrollView>
+          </View>
         </Modal>
       </KeyboardAvoidingView>
     </>
@@ -476,7 +487,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   imageContainer: {
-    height: 350,
+    height: 300,
     width: "100%",
     overflow: "hidden",
     justifyContent: "center",
@@ -508,6 +519,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 5,
     padding: 20,
+    overflow: "hidden",
   },
   detailRow: {
     flexDirection: "row",
@@ -539,6 +551,7 @@ const styles = StyleSheet.create({
   modal: {
     padding: 20,
     backgroundColor: defaultStyles.colors.lightGrey,
+    flex: 1,
   },
   modalCard: {
     backgroundColor: defaultStyles.colors.white,

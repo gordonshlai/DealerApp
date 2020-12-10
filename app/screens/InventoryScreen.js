@@ -180,7 +180,7 @@ function InventoryScreen({ navigation }) {
                 )
                   setPageCurrent(pageCurrent + 1);
               }}
-              onEndReachedThreshold={0}
+              onEndReachedThreshold={0.1}
               ListFooterComponent={
                 <LoadingVehicles visible={getVehiclesApi.loading} />
               }

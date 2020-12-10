@@ -19,8 +19,8 @@ function RegistrationPlateInput({ name, ...otherProps }) {
         <Image
           source={require("../../assets/euIdentifier.png")}
           style={{
-            height: 90,
-            width: 67,
+            height: 80,
+            width: 60,
             resizeMode: "contain",
             flex: 0,
             backgroundColor: "black",
@@ -32,7 +32,7 @@ function RegistrationPlateInput({ name, ...otherProps }) {
           value={values[name]}
           autoCapitalize="characters"
           autoCorrect={false}
-          placeholder="XX00 XXX"
+          placeholder=""
           textAlign="center"
           style={styles.textInput}
           {...otherProps}
@@ -50,12 +50,12 @@ const styles = StyleSheet.create({
     borderColor: defaultStyles.colors.mediumGrey,
     borderWidth: 5,
     overflow: "hidden",
-    height: 100,
+    height: 90,
     marginVertical: 7,
   },
   textInput: {
     width: "100%",
-    fontSize: 45,
+    fontSize: 40,
     textAlign: "center",
     backgroundColor: "white",
     flex: 1,

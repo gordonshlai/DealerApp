@@ -122,7 +122,7 @@ const ResetPasswordScreen = ({ navigation }) => {
                 icon="arrow-left-bold-outline"
                 title="Back"
                 color={defaultStyles.colors.secondary}
-                onPress={() => navigation.navigate(routes.SIGN_IN_2)}
+                onPress={() => navigation.goBack()}
               />
             </ScrollView>
           </KeyboardAvoidingView>

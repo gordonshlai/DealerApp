@@ -9,7 +9,7 @@ import colors from "./colors";
 export default {
   colors,
   text: {
-    color: colors.dark,
+    color: colors.darkGrey,
     fontSize: 18,
     ...Platform.select({
       ios: {

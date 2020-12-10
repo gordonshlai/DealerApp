@@ -63,12 +63,11 @@ function Slider({ images, height, width }) {
           {images.map((image, index) => (
             <TouchableWithoutFeedback onPress={() => setImageZoomVisible(true)}>
               <Image
-                key={index}
+                key={index.toString()}
                 source={{ uri: image.url }}
                 style={{
                   height: height * 0.8,
                   width,
-                  resizeMode: "contain",
                 }}
               />
             </TouchableWithoutFeedback>
@@ -112,7 +111,6 @@ function Slider({ images, height, width }) {
                   style={{
                     height: "100%",
                     width: width / 5,
-                    resizeMode: "contain",
                   }}
                 />
               </TouchableWithoutFeedback>

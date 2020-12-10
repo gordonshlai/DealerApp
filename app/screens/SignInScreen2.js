@@ -118,7 +118,7 @@ const SignInScreen2 = ({ navigation, route }) => {
                 icon="arrow-left-bold-outline"
                 title="Back"
                 color={defaultStyles.colors.secondary}
-                onPress={() => navigation.navigate(routes.SIGN_IN_1)}
+                onPress={() => navigation.goBack()}
               />
             </ScrollView>
           </KeyboardAvoidingView>
