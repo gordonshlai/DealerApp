@@ -19,8 +19,7 @@ function AppFormDateTimePicker({
       <AppDateTimePicker
         icon={icon}
         onSelectDate={(date) => {
-          setFieldValue(name, date);
-          console.log("form" + date);
+          setFieldValue(name, new Date(date));
           onSelectDate ? onSelectDate(date) : null;
         }}
         placeholder={placeholder}

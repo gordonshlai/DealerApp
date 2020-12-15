@@ -18,7 +18,8 @@ export default Object.freeze({
 
   NEW_CAR: "New Car",
   VEHICLE_DETAIL: "Vehicle detail",
+  VEHICLE_DESCRIPTION: "Vehicle description",
 
-  MESSAGE: "Message",
+  MESSAGES: "Messages",
   ACCOUNT: "Account",
 });

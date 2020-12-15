@@ -18,6 +18,7 @@ import {
   AppFormPicker,
   SubmitButton,
 } from "../components/forms";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
@@ -39,12 +40,12 @@ const validationSchema = Yup.object().shape({
   transmission: Yup.string().label("Transmission"),
   seats: Yup.string().label("Seats"),
   doors: Yup.string().label("Doors"),
-  bodyStyle: Yup.string().label("Body Type"),
+  body_style: Yup.string().label("Body Type"),
 });
 
 const fuelArray = ["Diesel", "Electric", "Hybrid", "Petrol"];
 const transmissionArray = ["Automatic", "Semi-Automatic", "Manual"];
-const bodyStyleArray = [
+const body_styleArray = [
   "Hatchback",
   "Coupe",
   "Sedan",
@@ -71,267 +72,274 @@ function VehicleDetailScreen({ route, navigation }) {
     }
   }, []);
 
-  const handleSubmit = (inputDetail) => {
-    console.log(inputDetail);
+  const handleSubmit = (vehicleDetailInput) => {
+    navigation.navigate(routes.VEHICLE_DESCRIPTION, {
+      vehicleDetailInput,
+      vehicleDetail,
+    });
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
-    >
-      <ScrollView>
-        <Screen style={styles.screen}>
-          <Formik
-            initialValues={{
-              make: vehicleDetail ? vehicleDetail.make : "",
-              model: vehicleDetail ? vehicleDetail.model : "",
-              registration: vehicleDetail ? vehicleDetail.registration : "",
-              mileage:
-                vehicleDetail && vehicleDetail.mileage
-                  ? vehicleDetail.mileage.toString()
+    <>
+      <ActivityIndicator visible={makesApi.loading || modelsApi.loading} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS == "ios" ? 0 : 100}
+      >
+        <ScrollView>
+          <View style={styles.screen}>
+            <Formik
+              initialValues={{
+                make: vehicleDetail ? vehicleDetail.make : "",
+                model: vehicleDetail ? vehicleDetail.model : "",
+                registration: vehicleDetail ? vehicleDetail.registration : "",
+                mileage:
+                  vehicleDetail && vehicleDetail.mileage
+                    ? vehicleDetail.mileage.toString()
+                    : "",
+                colour:
+                  vehicleDetail && vehicleDetail.colour
+                    ? vehicleDetail.colour
+                    : "",
+                fuel:
+                  vehicleDetail && vehicleDetail.fuel ? vehicleDetail.fuel : "",
+                engine_capacity:
+                  vehicleDetail && vehicleDetail.engine_capacity
+                    ? vehicleDetail.engine_capacity.toString()
+                    : "",
+                year:
+                  vehicleDetail && vehicleDetail.year
+                    ? vehicleDetail.year.toString()
+                    : "",
+                registration_date: vehicleDetail
+                  ? new Date(vehicleDetail.registration_date)
                   : "",
-              colour:
-                vehicleDetail && vehicleDetail.colour
-                  ? vehicleDetail.colour
-                  : "",
-              fuel:
-                vehicleDetail && vehicleDetail.fuel ? vehicleDetail.fuel : "",
-              engine_capacity:
-                vehicleDetail && vehicleDetail.engine_capacity
-                  ? vehicleDetail.engine_capacity.toString()
-                  : "",
-              year:
-                vehicleDetail && vehicleDetail.year
-                  ? vehicleDetail.year.toString()
-                  : "",
-              registration_date: vehicleDetail
-                ? new Date(vehicleDetail.registration_date)
-                : "",
-              mot_expiry:
-                vehicleDetail && vehicleDetail.mot_expiry
-                  ? new Date(vehicleDetail.mot_expiry)
-                  : "",
-              transmission:
-                vehicleDetail && vehicleDetail.transmission
-                  ? vehicleDetail.transmission
-                  : "",
-              seats: "",
-              doors: "",
-              bodyStyle: "",
-            }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            {({ errors, values, setFieldValue }) => (
-              <>
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="car"
-                    text="Make"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormPicker
-                    name="make"
-                    placeholder="Please select"
-                    items={makesApi.data}
-                    onSelectItem={(item) => {
-                      modelsApi.request("api/car/models/" + item);
-                      if (values["make"] !== item) {
-                        setFieldValue("model", "");
-                      }
-                    }}
-                  />
-                </View>
+                mot_expiry:
+                  vehicleDetail && vehicleDetail.mot_expiry
+                    ? new Date(vehicleDetail.mot_expiry)
+                    : "",
+                transmission:
+                  vehicleDetail && vehicleDetail.transmission
+                    ? vehicleDetail.transmission
+                    : "",
+                seats: "",
+                doors: "",
+                body_style: "",
+              }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              {({ errors, values, setFieldValue }) => (
+                <>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="car"
+                      text="Make"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormPicker
+                      name="make"
+                      placeholder="Please select"
+                      items={makesApi.data}
+                      onSelectItem={(item) => {
+                        modelsApi.request("api/car/models/" + item);
+                        if (values["make"] !== item) {
+                          setFieldValue("model", "");
+                        }
+                      }}
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="alpha-m"
-                    text="Model"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormPicker
-                    name="model"
-                    placeholder="Please select"
-                    items={modelsApi.data}
-                    disabled={values["make"] === "" ? true : false}
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="alpha-m"
+                      text="Model"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormPicker
+                      name="model"
+                      placeholder="Please select"
+                      items={modelsApi.data}
+                      disabled={values["make"] === "" ? true : false}
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="card-text"
-                    text="Registration"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField
-                    name="registration"
-                    placeholder="Registration"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="card-text"
+                      text="Registration"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField
+                      name="registration"
+                      placeholder="Registration"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="speedometer"
-                    text="Mileage"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField
-                    name="mileage"
-                    placeholder="Miles"
-                    keyboardType="numeric"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="speedometer"
+                      text="Mileage"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField
+                      name="mileage"
+                      placeholder="Miles"
+                      keyboardType="numeric"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="format-color-fill"
-                    text="Colour"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField name="colour" placeholder="Colour" />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="format-color-fill"
+                      text="Colour"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField name="colour" placeholder="Colour" />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="fuel"
-                    text="Fuel"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormPicker
-                    name="fuel"
-                    placeholder="Please select"
-                    items={fuelArray}
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="fuel"
+                      text="Fuel"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormPicker
+                      name="fuel"
+                      placeholder="Please select"
+                      items={fuelArray}
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="engine"
-                    text="Engine Capacity (cc)"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField
-                    name="engine_capacity"
-                    placeholder="Engine Capacity (cc)"
-                    keyboardType="numeric"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="engine"
+                      text="Engine Capacity (cc)"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField
+                      name="engine_capacity"
+                      placeholder="Engine Capacity (cc)"
+                      keyboardType="numeric"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="calendar"
-                    text="Year"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField
-                    name="year"
-                    placeholder="Year"
-                    keyboardType="numeric"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="calendar"
+                      text="Year"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField
+                      name="year"
+                      placeholder="Year"
+                      keyboardType="numeric"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="calendar-check"
-                    text="Registration Date"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormDateTimePicker
-                    name="registration_date"
-                    placeholder="Please select"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="calendar-check"
+                      text="Registration Date"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormDateTimePicker
+                      name="registration_date"
+                      placeholder="Please select"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="alert-outline"
-                    text="MOT Expiry"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormDateTimePicker
-                    name="mot_expiry"
-                    placeholder="Please select"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="alert-outline"
+                      text="MOT Expiry"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormDateTimePicker
+                      name="mot_expiry"
+                      placeholder="Please select"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="settings"
-                    text="Transmission"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormPicker
-                    name="transmission"
-                    placeholder="Please select"
-                    items={transmissionArray}
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="settings"
+                      text="Transmission"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormPicker
+                      name="transmission"
+                      placeholder="Please select"
+                      items={transmissionArray}
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="car-seat"
-                    text="Seats"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField
-                    name="seats"
-                    placeholder="Seats"
-                    keyboardType="numeric"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="car-seat"
+                      text="Seats"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField
+                      name="seats"
+                      placeholder="Seats"
+                      keyboardType="numeric"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="car-door"
-                    text="Doors"
-                    color={defaultStyles.colors.mediumGrey}
-                  />
-                  <AppFormField
-                    name="doors"
-                    placeholder="Doors"
-                    keyboardType="numeric"
-                  />
-                </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="car-door"
+                      text="Doors"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormField
+                      name="doors"
+                      placeholder="Doors"
+                      keyboardType="numeric"
+                    />
+                  </View>
 
-                <View style={styles.fieldContainer}>
-                  <Info
-                    name="train-car"
-                    text="Body Style"
-                    color={defaultStyles.colors.mediumGrey}
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="train-car"
+                      text="Body Style"
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <AppFormPicker
+                      name="body_style"
+                      placeholder="Please select"
+                      items={body_styleArray}
+                    />
+                  </View>
+                  <AppErrorMessage
+                    error="Please fix the errors above before moving on."
+                    visible={
+                      !(
+                        Object.keys(errors).length === 0 &&
+                        errors.constructor === Object
+                      )
+                    }
                   />
-                  <AppFormPicker
-                    name="bodyStyle"
-                    placeholder="Please select"
-                    items={bodyStyleArray}
+                  <AppErrorMessage error={error} visible={error} />
+                  <SubmitButton
+                    icon="arrow-right"
+                    color={defaultStyles.colors.primary}
+                    title="Next"
                   />
-                </View>
-                <AppErrorMessage
-                  error="Please fix the errors above before moving on."
-                  visible={
-                    !(
-                      Object.keys(errors).length === 0 &&
-                      errors.constructor === Object
-                    )
-                  }
-                />
-                <AppErrorMessage error={error} visible={error} />
-                <SubmitButton
-                  icon="arrow-right"
-                  color={defaultStyles.colors.primary}
-                  title="Next"
-                />
-              </>
-            )}
-          </Formik>
-          <AppButton
-            icon="arrow-left"
-            title="back"
-            color={defaultStyles.colors.secondary}
-            onPress={() => navigation.goBack()}
-          />
-        </Screen>
-      </ScrollView>
-    </KeyboardAvoidingView>
+                </>
+              )}
+            </Formik>
+            <AppButton
+              icon="arrow-left"
+              title="back"
+              color={defaultStyles.colors.secondary}
+              onPress={() => navigation.goBack()}
+            />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </>
   );
 }
 
@@ -340,16 +348,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   fieldContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  fieldContainer: {
     marginBottom: 10,
-    alignItems: "flex-start",
-  },
-  infoContainer: {
-    width: "45%",
-    justifyContent: "center",
     alignItems: "flex-start",
   },
   modal: {

@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TradeNavigator from "./TradeNavigator";
 import InventoryScreen from "../screens/InventoryScreen";
-import MessageScreen from "../screens/MessageScreen";
+import MessagesScreen from "../screens/MessagesScreen";
 import AccountScreen from "../screens/AccountScreen";
 import NewCarButton from "./NewCarButton";
 import NewCarNavigator from "./NewCarNavigator";
@@ -16,7 +16,7 @@ const Tab = createBottomTabNavigator();
 
 /**
  * The bottom tab navigator, including the following screens:
- * Home Screen, InventoryScreen, NewCarScreen, MessageScreen, Account Screen.
+ * Home Screen, InventoryScreen, NewCarScreen, MessagesScreen, Account Screen.
  * @module navigation/AppNavigator
  */
 const AppNavigator = () => (
@@ -76,8 +76,8 @@ const AppNavigator = () => (
       })}
     />
     <Tab.Screen
-      name={routes.MESSAGE}
-      component={MessageScreen}
+      name={routes.MESSAGES}
+      component={MessagesScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons

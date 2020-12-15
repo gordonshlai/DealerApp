@@ -1,9 +1,11 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 import NewCarScreen from "../screens/NewCarScreen";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
+import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import routes from "./routes";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../config/styles";
 
@@ -33,6 +35,10 @@ const NewCarNavigator = () => (
     <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}
+    />
+    <Stack.Screen
+      name={routes.VEHICLE_DESCRIPTION}
+      component={VehicleDescriptionScreen}
     />
   </Stack.Navigator>
 );

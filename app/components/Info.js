@@ -3,7 +3,15 @@ import { View, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "./AppText";
 
-function Info({ name, color, size = 18, text, textStyle }) {
+import defaultStyles from "../config/styles";
+
+function Info({
+  name,
+  color = defaultStyles.colors.darkGrey,
+  size = 18,
+  text,
+  textStyle,
+}) {
   return (
     <View style={styles.container}>
       <MaterialCommunityIcons name={name} color={color} size={size} />
@@ -12,7 +20,7 @@ function Info({ name, color, size = 18, text, textStyle }) {
           {
             color,
             fontSize: size,
-            paddingHorizontal: 5,
+            paddingLeft: 5,
           },
           textStyle,
         ]}
@@ -28,6 +36,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    paddingHorizontal: 10,
   },
 });
 

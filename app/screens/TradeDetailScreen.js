@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,11 +8,13 @@ import {
   RefreshControl,
   Modal,
   Dimensions,
+  Linking,
 } from "react-native";
 import dayjs from "dayjs";
 import * as Yup from "yup";
 
 import AppButton from "../components/AppButton";
+import AppSmallButton from "../components/AppSmallButton";
 import AppText from "../components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -21,19 +23,18 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-
-import client from "../api/client";
-import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
-
-import defaultStyles from "../config/styles";
-import Screen from "../components/Screen";
 import Registration from "../components/Registration";
 import Info from "../components/Info";
 import SpecificationItem from "../components/SpecificationItem";
 import { ListItemSeparator } from "../components/lists";
 import Slider from "../components/Slider";
 import Disclaimer from "../components/Disclaimer";
+
+import client from "../api/client";
+import useApi from "../hooks/useApi";
+
+import defaultStyles from "../config/styles";
 
 const validationSchema = Yup.object().shape({
   price: Yup.number().required().min(0).label("Price"),
@@ -245,6 +246,17 @@ function TradeDetailScreen({ route, navigation }) {
                       }
                       textStyle={{ fontStyle: "italic" }}
                     />
+                    <AppSmallButton
+                      icon="google-maps"
+                      title="Show on map   >"
+                      color={null}
+                      onPress={() =>
+                        Linking.openURL(
+                          "https://www.google.com/maps/place/" +
+                            getVehicleApi.data.seller.postcode
+                        )
+                      }
+                    />
                   </>
                 )}
               </View>
@@ -414,7 +426,7 @@ function TradeDetailScreen({ route, navigation }) {
           )}
         </ScrollView>
 
-        <Modal visible={modalVisible} animationType="slide">
+        <Modal visible={modalVisible}>
           <View style={styles.modal}>
             <ScrollView>
               <View style={styles.modalCard}>

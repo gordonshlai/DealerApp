@@ -61,9 +61,11 @@ function Slider({ images, height, width }) {
           style={{ height, width }}
         >
           {images.map((image, index) => (
-            <TouchableWithoutFeedback onPress={() => setImageZoomVisible(true)}>
+            <TouchableWithoutFeedback
+              onPress={() => setImageZoomVisible(true)}
+              key={index}
+            >
               <Image
-                key={index.toString()}
                 source={{ uri: image.url }}
                 style={{
                   height: height * 0.8,
@@ -104,9 +106,9 @@ function Slider({ images, height, width }) {
                 onPress={() => {
                   bigSlider.current.scrollTo({ x: index * width });
                 }}
+                key={index}
               >
                 <Image
-                  key={index}
                   source={{ uri: image.url }}
                   style={{
                     height: "100%",

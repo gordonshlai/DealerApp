@@ -6,12 +6,12 @@ import defaultStyles from "../config/styles";
 
 /**
  * A custom button of the application
- * @module components/AppButton
+ * @module components/AppSmallButton
  * @param {string} title - the words apears on the button
  * @param {string} color - the background color of the button (default = primary)
  * @param {method} onPress - the block of code that will execute when the button is pressed
  */
-function AppButton({
+function AppSmallButton({
   icon,
   title,
   color = defaultStyles.colors.primary,
@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppButton;
+export default AppSmallButton;

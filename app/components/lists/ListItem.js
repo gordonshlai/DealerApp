@@ -16,7 +16,7 @@ function ListItem({
 }) {
   return (
     <Swipeable renderRightActions={renderRightActions}>
-      <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+      <TouchableHighlight underlayColor={colors.lightGrey} onPress={onPress}>
         <View style={styles.container}>
           {IconComponent}
           {image && <Image style={styles.image} source={image} />}
@@ -32,7 +32,7 @@ function ListItem({
           </View>
           {onPress && (
             <MaterialCommunityIcons
-              color={colors.medium}
+              color={colors.mediumGrey}
               name="chevron-right"
               size={25}
             />
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
     padding: 15,
-    backgroundColor: colors.white,
+    backgroundColor: "white",
   },
   detailsContainer: {
     flex: 1,
@@ -59,9 +59,10 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
+    resizeMode: "contain",
   },
   subTitle: {
-    color: colors.medium,
+    color: colors.mediumGrey,
   },
   title: {
     fontWeight: "500",
