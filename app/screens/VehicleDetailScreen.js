@@ -129,7 +129,7 @@ function VehicleDetailScreen({ route, navigation }) {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              {({ errors, values, setFieldValue }) => (
+              {({ errors, values, setFieldValue, isValid, submitCount }) => (
                 <>
                   <View style={styles.fieldContainer}>
                     <Info
@@ -314,12 +314,7 @@ function VehicleDetailScreen({ route, navigation }) {
                   </View>
                   <AppErrorMessage
                     error="Please fix the errors above before moving on."
-                    visible={
-                      !(
-                        Object.keys(errors).length === 0 &&
-                        errors.constructor === Object
-                      )
-                    }
+                    visible={!isValid && submitCount}
                   />
                   <AppErrorMessage error={error} visible={error} />
                   <SubmitButton

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
   },
   priceAsking: {
     color: defaultStyles.colors.success,
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     flex: 1,
   },

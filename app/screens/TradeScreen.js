@@ -1,27 +1,18 @@
 import React, { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  FlatList,
-  View,
-  Modal,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, FlatList, View } from "react-native";
 import AppButton from "../components/AppButton";
-import LoadingVehicles from "../components/LoadingVehicles";
+import Loading from "../components/Loading";
 
 import AppText from "../components/AppText";
 import Card from "../components/Card";
 import Screen from "../components/Screen";
-import Picker from "../components/Picker";
 
 import client from "../api/client";
 import useApi from "../hooks/useApi";
 
 import defaultStyles from "../config/styles";
-import { ListItemSeparator } from "../components/lists";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import routes from "../navigation/routes";
+import OptionButton from "../components/OptionButton";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -54,7 +45,7 @@ function HomeScreen({ navigation }) {
   const [makesArray, setMakesArray] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [reload, setReload] = useState(false);
   const [vehicles, setVehicles] = useState([]);
 
   const [pageCurrent, setPageCurrent] = useState(1);
@@ -62,14 +53,6 @@ function HomeScreen({ navigation }) {
   const [seller, setSeller] = useState("");
   const [env, setEnv] = useState("0");
   const [sortBy, setSortBy] = useState("listed-desc");
-
-  const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const [sortByModalVisible, setSortByModalVisible] = useState(false);
-  const [filter, setFilter] = useState({
-    make: make,
-    seller: seller,
-    env: env,
-  });
 
   let endpoint =
     "api/trade/all/inventory?make=" +
@@ -89,7 +72,7 @@ function HomeScreen({ navigation }) {
   useEffect(() => {
     getData();
     getMakes();
-  }, [refresh, pageCurrent, make, sortBy]);
+  }, [reload]);
 
   const getData = async () => {
     const result = await getVehiclesApi.request();
@@ -106,13 +89,13 @@ function HomeScreen({ navigation }) {
     if (!result.ok) return;
     const makes = result.data;
     const makesArray = parseObjectToArray(makes);
-    setMakesArray(["ALL", ...makesArray]);
+    setMakesArray(["all", ...makesArray]);
   };
 
   const handleRefresh = () => {
     setVehicles([]);
     setPageCurrent(1);
-    setRefresh(!refresh);
+    setReload(!reload);
   };
 
   const parseObjectToArray = (obj) => {
@@ -123,152 +106,84 @@ function HomeScreen({ navigation }) {
     return arr;
   };
 
-  const applyFilter = () => {
-    setFilterModalVisible(false);
-    if (filter.make != make) {
-      setVehicles([]);
-      setPageCurrent(1);
-      setMake(filter.make);
+  const handleLazyLoading = async () => {
+    if (!getVehiclesApi.loading && getVehiclesApi.data.next_page_url) {
+      setPageCurrent(pageCurrent + 1);
+      setReload(!reload);
     }
   };
 
   return (
-    <>
-      <Screen style={styles.screen}>
-        {getVehiclesApi.error ? (
-          <>
-            <AppText style={styles.errorMessage}>
-              Couldn't retrieve the vehicles.
-            </AppText>
-            <AppButton title="Retry" onPress={handleRefresh} />
-          </>
-        ) : (
-          <>
-            <View style={styles.optionBar}>
-              <View style={styles.filterButtonContainer}>
-                <AppButton
-                  title="Filter"
-                  color={null}
-                  icon="filter-variant"
-                  onPress={() => setFilterModalVisible(true)}
-                />
-              </View>
-              <View style={styles.filterButtonContainer}>
-                <AppButton
-                  title="Sort By"
-                  color={null}
-                  icon="sort"
-                  onPress={() => setSortByModalVisible(true)}
-                />
-              </View>
-            </View>
-            {vehicles.length === 0 && !getVehiclesApi.loading && (
-              <AppText style={styles.noMatchingVehicles}>
-                No matching vehicles
-              </AppText>
-            )}
-            <FlatList
-              data={vehicles}
-              keyExtractor={(vehicle) => vehicle.id.toString()}
-              renderItem={({ item }) => (
-                <Card
-                  title={item.title}
-                  make={item.make}
-                  model={item.model}
-                  year={item.year}
-                  mileage={item.mileage}
-                  engineCapacity={item.engine_capacity}
-                  priceAsking={item.price_asking}
-                  registration={item.registration}
-                  imageUrl={item.thumb ? item.thumb.url : ""}
-                  onPress={() => navigation.navigate(routes.TRADE_DETAIL, item)}
-                />
-              )}
-              refreshing={refreshing}
-              onRefresh={handleRefresh}
-              onEndReached={async () => {
-                if (
-                  !getVehiclesApi.loading &&
-                  getVehiclesApi.data.next_page_url
-                )
-                  setPageCurrent(pageCurrent + 1);
-              }}
-              onEndReachedThreshold={0.1}
-              ListFooterComponent={
-                <LoadingVehicles visible={getVehiclesApi.loading} />
-              }
-            />
-          </>
-        )}
-      </Screen>
-      <Modal visible={filterModalVisible} animationType="slide">
-        <View style={styles.modal}>
-          <ScrollView>
-            <View style={styles.modalCard}>
-              <AppText style={styles.modalTitle}>Vehicle Make</AppText>
-              <Picker
-                icon="car-side"
-                items={makesArray}
-                onSelectItem={(make) => {
-                  setFilter({
-                    make: make.toLowerCase(),
-                    seller: filter.seller,
-                    env: filter.env,
-                  });
-                }}
-                selectedItem={filter.make.toUpperCase()}
-              />
-              <AppButton title="Apply filter" onPress={applyFilter} />
-            </View>
-            <AppButton
-              icon="close"
+    <Screen style={styles.screen}>
+      {getVehiclesApi.error ? (
+        <>
+          <AppText style={styles.errorMessage}>
+            Couldn't retrieve the vehicles.
+          </AppText>
+          <AppButton title="Retry" onPress={handleRefresh} />
+        </>
+      ) : (
+        <>
+          <View style={styles.optionBar}>
+            <OptionButton
+              title={make.toUpperCase()}
               color={null}
-              title="close"
-              onPress={() => setFilterModalVisible(false)}
+              icon="car"
+              initialValue="all"
+              value={make}
+              queryArray={makesArray}
+              displayArray={makesArray}
+              setValue={setMake}
+              handleRefresh={handleRefresh}
             />
-          </ScrollView>
-        </View>
-      </Modal>
-      <Modal visible={sortByModalVisible} animationType="slide">
-        <Screen style={{ padding: 20 }}>
+            <OptionButton
+              title="Sort By"
+              color={null}
+              icon="sort"
+              initialValue="listed-desc"
+              value={sortBy}
+              queryArray={sortByQueryArray}
+              displayArray={sortByDisplayArray}
+              setValue={setSortBy}
+              handleRefresh={handleRefresh}
+            />
+          </View>
+          {vehicles.length === 0 && !getVehiclesApi.loading && (
+            <AppText style={styles.noMatchingVehicles}>
+              No matching vehicles
+            </AppText>
+          )}
           <FlatList
-            data={sortByDisplayArray}
-            keyExtractor={(item) => item}
-            ItemSeparatorComponent={ListItemSeparator}
+            data={vehicles}
+            keyExtractor={(vehicle) => vehicle.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.listItem}
-                onPress={() => {
-                  setSortByModalVisible(false);
-                  const query =
-                    sortByQueryArray[sortByDisplayArray.indexOf(item)];
-                  if (sortBy === query) return;
-                  setVehicles([]);
-                  setPageCurrent(1);
-                  setSortBy(query);
-                }}
-              >
-                <AppText>{item}</AppText>
-                {sortBy ===
-                sortByQueryArray[sortByDisplayArray.indexOf(item)] ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    color={defaultStyles.colors.primary}
-                    size={24}
-                  />
-                ) : null}
-              </TouchableOpacity>
+              <Card
+                title={item.title}
+                make={item.make}
+                model={item.model}
+                year={item.year}
+                mileage={item.mileage}
+                engineCapacity={item.engine_capacity}
+                priceAsking={item.price_asking}
+                registration={item.registration}
+                imageUrl={item.thumb ? item.thumb.url : ""}
+                onPress={() => navigation.navigate(routes.TRADE_DETAIL, item)}
+              />
             )}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            onEndReached={handleLazyLoading}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={
+              <Loading
+                visible={getVehiclesApi.loading}
+                text="Loading Vehicles"
+              />
+            }
           />
-          <AppButton
-            icon="close"
-            title="Close"
-            color={null}
-            onPress={() => setSortByModalVisible(false)}
-          />
-        </Screen>
-      </Modal>
-    </>
+        </>
+      )}
+    </Screen>
   );
 }
 
@@ -277,9 +192,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: 24,
-  },
-  filterButtonContainer: {
-    width: "35%",
   },
   noMatchingVehicles: {
     fontSize: 24,

@@ -8,7 +8,7 @@ import defaultStyles from "../config/styles";
 function Info({
   name,
   color = defaultStyles.colors.darkGrey,
-  size = 18,
+  size = 16,
   text,
   textStyle,
 }) {

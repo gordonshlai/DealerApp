@@ -7,36 +7,54 @@ import AppText from "../AppText";
 import colors from "../../config/colors";
 
 function ListItem({
-  title,
-  subTitle,
   image,
   IconComponent,
+  title,
+  time,
+  subTitle,
+  unread,
   onPress,
   renderRightActions,
+  renderLeftActions,
 }) {
   return (
-    <Swipeable renderRightActions={renderRightActions}>
-      <TouchableHighlight underlayColor={colors.lightGrey} onPress={onPress}>
+    <Swipeable
+      renderRightActions={renderRightActions}
+      renderLeftActions={renderLeftActions}
+    >
+      <TouchableHighlight underlayColor={colors.mediumGrey} onPress={onPress}>
         <View style={styles.container}>
           {IconComponent}
           {image && <Image style={styles.image} source={image} />}
           <View style={styles.detailsContainer}>
-            <AppText style={styles.title} numberOfLines={1}>
-              {title}
-            </AppText>
-            {subTitle && (
-              <AppText style={styles.subTitle} numberOfLines={2}>
-                {subTitle}
+            <View style={styles.row}>
+              <AppText style={styles.title} numberOfLines={1}>
+                {title}
               </AppText>
-            )}
+              <AppText
+                style={[
+                  styles.time,
+                  unread
+                    ? { color: colors.primary, fontWeight: "bold" }
+                    : { color: colors.mediumGrey },
+                ]}
+              >
+                {time}
+              </AppText>
+            </View>
+            <View style={styles.row}>
+              {subTitle && (
+                <AppText style={styles.subTitle} numberOfLines={1}>
+                  {subTitle}
+                </AppText>
+              )}
+              {unread && (
+                <View style={styles.unreadBadge}>
+                  <AppText style={styles.unreadText}>{unread}</AppText>
+                </View>
+              )}
+            </View>
           </View>
-          {onPress && (
-            <MaterialCommunityIcons
-              color={colors.mediumGrey}
-              name="chevron-right"
-              size={25}
-            />
-          )}
         </View>
       </TouchableHighlight>
     </Swipeable>
@@ -61,11 +79,34 @@ const styles = StyleSheet.create({
     borderRadius: 35,
     resizeMode: "contain",
   },
-  subTitle: {
-    color: colors.mediumGrey,
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   title: {
-    fontWeight: "500",
+    fontWeight: "bold",
+    marginBottom: 3,
+  },
+  time: {
+    fontSize: 12,
+  },
+  subTitle: {
+    color: colors.mediumGrey,
+    flex: 1,
+  },
+  unreadBadge: {
+    alignItems: "center",
+    borderRadius: 12,
+    backgroundColor: colors.primary,
+    paddingVertical: 2,
+    paddingHorizontal: 7,
+    marginLeft: 10,
+    justifyContent: "center",
+  },
+  unreadText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
   },
 });
 

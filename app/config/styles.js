@@ -10,7 +10,7 @@ export default {
   colors,
   text: {
     color: colors.darkGrey,
-    fontSize: 18,
+    fontSize: 16,
     ...Platform.select({
       ios: {
         fontFamily: "Avenir",

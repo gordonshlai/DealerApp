@@ -22,7 +22,7 @@ function AppButton({
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: color, padding: color === null ? 5 : 15 },
+        { backgroundColor: color, padding: color === null ? 5 : 12 },
         style,
       ]}
       onPress={onPress}
@@ -30,7 +30,7 @@ function AppButton({
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={18}
+          size={16}
           color={
             color === null
               ? defaultStyles.colors.primary
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     marginVertical: 7,
   },
   text: {
-    fontSize: 18,
+    fontSize: 16,
     textTransform: "uppercase",
     fontWeight: "bold",
     textAlign: "center",

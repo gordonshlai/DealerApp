@@ -15,6 +15,7 @@ function AppSmallButton({
   icon,
   title,
   color = defaultStyles.colors.primary,
+  badge,
   onPress,
   style,
 }) {
@@ -26,7 +27,7 @@ function AppSmallButton({
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={16}
+          size={18}
           color={
             color === null
               ? defaultStyles.colors.primary
@@ -50,6 +51,22 @@ function AppSmallButton({
           {title}
         </Text>
       )}
+      {badge && (
+        <MaterialCommunityIcons
+          name="check"
+          style={[
+            styles.badge,
+            {
+              backgroundColor:
+                color === null
+                  ? defaultStyles.colors.primary
+                  : defaultStyles.colors.white,
+            },
+          ]}
+          color={color === null ? defaultStyles.colors.white : color}
+          size={12}
+        />
+      )}
     </TouchableOpacity>
   );
 }
@@ -60,8 +77,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    marginVertical: 5,
-    marginHorizontal: 10,
+    margin: 5,
     padding: 5,
   },
   text: {
@@ -69,7 +85,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   icon: {
-    marginHorizontal: 5,
+    marginRight: 5,
+  },
+  badge: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    borderRadius: 6,
+    overflow: "hidden",
   },
 });
 

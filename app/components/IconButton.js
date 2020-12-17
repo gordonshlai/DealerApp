@@ -16,12 +16,21 @@ function IconButton({
   name = "magnify",
   color = defaultStyles.colors.primary,
   size = 24,
+  badge,
   onPress,
   style,
 }) {
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <MaterialCommunityIcons name={name} size={size} color={color} />
+      {badge && (
+        <MaterialCommunityIcons
+          name="check"
+          style={[styles.badge, { backgroundColor: color }]}
+          color={defaultStyles.colors.white}
+          size={10}
+        />
+      )}
     </TouchableOpacity>
   );
 }
@@ -29,6 +38,13 @@ function IconButton({
 const styles = StyleSheet.create({
   container: {
     margin: 5,
+  },
+  badge: {
+    position: "absolute",
+    left: -5,
+    top: -5,
+    borderRadius: 5,
+    overflow: "hidden",
   },
 });
 

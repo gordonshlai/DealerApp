@@ -7,14 +7,14 @@ import defaultStyles from "../config/styles";
 
 /**
  * An animated component that indicates the loading activity.
- * @module components/LoadingVehicles
+ * @module components/Loading
  * @param {boolean} visible - visibility of the activity indicator
  */
-function LoadingVehicles({ visible = false }) {
+function Loading({ visible = false, text = "Loading" }) {
   if (!visible) return null;
   return (
     <View style={styles.container}>
-      <AppText style={styles.text}>Loading Vehicles</AppText>
+      <AppText style={styles.text}>{text}</AppText>
       <LottieView
         autoPlay
         loop
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoadingVehicles;
+export default Loading;

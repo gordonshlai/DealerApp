@@ -17,7 +17,7 @@ const AppTextInput = ({ icon, width = "100%", ...otherProps }) => {
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={18}
+          size={16}
           color={defaultStyles.colors.mediumGrey}
           style={styles.icon}
         />
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 5,
     flexDirection: "row",
-    padding: 15,
+    padding: 12,
     marginVertical: 7,
     alignItems: "center",
   },

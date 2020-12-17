@@ -19,7 +19,6 @@ function Registration({ registration, style, ...otherProps }) {
 
 const styles = StyleSheet.create({
   container: {
-    fontSize: 16,
     fontWeight: "bold",
     alignSelf: "center",
     borderRadius: 5,

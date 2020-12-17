@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: 5,
     flexDirection: "row",
-    padding: 15,
-    marginVertical: 10,
+    padding: 12,
+    marginVertical: 7,
     alignItems: "center",
   },
   icon: {

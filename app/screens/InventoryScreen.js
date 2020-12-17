@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList, View, Modal } from "react-native";
 import { ButtonGroup } from "react-native-elements";
 import AppButton from "../components/AppButton";
-import LoadingVehicles from "../components/LoadingVehicles";
+import Loading from "../components/Loading";
 
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
@@ -15,6 +15,7 @@ import useApi from "../hooks/useApi";
 
 import defaultStyles from "../config/styles";
 import IconButton from "../components/IconButton";
+import AppSmallButton from "../components/AppSmallButton";
 
 const statusArray = ["stock", "listed", "sold"];
 
@@ -22,7 +23,7 @@ function InventoryScreen({ navigation }) {
   const [makesArray, setMakesArray] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [reload, setReload] = useState(false);
   const [vehicles, setVehicles] = useState([]);
 
   const [make, setMake] = useState("all");
@@ -52,7 +53,7 @@ function InventoryScreen({ navigation }) {
   useEffect(() => {
     getData();
     getMakes();
-  }, [refresh, pageCurrent, search, status, make]);
+  }, [reload]);
 
   const getData = async () => {
     const result = await getVehiclesApi.request();
@@ -74,7 +75,7 @@ function InventoryScreen({ navigation }) {
   const handleRefresh = () => {
     setVehicles([]);
     setPageCurrent(1);
-    setRefresh(!refresh);
+    setReload(!reload);
   };
 
   const parseObjectToArray = (obj) => {
@@ -88,11 +89,10 @@ function InventoryScreen({ navigation }) {
   let searchCheck;
   const handleSearch = (text) => {
     searchCheck = text;
-    setTimeout(async () => {
+    setTimeout(() => {
       if (searchCheck == text) {
-        setVehicles([]);
-        setPageCurrent(1);
         setSearch(text);
+        handleRefresh();
       }
     }, 500);
   };
@@ -100,10 +100,16 @@ function InventoryScreen({ navigation }) {
   const applyFilter = () => {
     setFilterModalVisible(false);
     if (filter.status === status && filter.make === make) return;
-    setVehicles([]);
-    setPageCurrent(1);
     setStatus(filter.status);
     setMake(filter.make);
+    handleRefresh();
+  };
+
+  const handleLazyLoading = async () => {
+    if (!getVehiclesApi.loading && getVehiclesApi.data.next_page_url) {
+      setPageCurrent(pageCurrent + 1);
+      setReload(!reload);
+    }
   };
 
   return (
@@ -123,17 +129,17 @@ function InventoryScreen({ navigation }) {
         ) : (
           <>
             <View style={styles.optionBar}>
-              <View style={styles.filterButtonContainer}>
-                <AppButton
-                  title="Filter"
-                  color={null}
-                  icon="filter-variant"
-                  onPress={() => setFilterModalVisible(true)}
-                />
-              </View>
+              <AppSmallButton
+                title="Filter"
+                color={null}
+                icon="filter-variant"
+                badge={status !== statusArray[0] || make !== "all"}
+                onPress={() => setFilterModalVisible(true)}
+              />
               <View style={styles.searchButtonContainer}>
                 <IconButton
                   name={serachBarVisible ? "magnify-close" : "magnify"}
+                  badge={search !== ""}
                   onPress={() => setSearchBarVisible(!serachBarVisible)}
                 />
               </View>
@@ -173,16 +179,13 @@ function InventoryScreen({ navigation }) {
               )}
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              onEndReached={async () => {
-                if (
-                  !getVehiclesApi.loading &&
-                  getVehiclesApi.data.next_page_url
-                )
-                  setPageCurrent(pageCurrent + 1);
-              }}
+              onEndReached={handleLazyLoading}
               onEndReachedThreshold={0.1}
               ListFooterComponent={
-                <LoadingVehicles visible={getVehiclesApi.loading} />
+                <Loading
+                  visible={getVehiclesApi.loading}
+                  text="Loading Vehicles"
+                />
               }
             />
           </>
@@ -237,9 +240,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: 24,
-  },
-  filterButtonContainer: {
-    width: "25%",
   },
   searchButtonContainer: {
     justifyContent: "center",

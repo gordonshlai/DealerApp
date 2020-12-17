@@ -518,7 +518,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
   },
   tagline: {
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   detailValue: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
   },

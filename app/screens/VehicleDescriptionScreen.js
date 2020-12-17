@@ -130,7 +130,7 @@ function VehicleDescriptionScreen({ navigation, route }) {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              {({ errors }) => (
+              {({ errors, isValid, submitCount }) => (
                 <>
                   <View style={styles.fieldContainer}>
                     <Info
@@ -142,7 +142,7 @@ function VehicleDescriptionScreen({ navigation, route }) {
                       name="title"
                       placeholder="Title"
                       multiline={true}
-                      textAlignVertical="top"
+                      textAlignVertical="center"
                     />
                   </View>
                   <View style={styles.fieldContainer}>
@@ -167,6 +167,7 @@ function VehicleDescriptionScreen({ navigation, route }) {
                       name="tagline"
                       placeholder="Tagline"
                       multiline={true}
+                      textAlignVertical="center"
                     />
                   </View>
                   <View style={styles.fieldContainer}>
@@ -223,17 +224,14 @@ function VehicleDescriptionScreen({ navigation, route }) {
                       name="description"
                       placeholder="Description"
                       multiline={true}
+                      textAlignVertical="center"
                     />
                   </View>
                   <AppErrorMessage
                     error="Please fix the errors above before moving on."
-                    visible={
-                      !(
-                        Object.keys(errors).length === 0 &&
-                        errors.constructor === Object
-                      )
-                    }
+                    visible={!isValid && submitCount}
                   />
+                  {console.log(submitCount)}
                   <AppErrorMessage error={error} visible={error} />
                   <SubmitButton
                     icon="check"
