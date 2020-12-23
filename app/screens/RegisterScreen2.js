@@ -132,13 +132,13 @@ function RegisterScreen2({ navigation, route }) {
                 />
                 <SubmitButton
                   icon="plus"
-                  title="Register"
+                  title="REGISTER"
                   color={defaultStyles.colors.success}
                 />
               </AppForm>
               <AppButton
                 icon="arrow-left-bold-outline"
-                title="Back"
+                title="BACK"
                 color={defaultStyles.colors.secondary}
                 onPress={() => navigation.goBack()}
               />

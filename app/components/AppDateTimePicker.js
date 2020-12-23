@@ -76,7 +76,7 @@ function AppDateTimePicker({
               }}
             />
             <AppButton
-              title="ok"
+              title="OK"
               onPress={() => {
                 setModalVisible(false);
                 onSelectDate(value);
@@ -85,7 +85,7 @@ function AppDateTimePicker({
             <AppButton
               icon="cancel"
               color={null}
-              title="cancel"
+              title="CANCEL"
               onPress={() => setModalVisible(false)}
             />
           </View>

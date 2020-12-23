@@ -120,7 +120,7 @@ const ResetPasswordScreen = ({ navigation }) => {
               </AppForm>
               <AppButton
                 icon="arrow-left-bold-outline"
-                title="Back"
+                title="BACK"
                 color={defaultStyles.colors.secondary}
                 onPress={() => navigation.goBack()}
               />

@@ -21,5 +21,7 @@ export default Object.freeze({
   VEHICLE_DESCRIPTION: "Vehicle description",
 
   MESSAGES: "Messages",
+  MESSAGE_DETAIL: "Message Detail",
+
   ACCOUNT: "Account",
 });

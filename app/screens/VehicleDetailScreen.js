@@ -320,14 +320,14 @@ function VehicleDetailScreen({ route, navigation }) {
                   <SubmitButton
                     icon="arrow-right"
                     color={defaultStyles.colors.primary}
-                    title="Next"
+                    title="NEXT"
                   />
                 </>
               )}
             </Formik>
             <AppButton
               icon="arrow-left"
-              title="back"
+              title="BACK"
               color={defaultStyles.colors.secondary}
               onPress={() => navigation.goBack()}
             />

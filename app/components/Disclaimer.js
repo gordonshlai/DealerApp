@@ -35,12 +35,12 @@ function Disclaimer({ onAcceptPress, onCancelPress }) {
       </View>
       <AppButton
         icon="check"
-        title="Accept and Continue"
+        title="ACCEPT AND CONTINUE"
         onPress={onAcceptPress}
       />
       <AppButton
         icon="cancel"
-        title="Cancel"
+        title="CANCEL"
         color={defaultStyles.colors.secondary}
         onPress={onCancelPress}
       />

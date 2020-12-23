@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -14,7 +14,6 @@ import dayjs from "dayjs";
 import * as Yup from "yup";
 
 import AppButton from "../components/AppButton";
-import AppSmallButton from "../components/AppSmallButton";
 import AppText from "../components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
@@ -35,6 +34,10 @@ import client from "../api/client";
 import useApi from "../hooks/useApi";
 
 import defaultStyles from "../config/styles";
+import Screen from "../components/Screen";
+import ErrorMessage from "../components/forms/AppErrorMessage";
+import routes from "../navigation/routes";
+import AuthContext from "../auth/context";
 
 const validationSchema = Yup.object().shape({
   price: Yup.number().required().min(0).label("Price"),
@@ -43,12 +46,21 @@ const validationSchema = Yup.object().shape({
 function TradeDetailScreen({ route, navigation }) {
   const vehicle = route.params;
 
-  const endpoint = "api/trade/" + vehicle.type + "/inventory/" + vehicle.id;
-  const getVehicleApi = useApi(() => client.get(endpoint));
+  const { loadMessagesFlag, setLoadMessagesFlag } = useContext(AuthContext);
 
+  const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState(false);
+  const [action, setAction] = useState("");
+  const [price, setPrice] = useState("");
+
+  const getVehicleApi = useApi(() =>
+    client.get("api/trade/" + vehicle.type + "/inventory/" + vehicle.id)
+  );
+  const enquiryApi = useApi((payload) =>
+    client.post("api/trade/" + vehicle.type + "/enquiry/" + vehicle.id, payload)
+  );
 
   useEffect(() => {
     getVehicleApi.request();
@@ -71,10 +83,25 @@ function TradeDetailScreen({ route, navigation }) {
   };
 
   const handleSubmit = async ({ price }) => {
-    setModalVisible(!modalVisible);
-    setDisclaimerVisible(!disclaimerVisible);
-    console.log(price);
+    setModalVisible(false);
+    setDisclaimerVisible(true);
+    setAction("offer");
+    setPrice(price);
   };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <AppButton
+          icon="dots-vertical"
+          color={null}
+          size={24}
+          style={{ marginRight: 10 }}
+          onPress={() => setModalVisible(true)}
+        />
+      ),
+    });
+  }, [navigation]);
 
   return (
     <>
@@ -95,7 +122,7 @@ function TradeDetailScreen({ route, navigation }) {
               <AppText style={styles.errorMessage}>
                 Couldn't retrieve the vehicle.
               </AppText>
-              <AppButton title="Retry" onPress={handleRefresh} />
+              <AppButton title="RETRY" onPress={handleRefresh} />
             </View>
           ) : (
             <>
@@ -219,7 +246,7 @@ function TradeDetailScreen({ route, navigation }) {
                     )}
                   </View>
                   <AppButton
-                    title="interested?"
+                    title="INTERESTED?"
                     onPress={() => setModalVisible(true)}
                   />
                 </View>
@@ -246,7 +273,7 @@ function TradeDetailScreen({ route, navigation }) {
                       }
                       textStyle={{ fontStyle: "italic" }}
                     />
-                    <AppSmallButton
+                    <AppButton
                       icon="google-maps"
                       title="Show on map   >"
                       color={null}
@@ -426,62 +453,91 @@ function TradeDetailScreen({ route, navigation }) {
           )}
         </ScrollView>
 
-        <Modal visible={modalVisible}>
+        <Modal visible={modalVisible} animationType="slide">
           <View style={styles.modal}>
             <ScrollView>
               <View style={styles.modalCard}>
                 <AppText style={styles.modalTitle}>Enquire</AppText>
                 <AppButton
                   icon="message-processing"
-                  title="Make Enquiry"
+                  title="MAKE ENQUIRY"
                   color={defaultStyles.colors.secondary}
                   onPress={() => {
-                    setModalVisible(!modalVisible);
-                    setDisclaimerVisible(!disclaimerVisible);
+                    setModalVisible(false);
+                    setDisclaimerVisible(true);
+                    setAction("enquiry");
                   }}
                 />
               </View>
               <View style={styles.modalCard}>
                 <AppText style={styles.modalTitle}>Make An Offer</AppText>
                 <AppForm
-                  initialValues={{ price: "" }}
+                  initialValues={{
+                    price: getVehicleApi.data.price_asking
+                      ? getVehicleApi.data.price_asking
+                      : "",
+                  }}
                   onSubmit={handleSubmit}
                   validationSchema={validationSchema}
                 >
                   <AppFormField
                     icon="currency-gbp"
                     name="price"
-                    placeholder="Price"
+                    placeholder="Type a price"
                     keyboardType="numeric"
                   />
                   <SubmitButton
                     color={defaultStyles.colors.success}
                     icon="check"
-                    title="Submit Offer"
+                    title="SUBMIT OFFER"
                   />
                 </AppForm>
               </View>
               <AppButton
                 icon="close"
                 color={null}
-                title="close"
+                title="CLOSE"
                 onPress={() => setModalVisible(false)}
               />
             </ScrollView>
           </View>
         </Modal>
-        <Modal visible={disclaimerVisible} animationType="fade">
+        <Modal visible={disclaimerVisible} transparent>
           <View style={styles.modal}>
             <ScrollView>
               <View style={styles.modalCard}>
                 <Disclaimer
-                  onAcceptPress={() => {
-                    setDisclaimerVisible(!disclaimerVisible);
+                  onAcceptPress={async () => {
+                    const lastSentence =
+                      action === "enquiry"
+                        ? "is this still available?"
+                        : "would you accept £" + price;
+                    const result = await enquiryApi.request({
+                      message:
+                        "I am interested in the " +
+                        getVehicleApi.data.year +
+                        " " +
+                        getVehicleApi.data.make +
+                        " " +
+                        getVehicleApi.data.model +
+                        " (" +
+                        formatingRegistration(getVehicleApi.data.registration) +
+                        "), " +
+                        lastSentence,
+                    });
+                    if (!result.ok) return setError(result.data.message);
+                    navigation.navigate(routes.MESSAGE_DETAIL, {
+                      messageId: result.data.id,
+                      title: getVehicleApi.data.seller.name,
+                    });
+                    setLoadMessagesFlag(!loadMessagesFlag);
+                    setDisclaimerVisible(false);
                   }}
                   onCancelPress={() => {
-                    setDisclaimerVisible(!disclaimerVisible);
+                    setDisclaimerVisible(false);
                   }}
                 />
+                <AppErrorMessage error={error} visible={error} />
               </View>
             </ScrollView>
           </View>
@@ -561,12 +617,13 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   modal: {
-    padding: 20,
-    backgroundColor: defaultStyles.colors.lightGrey,
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+    backgroundColor: defaultStyles.colors.mediumGrey + "44",
     flex: 1,
   },
   modalCard: {
-    backgroundColor: defaultStyles.colors.white,
+    backgroundColor: defaultStyles.colors.lightGrey,
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,

@@ -66,11 +66,11 @@ function NewCarScreen({ navigation }) {
                 <SubmitButton
                   icon="magnify"
                   color={defaultStyles.colors.success}
-                  title="Find"
+                  title="FIND"
                 />
               </AppForm>
               <AppButton
-                title="Without registration"
+                title="WITHOUT REGISTRATION"
                 color={defaultStyles.colors.secondary}
                 onPress={() => navigation.navigate(routes.VEHICLE_DETAIL)}
               />
@@ -78,7 +78,7 @@ function NewCarScreen({ navigation }) {
             <AppButton
               icon="cancel"
               color={null}
-              title="cancel"
+              title="CANCEL"
               onPress={() => navigation.goBack()}
             />
           </Screen>

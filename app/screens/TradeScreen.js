@@ -51,7 +51,7 @@ function HomeScreen({ navigation }) {
   const [pageCurrent, setPageCurrent] = useState(1);
   const [make, setMake] = useState("all");
   const [seller, setSeller] = useState("");
-  const [env, setEnv] = useState("0");
+  const [env, setEnv] = useState("1");
   const [sortBy, setSortBy] = useState("listed-desc");
 
   let endpoint =
@@ -120,7 +120,7 @@ function HomeScreen({ navigation }) {
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the vehicles.
           </AppText>
-          <AppButton title="Retry" onPress={handleRefresh} />
+          <AppButton title="RETRY" onPress={handleRefresh} />
         </>
       ) : (
         <>

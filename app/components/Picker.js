@@ -89,7 +89,7 @@ function Picker({
           />
           <AppButton
             icon="close"
-            title="Close"
+            title="CLOSE"
             color={null}
             onPress={() => setModalVisible(false)}
           />

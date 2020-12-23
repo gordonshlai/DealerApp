@@ -51,7 +51,7 @@ const SignInScreen2 = ({ navigation, route }) => {
   const { logIn } = useAuth();
   const [error, setError] = useState();
 
-  /**ß
+  /**
    * Handles the submit operation
    * @param {string} password - the user input in the password field
    */
@@ -62,10 +62,8 @@ const SignInScreen2 = ({ navigation, route }) => {
 
   const handleSubmit = async ({ password }) => {
     const result = await loginApi.request({ password });
-    console.log(result);
     if (!result.ok) return setError(result.data.message);
     logIn(result.data.token);
-    const user = await client.get("/api/user");
   };
 
   return (
@@ -111,12 +109,12 @@ const SignInScreen2 = ({ navigation, route }) => {
                 <SubmitButton
                   color={defaultStyles.colors.success}
                   icon="login"
-                  title="Sign In"
+                  title="SIGN IN"
                 />
               </AppForm>
               <AppButton
                 icon="arrow-left-bold-outline"
-                title="Back"
+                title="BACK"
                 color={defaultStyles.colors.secondary}
                 onPress={() => navigation.goBack()}
               />

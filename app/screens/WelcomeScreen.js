@@ -1,7 +1,6 @@
 import React from "react";
 import { Image, ImageBackground, StyleSheet, View } from "react-native";
 
-import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 
 import defaultStyles from "../config/styles";
@@ -32,12 +31,12 @@ function WelcomeScreen({ navigation }) {
         <View style={styles.buttonsContainer}>
           <AppButton
             icon="login"
-            title="Sign In"
+            title="SIGN IN"
             onPress={() => navigation.navigate(routes.SIGN_IN_1)}
           />
           <AppButton
             icon="plus"
-            title="Register"
+            title="REGISTER"
             color={defaultStyles.colors.secondary}
             onPress={() => navigation.navigate(routes.REGISTER_1)}
           />

@@ -43,7 +43,7 @@ function RegisterScreen({ navigation }) {
             </AppText>
             <AppButton
               icon="login"
-              title="Sign In"
+              title="SIGN IN"
               onPress={() => navigation.navigate(routes.SIGN_IN_1)}
             />
           </ScrollView>

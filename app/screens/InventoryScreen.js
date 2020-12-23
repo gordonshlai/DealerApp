@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, FlatList, View, Modal } from "react-native";
 import { ButtonGroup } from "react-native-elements";
+
 import AppButton from "../components/AppButton";
 import Loading from "../components/Loading";
-
 import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 import Card from "../components/Card";
@@ -14,8 +14,6 @@ import client from "../api/client";
 import useApi from "../hooks/useApi";
 
 import defaultStyles from "../config/styles";
-import IconButton from "../components/IconButton";
-import AppSmallButton from "../components/AppSmallButton";
 
 const statusArray = ["stock", "listed", "sold"];
 
@@ -122,14 +120,14 @@ function InventoryScreen({ navigation }) {
             </AppText>
             <AppButton
               style={styles.retryButton}
-              title="Retry"
+              title="RETRY"
               onPress={handleRefresh}
             />
           </>
         ) : (
           <>
             <View style={styles.optionBar}>
-              <AppSmallButton
+              <AppButton
                 title="Filter"
                 color={null}
                 icon="filter-variant"
@@ -137,8 +135,10 @@ function InventoryScreen({ navigation }) {
                 onPress={() => setFilterModalVisible(true)}
               />
               <View style={styles.searchButtonContainer}>
-                <IconButton
-                  name={serachBarVisible ? "magnify-close" : "magnify"}
+                <AppButton
+                  icon={serachBarVisible ? "magnify-close" : "magnify"}
+                  color={null}
+                  size={24}
                   badge={search !== ""}
                   onPress={() => setSearchBarVisible(!serachBarVisible)}
                 />
@@ -228,7 +228,7 @@ function InventoryScreen({ navigation }) {
             }}
             selectedItem={filter.make.toUpperCase()}
           />
-          <AppButton title="Apply filter" onPress={applyFilter} />
+          <AppButton icon="check" title="APPLY FILTER" onPress={applyFilter} />
         </Screen>
       </Modal>
     </>

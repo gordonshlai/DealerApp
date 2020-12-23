@@ -100,11 +100,11 @@ const SignInScreen1 = ({ navigation }) => {
                   textContentType="emailAddress"
                 />
 
-                <SubmitButton icon="arrow-right-bold" title="Next" />
+                <SubmitButton icon="arrow-right-bold" title="NEXT" />
               </AppForm>
               <AppButton
                 icon="arrow-left-bold-outline"
-                title="Back"
+                title="BACK"
                 color={defaultStyles.colors.secondary}
                 onPress={() => navigation.goBack()}
               />

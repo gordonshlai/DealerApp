@@ -15,6 +15,8 @@ function AppButton({
   icon,
   title,
   color = defaultStyles.colors.primary,
+  size = 18,
+  badge,
   onPress,
   style,
 }) {
@@ -22,7 +24,7 @@ function AppButton({
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: color, padding: color === null ? 5 : 12 },
+        { backgroundColor: color, padding: color === null ? 5 : 10 },
         style,
       ]}
       onPress={onPress}
@@ -30,20 +32,21 @@ function AppButton({
       {icon && (
         <MaterialCommunityIcons
           name={icon}
-          size={16}
+          size={size}
           color={
             color === null
               ? defaultStyles.colors.primary
               : defaultStyles.colors.white
           }
-          style={styles.icon}
         />
       )}
       {title && (
         <Text
           style={[
-            styles.text,
+            styles.title,
             {
+              fontSize: size,
+              marginLeft: icon ? 5 : 0,
               color:
                 color === null
                   ? defaultStyles.colors.primary
@@ -53,6 +56,22 @@ function AppButton({
         >
           {title}
         </Text>
+      )}
+      {badge && (
+        <MaterialCommunityIcons
+          name="check"
+          style={[
+            styles.badge,
+            {
+              backgroundColor:
+                color === null
+                  ? defaultStyles.colors.primary
+                  : defaultStyles.colors.white,
+            },
+          ]}
+          color={color === null ? defaultStyles.colors.white : color}
+          size={12}
+        />
       )}
     </TouchableOpacity>
   );
@@ -64,17 +83,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    width: "100%",
-    marginVertical: 7,
+    marginVertical: 5,
   },
-  text: {
-    fontSize: 16,
-    textTransform: "uppercase",
+  title: {
     fontWeight: "bold",
-    textAlign: "center",
   },
-  icon: {
-    marginHorizontal: 10,
+  badge: {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    borderRadius: 6,
+    overflow: "hidden",
   },
 });
 

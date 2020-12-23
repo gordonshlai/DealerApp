@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
@@ -15,24 +15,26 @@ import dayjs from "dayjs";
 import Loading from "../components/Loading";
 import OptionButton from "../components/OptionButton";
 import AppTextInput from "../components/AppTextInput";
-import IconButton from "../components/IconButton";
+import routes from "../navigation/routes";
+import AuthContext from "../auth/context";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
 
 const filterArray = ["all", "saved", "archived"];
 
-function MessagesScreen(props) {
+function MessagesScreen({ navigation }) {
+  const { unread, loadMessagesFlag } = useContext(AuthContext);
   const [messages, setMessages] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const [reload, setReload] = useState(false);
+  const [concat, setConcat] = useState(false);
+  const [replace, setReplace] = useState(false);
 
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("desc");
   const [search, setSearch] = useState("");
   const [pageCurrent, setPageCurrent] = useState(1);
-
-  const [serachBarVisible, setSearchBarVisible] = useState(false);
 
   let endpoint =
     "api/inbox/" + filter + "/" + sortBy + search + "?page=" + pageCurrent;
@@ -40,8 +42,16 @@ function MessagesScreen(props) {
   const getMessagesApi = useApi(() => client.get(endpoint));
 
   useEffect(() => {
-    getMessages();
-  }, [reload]);
+    replaceMessages();
+  }, [replace]);
+
+  useDidMountEffect(() => {
+    concatMessages();
+  }, [concat]);
+
+  useDidMountEffect(() => {
+    handleRefresh();
+  }, [unread, loadMessagesFlag]);
 
   const getMessages = async () => {
     const result = await getMessagesApi.request();
@@ -49,7 +59,17 @@ function MessagesScreen(props) {
     if (!result.ok) return;
     const newMessages = result.data.data;
     const newMessagesArray = parseObjectToArray(newMessages);
+    return newMessagesArray;
+  };
+
+  const concatMessages = async () => {
+    const newMessagesArray = await getMessages();
     setMessages([...messages, ...newMessagesArray]);
+  };
+
+  const replaceMessages = async () => {
+    const newMessagesArray = await getMessages();
+    setMessages([...newMessagesArray]);
   };
 
   const parseObjectToArray = (obj) => {
@@ -101,7 +121,7 @@ function MessagesScreen(props) {
     return displayString ? displayString : participant.user.account.name;
   };
 
-  const unread = (item) => {
+  const unreadCount = (item) => {
     return (
       item.participant.links_all_count -
       item.participant.links_user_count -
@@ -110,15 +130,15 @@ function MessagesScreen(props) {
   };
 
   const handleRefresh = () => {
-    setMessages([]);
+    // setMessages([]);
     setPageCurrent(1);
-    setReload(!reload);
+    setReplace(!replace);
   };
 
   const handleLazyLoading = async () => {
     if (!getMessagesApi.loading && getMessagesApi.data.next_page_url) {
       setPageCurrent(pageCurrent + 1);
-      setReload(!reload);
+      setConcat(!concat);
     }
   };
 
@@ -129,7 +149,7 @@ function MessagesScreen(props) {
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the messages.
           </AppText>
-          <AppButton title="Retry" onPress={handleRefresh} />
+          <AppButton title="RETRY" onPress={handleRefresh} />
         </View>
       ) : (
         <>
@@ -177,8 +197,13 @@ function MessagesScreen(props) {
                   "HH:mm DD/MM/YYYY"
                 )}
                 subTitle={item.last_message.clean_message}
-                unread={unread(item) ? unread(item).toString() : null}
-                onPress={() => console.log("Message selected", item)}
+                unread={unreadCount(item) ? unreadCount(item).toString() : null}
+                onPress={() =>
+                  navigation.navigate(routes.MESSAGE_DETAIL, {
+                    messageId: item.id,
+                    title: displayParticipants(item),
+                  })
+                }
                 // renderLeftActions={() => (
                 //   <ListItemAction
                 //     onPress={() => handleDelete(item)}
@@ -191,7 +216,7 @@ function MessagesScreen(props) {
                 // renderRightActions={() => (
                 //   <ListItemAction
                 //     onPress={() => handleDelete(item)}
-                //     icon="book-multiple"
+                //     icon="archive"
                 //     text="Archive"
                 //     backgroundColor={null}
                 //     color={colors.secondary}

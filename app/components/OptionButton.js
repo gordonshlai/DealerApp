@@ -5,7 +5,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
 import AppButton from "./AppButton";
-import AppSmallButton from "./AppSmallButton";
 import AppText from "./AppText";
 import { ListItemSeparator } from "./lists";
 import Screen from "./Screen";
@@ -18,15 +17,13 @@ function OptionButton({
   value,
   queryArray,
   displayArray,
-  setItems,
-  setPageCurrent,
   setValue,
   handleRefresh,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>
-      <AppSmallButton
+      <AppButton
         title={title}
         color={color}
         icon={icon}
@@ -63,7 +60,7 @@ function OptionButton({
           />
           <AppButton
             icon="close"
-            title="Close"
+            title="CLOSE"
             color={null}
             onPress={() => setModalVisible(false)}
           />

@@ -10,19 +10,21 @@ function AccountScreen(props) {
   return (
     <View style={styles.container}>
       <AppButton
-        title="Log Out"
+        title="LOG OUT"
         onPress={() => {
           logOut();
           console.log("logout");
         }}
-      ></AppButton>
+      />
       <AppText>Account</AppText>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    padding: 20,
+  },
 });
 
 export default AccountScreen;

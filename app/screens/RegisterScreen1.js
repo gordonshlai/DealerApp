@@ -136,13 +136,13 @@ function RegisterScreen({ navigation }) {
                 />
                 <SubmitButton
                   icon="arrow-right-bold"
-                  title="Next"
+                  title="NEXT"
                   color={defaultStyles.colors.primary}
                 />
               </AppForm>
               <AppButton
                 icon="arrow-left-bold-outline"
-                title="Back"
+                title="BACK"
                 color={defaultStyles.colors.secondary}
                 onPress={() => navigation.goBack()}
               />

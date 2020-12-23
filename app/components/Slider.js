@@ -11,11 +11,9 @@ import {
 } from "react-native";
 import ImageZoom from "react-native-image-pan-zoom";
 
-import AppButton from "./AppButton";
-
 import defaultStyles from "../config/styles";
-import IconButton from "./IconButton";
 import AppText from "./AppText";
+import AppButton from "./AppButton";
 
 function Slider({ images, height, width }) {
   const [active, setActive] = useState(0);
@@ -149,15 +147,15 @@ function Slider({ images, height, width }) {
               ? images.length + " / " + images.length
               : active + 1 + " / " + images.length}
           </AppText>
-          <IconButton
-            name="chevron-left"
+          <AppButton
+            icon="chevron-left"
             color={defaultStyles.colors.black}
             size={50}
             style={styles.leftButton}
             onPress={handleLeftPress}
           />
-          <IconButton
-            name="chevron-right"
+          <AppButton
+            icon="chevron-right"
             color={defaultStyles.colors.black}
             size={50}
             style={styles.rightButton}
@@ -165,7 +163,7 @@ function Slider({ images, height, width }) {
           />
           <AppButton
             icon="close"
-            title="close"
+            title="CLOSE"
             color={null}
             onPress={() => setImageZoomVisible(false)}
             style={styles.closeButton}
