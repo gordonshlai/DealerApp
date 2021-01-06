@@ -14,6 +14,10 @@ export default function App() {
   const [isReady, setIsReady] = useState(false);
   const [unread, setUnread] = useState(null);
   const [loadMessagesFlag, setLoadMessagesFlag] = useState(false);
+  const [loadTradeFlag, setLoadTradeFlag] = useState(false);
+  const [loadTradeDetailFlag, setLoadTradeDetailFlag] = useState(false);
+  const [loadInventoryFlag, setLoadInventoryFlag] = useState(false);
+  const [loadInventoryDetailFlag, setLoadInventoryDetailFlag] = useState(false);
 
   useEffect(() => {
     repeatRequest();
@@ -66,6 +70,14 @@ export default function App() {
         setUnread,
         loadMessagesFlag,
         setLoadMessagesFlag,
+        loadTradeFlag,
+        setLoadTradeFlag,
+        loadTradeDetailFlag,
+        setLoadTradeDetailFlag,
+        loadInventoryFlag,
+        setLoadInventoryFlag,
+        loadInventoryDetailFlag,
+        setLoadInventoryDetailFlag,
       }}
     >
       <NavigationContainer theme={navigationTheme}>

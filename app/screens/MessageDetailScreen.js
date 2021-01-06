@@ -180,7 +180,12 @@ function MessageDetailScreen({ navigation, route }) {
           </AppForm>
         </View>
       </View>
-      <Modal visible={modalVisible} animationType="fade" transparent>
+      <Modal
+        visible={modalVisible}
+        animationType="fade"
+        transparent
+        onRequestClose={() => setModalVisible(false)}
+      >
         <Screen style={styles.modal}>
           <View>
             <AppText style={styles.actionTitle}>

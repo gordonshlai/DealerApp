@@ -21,6 +21,7 @@ function Slider({ images, height, width }) {
 
   const bigSlider = useRef();
   const thumbnail = useRef();
+  const imageZoom = useRef();
 
   useEffect(() => {}, [active]);
 
@@ -118,7 +119,12 @@ function Slider({ images, height, width }) {
           </ScrollView>
         </View>
       )}
-      <Modal visible={imageZoomVisible} animationType="fade">
+      <Modal
+        visible={imageZoomVisible}
+        animationType="fade"
+        statusBarTranslucent
+        onRequestClose={() => setImageZoomVisible(false)}
+      >
         <View style={styles.modalContainer}>
           {images && (
             <ImageZoom
@@ -149,15 +155,15 @@ function Slider({ images, height, width }) {
           </AppText>
           <AppButton
             icon="chevron-left"
-            color={defaultStyles.colors.black}
-            size={50}
+            color={defaultStyles.colors.mediumGrey}
+            size={30}
             style={styles.leftButton}
             onPress={handleLeftPress}
           />
           <AppButton
             icon="chevron-right"
-            color={defaultStyles.colors.black}
-            size={50}
+            color={defaultStyles.colors.mediumGrey}
+            size={30}
             style={styles.rightButton}
             onPress={handleRightPress}
           />
@@ -188,24 +194,25 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   modalContainer: {
-    justifyContent: "center",
+    backgroundColor: "black",
   },
   closeButton: {
     position: "absolute",
     bottom: 50,
+    alignSelf: "center",
   },
   leftButton: {
     position: "absolute",
-    backgroundColor: defaultStyles.colors.lightGrey,
-    opacity: 0.3,
-    paddingVertical: 50,
+    opacity: 0.5,
+    paddingVertical: 10,
+    top: 85,
   },
   rightButton: {
     position: "absolute",
     alignSelf: "flex-end",
-    backgroundColor: defaultStyles.colors.lightGrey,
-    opacity: 0.3,
-    paddingVertical: 50,
+    opacity: 0.5,
+    paddingVertical: 10,
+    top: 85,
   },
   imageZoomPagination: {
     backgroundColor: "#aaaaaa88",

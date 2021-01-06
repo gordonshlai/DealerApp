@@ -30,7 +30,12 @@ function OptionButton({
         badge={value !== initialValue}
         onPress={() => setModalVisible(true)}
       />
-      <Modal visible={modalVisible} animationType="slide">
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        statusBarTranslucent
+        onRequestClose={() => setModalVisible(false)}
+      >
         <Screen style={{ padding: 20 }}>
           <FlatList
             data={displayArray}

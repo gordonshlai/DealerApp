@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, View } from "react-native";
 import AppButton from "../components/AppButton";
 import Loading from "../components/Loading";
@@ -13,6 +13,8 @@ import useApi from "../hooks/useApi";
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
 import OptionButton from "../components/OptionButton";
+import AuthContext from "../auth/context";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -42,6 +44,8 @@ const sortByDisplayArray = [
 ];
 
 function HomeScreen({ navigation }) {
+  const { loadTradeFlag } = useContext(AuthContext);
+
   const [makesArray, setMakesArray] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -73,6 +77,10 @@ function HomeScreen({ navigation }) {
     getData();
     getMakes();
   }, [reload]);
+
+  useDidMountEffect(() => {
+    handleRefresh();
+  }, [loadTradeFlag]);
 
   const getData = async () => {
     const result = await getVehiclesApi.request();
@@ -174,12 +182,7 @@ function HomeScreen({ navigation }) {
             onRefresh={handleRefresh}
             onEndReached={handleLazyLoading}
             onEndReachedThreshold={0.1}
-            ListFooterComponent={
-              <Loading
-                visible={getVehiclesApi.loading}
-                text="Loading Vehicles"
-              />
-            }
+            ListFooterComponent={<Loading visible={getVehiclesApi.loading} />}
           />
         </>
       )}

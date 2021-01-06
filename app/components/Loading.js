@@ -10,11 +10,10 @@ import defaultStyles from "../config/styles";
  * @module components/Loading
  * @param {boolean} visible - visibility of the activity indicator
  */
-function Loading({ visible = false, text = "Loading" }) {
+function Loading({ visible = false, style }) {
   if (!visible) return null;
   return (
-    <View style={styles.container}>
-      <AppText style={styles.text}>{text}</AppText>
+    <View style={[styles.container, style]}>
       <LottieView
         autoPlay
         loop
@@ -27,13 +26,8 @@ function Loading({ visible = false, text = "Loading" }) {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    height: 150,
+    height: 100,
     borderRadius: 10,
-  },
-  text: {
-    color: defaultStyles.colors.primary,
-    fontSize: 22,
-    fontWeight: "bold",
   },
 });
 

@@ -25,6 +25,12 @@ import routes from "../navigation/routes";
 import useApi from "../hooks/useApi";
 import client from "../api/client";
 import { Formik } from "formik";
+import dayjs from "dayjs";
+
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
 
 const validationSchema = Yup.object().shape({
   make: Yup.string().required().label("Make"),
@@ -111,20 +117,30 @@ function VehicleDetailScreen({ route, navigation }) {
                   vehicleDetail && vehicleDetail.year
                     ? vehicleDetail.year.toString()
                     : "",
-                registration_date: vehicleDetail
-                  ? new Date(vehicleDetail.registration_date)
-                  : "",
+                registration_date:
+                  vehicleDetail && vehicleDetail.registration_date
+                    ? new Date(dayjs(vehicleDetail.registration_date))
+                    : "",
                 mot_expiry:
                   vehicleDetail && vehicleDetail.mot_expiry
-                    ? new Date(vehicleDetail.mot_expiry)
+                    ? new Date(dayjs(vehicleDetail.mot_expiry))
                     : "",
                 transmission:
                   vehicleDetail && vehicleDetail.transmission
                     ? vehicleDetail.transmission
                     : "",
-                seats: "",
-                doors: "",
-                body_style: "",
+                seats:
+                  vehicleDetail && vehicleDetail.seats
+                    ? vehicleDetail.seats
+                    : "",
+                doors:
+                  vehicleDetail && vehicleDetail.doors
+                    ? vehicleDetail.doors
+                    : "",
+                body_style:
+                  vehicleDetail && vehicleDetail.body_style
+                    ? vehicleDetail.body_style
+                    : "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}

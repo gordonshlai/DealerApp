@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, View, Modal } from "react-native";
 import { ButtonGroup } from "react-native-elements";
 
@@ -14,10 +14,15 @@ import client from "../api/client";
 import useApi from "../hooks/useApi";
 
 import defaultStyles from "../config/styles";
+import routes from "../navigation/routes";
+import AuthContext from "../auth/context";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 const statusArray = ["stock", "listed", "sold"];
 
 function InventoryScreen({ navigation }) {
+  const { loadInventoryFlag } = useContext(AuthContext);
+
   const [makesArray, setMakesArray] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
@@ -52,6 +57,10 @@ function InventoryScreen({ navigation }) {
     getData();
     getMakes();
   }, [reload]);
+
+  useDidMountEffect(() => {
+    handleRefresh();
+  }, [loadInventoryFlag]);
 
   const getData = async () => {
     const result = await getVehiclesApi.request();
@@ -174,19 +183,16 @@ function InventoryScreen({ navigation }) {
                   priceAsking={item.price_asking}
                   registration={item.registration}
                   imageUrl={item.thumb ? item.thumb.url : ""}
-                  onPress={() => console.log(item)}
+                  onPress={() =>
+                    navigation.navigate(routes.INVENTORY_DETAIL, item)
+                  }
                 />
               )}
               refreshing={refreshing}
               onRefresh={handleRefresh}
               onEndReached={handleLazyLoading}
               onEndReachedThreshold={0.1}
-              ListFooterComponent={
-                <Loading
-                  visible={getVehiclesApi.loading}
-                  text="Loading Vehicles"
-                />
-              }
+              ListFooterComponent={<Loading visible={getVehiclesApi.loading} />}
             />
           </>
         )}

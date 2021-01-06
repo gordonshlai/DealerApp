@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -24,6 +24,7 @@ import useApi from "../hooks/useApi";
 import client from "../api/client";
 import { Formik } from "formik";
 import UploadScreen from "./UploadScreen";
+import AuthContext from "../auth/context";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().label("Title"),
@@ -41,11 +42,21 @@ const sales_statusArray = ["In Stock", "Sold", "Listed For Trade"];
 function VehicleDescriptionScreen({ navigation, route }) {
   const { vehicleDetailInput, vehicleDetail } = route.params;
 
+  const { loadInventoryFlag, setLoadInventoryFlag } = useContext(AuthContext);
+
   const [uploadVisible, setUploadVisible] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  const inventoryApi = useApi((data, onUploadProgress) =>
+  const postInventoryApi = useApi((data, onUploadProgress) =>
     client.post("api/inventory/vehicles", data, {
+      onUploadProgress: (progress) => {
+        onUploadProgress(progress.loaded / progress.total);
+      },
+    })
+  );
+
+  const patchInventoryApi = useApi((data, onUploadProgress) =>
+    client.patch("api/inventory/vehicles/" + vehicleDetail.id, data, {
       onUploadProgress: (progress) => {
         onUploadProgress(progress.loaded / progress.total);
       },
@@ -57,47 +68,59 @@ function VehicleDescriptionScreen({ navigation, route }) {
   const handleSubmit = async (vehicleDescriptionInput) => {
     setProgress(0);
     setUploadVisible(true);
-    const result = await inventoryApi.request(
-      {
-        make: vehicleDetailInput.make,
-        model: vehicleDetailInput.model,
-        registration_date: vehicleDetailInput.registration_date,
-        engine_capacity: vehicleDetailInput.engine_capacity,
-        retail_price: vehicleDescriptionInput.retail_price,
-        registration: vehicleDetailInput.registration,
-        year: vehicleDetailInput.year,
-        mileage: vehicleDetailInput.mileage,
-        colour: vehicleDetailInput.colour,
-        body_style: vehicleDetailInput.body_style,
-        fuel: vehicleDetailInput.fuel,
-        transmission: vehicleDetailInput.transmission,
-        title: vehicleDescriptionInput.title,
-        seats: vehicleDetailInput.seats,
-        doors: vehicleDetailInput.doors,
-        tagline: vehicleDescriptionInput.tagline,
-        description: vehicleDescriptionInput.description,
-        price_asking: vehicleDescriptionInput.price_asking
-          ? vehicleDescriptionInput.price_asking
-          : "0.00",
-        price_civ: vehicleDescriptionInput.price_civ
-          ? vehicleDescriptionInput.price_civ
-          : "0.00",
-        price_cap: vehicleDescriptionInput.price_cap
-          ? vehicleDescriptionInput.price_cap
-          : "0.00",
-        sales_status: vehicleDescriptionInput.sales_status,
-        mot_expiry: vehicleDetailInput.mot_expiry,
-      },
-      (progress) => setProgress(progress)
-    );
+    const data = {
+      make: vehicleDetailInput.make,
+      model: vehicleDetailInput.model,
+      registration_date: vehicleDetailInput.registration_date,
+      engine_capacity: vehicleDetailInput.engine_capacity,
+      retail_price: vehicleDescriptionInput.retail_price,
+      registration: vehicleDetailInput.registration,
+      year: vehicleDetailInput.year,
+      mileage: vehicleDetailInput.mileage,
+      colour: vehicleDetailInput.colour,
+      body_style: vehicleDetailInput.body_style,
+      fuel: vehicleDetailInput.fuel,
+      transmission: vehicleDetailInput.transmission,
+      title: vehicleDescriptionInput.title,
+      seats: vehicleDetailInput.seats,
+      doors: vehicleDetailInput.doors,
+      tagline: vehicleDescriptionInput.tagline,
+      description: vehicleDescriptionInput.description,
+      price_asking: vehicleDescriptionInput.price_asking
+        ? vehicleDescriptionInput.price_asking
+        : "0.00",
+      price_civ: vehicleDescriptionInput.price_civ
+        ? vehicleDescriptionInput.price_civ
+        : "0.00",
+      price_cap: vehicleDescriptionInput.price_cap
+        ? vehicleDescriptionInput.price_cap
+        : "0.00",
+      sales_status: sales_statusArray.indexOf(
+        vehicleDescriptionInput.sales_status
+      ),
+      mot_expiry: vehicleDetailInput.mot_expiry,
+    };
+
+    const result = vehicleDetail.id
+      ? await patchInventoryApi.request(data, (progress) =>
+          setProgress(progress)
+        )
+      : await postInventoryApi.request(data, (progress) =>
+          setProgress(progress)
+        );
     console.log(result);
     if (!result.ok) return setError(result.data.message);
-    console.log("posted!");
   };
+
   return (
     <>
       <UploadScreen
-        onDone={() => setUploadVisible(false)}
+        onDone={async () => {
+          setUploadVisible(false);
+          navigation.popToTop();
+          navigation.navigate(routes.INVENTORY);
+          setLoadInventoryFlag(!loadInventoryFlag);
+        }}
         progress={progress}
         visible={uploadVisible}
       />
@@ -115,17 +138,32 @@ function VehicleDescriptionScreen({ navigation, route }) {
                     : "",
                 sales_status:
                   vehicleDetail && vehicleDetail.sales_status
-                    ? vehicleDetail.sales_status
-                    : "In Stock",
-                tagline: "",
-                retail_price: "",
-                price_asking: "",
-                price_civ: "",
+                    ? sales_statusArray[vehicleDetail.sales_status]
+                    : sales_statusArray[0],
+                tagline:
+                  vehicleDetail && vehicleDetail.tagline
+                    ? vehicleDetail.tagline
+                    : "",
+                retail_price:
+                  vehicleDetail && vehicleDetail.retail_price
+                    ? vehicleDetail.retail_price
+                    : "",
+                price_asking:
+                  vehicleDetail && vehicleDetail.price_asking
+                    ? vehicleDetail.price_asking
+                    : "",
+                price_civ:
+                  vehicleDetail && vehicleDetail.price_civ
+                    ? vehicleDetail.price_civ
+                    : "",
                 price_cap:
                   vehicleDetail && vehicleDetail.price_cap
                     ? vehicleDetail.price_cap
                     : "",
-                description: "",
+                description:
+                  vehicleDetail && vehicleDetail.description
+                    ? vehicleDetail.description
+                    : "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
@@ -231,7 +269,6 @@ function VehicleDescriptionScreen({ navigation, route }) {
                     error="Please fix the errors above before moving on."
                     visible={!isValid && submitCount}
                   />
-                  {console.log(submitCount)}
                   <AppErrorMessage error={error} visible={error} />
                   <SubmitButton
                     icon="check"

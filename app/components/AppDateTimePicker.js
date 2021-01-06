@@ -24,7 +24,9 @@ function AppDateTimePicker({
   disabled = false,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [value, setValue] = useState(selectedDate ? selectedDate : new Date());
+  const [value, setValue] = useState(
+    selectedDate ? new Date(dayjs(selectedDate)) : new Date()
+  );
   const [show, setShow] = useState(false);
   return (
     <>

@@ -19,9 +19,7 @@ function SpecificationItem({
         <Info name={icon} text={text} color={color} />
       </View>
       <View style={styles.valueContainer}>
-        {value && (
-          <AppText style={[defaultStyles.text, styles.value]}>{value}</AppText>
-        )}
+        {value && <AppText style={styles.value}>{value}</AppText>}
       </View>
     </View>
   );

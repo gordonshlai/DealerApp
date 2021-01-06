@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 import {
@@ -25,7 +25,9 @@ const sortByDisplayArray = ["Newest First", "Oldest First"];
 const filterArray = ["all", "saved", "archived"];
 
 function MessagesScreen({ navigation }) {
-  const { unread, loadMessagesFlag } = useContext(AuthContext);
+  const { unread, loadMessagesFlag, setLoadMessagesFlag } = useContext(
+    AuthContext
+  );
   const [messages, setMessages] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [concat, setConcat] = useState(false);
@@ -40,6 +42,9 @@ function MessagesScreen({ navigation }) {
     "api/inbox/" + filter + "/" + sortBy + search + "?page=" + pageCurrent;
 
   const getMessagesApi = useApi(() => client.get(endpoint));
+  const saveArchiveMessageApi = useApi((messageId, payload) =>
+    client.patch("api/inbox/" + messageId, payload)
+  );
 
   useEffect(() => {
     replaceMessages();
@@ -130,7 +135,6 @@ function MessagesScreen({ navigation }) {
   };
 
   const handleRefresh = () => {
-    // setMessages([]);
     setPageCurrent(1);
     setReplace(!replace);
   };
@@ -140,6 +144,18 @@ function MessagesScreen({ navigation }) {
       setPageCurrent(pageCurrent + 1);
       setConcat(!concat);
     }
+  };
+
+  const handleAction = async (message, action) => {
+    const payload =
+      action === "save"
+        ? { save: message.participant.saved === "0" ? true : false }
+        : {
+            archive: message.participant.archived === "0" ? true : false,
+          };
+    const result = await saveArchiveMessageApi.request(message.id, payload);
+    if (!result.ok) return setError(result.data.message);
+    setLoadMessagesFlag(!loadMessagesFlag);
   };
 
   return (
@@ -165,6 +181,10 @@ function MessagesScreen({ navigation }) {
                 displayArray={sortByDisplayArray}
                 setValue={setSortBy}
                 handleRefresh={handleRefresh}
+              />
+              <ActivityIndicator
+                animating={getMessagesApi.loading}
+                color={colors.mediumGrey}
               />
               <OptionButton
                 title="Filter"
@@ -204,24 +224,28 @@ function MessagesScreen({ navigation }) {
                     title: displayParticipants(item),
                   })
                 }
-                // renderLeftActions={() => (
-                //   <ListItemAction
-                //     onPress={() => handleDelete(item)}
-                //     icon="content-save"
-                //     text="Save"
-                //     backgroundColor={null}
-                //     color={colors.success}
-                //   />
-                // )}
-                // renderRightActions={() => (
-                //   <ListItemAction
-                //     onPress={() => handleDelete(item)}
-                //     icon="archive"
-                //     text="Archive"
-                //     backgroundColor={null}
-                //     color={colors.secondary}
-                //   />
-                // )}
+                renderLeftActions={() => (
+                  <ListItemAction
+                    onPress={() => handleAction(item, "save")}
+                    icon="content-save"
+                    text={item.participant.saved === "0" ? "Save" : "Unsave"}
+                    backgroundColor={null}
+                    color={colors.success}
+                  />
+                )}
+                renderRightActions={() => (
+                  <ListItemAction
+                    onPress={() => handleAction(item, "archive")}
+                    icon="archive"
+                    text={
+                      item.participant.archived === "0"
+                        ? "Archive"
+                        : "Unarchive"
+                    }
+                    backgroundColor={null}
+                    color={colors.secondary}
+                  />
+                )}
               />
             )}
             ItemSeparatorComponent={ListItemSeparator}
@@ -229,12 +253,7 @@ function MessagesScreen({ navigation }) {
             onRefresh={handleRefresh}
             onEndReached={handleLazyLoading}
             onEndReachedThreshold={0.1}
-            ListFooterComponent={
-              <Loading
-                visible={getMessagesApi.loading}
-                text="Loading Messages"
-              />
-            }
+            ListFooterComponent={<Loading visible={getMessagesApi.loading} />}
           />
         </>
       )}

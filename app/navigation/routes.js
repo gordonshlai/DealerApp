@@ -15,6 +15,7 @@ export default Object.freeze({
   TRADE_DETAIL: "Trade Detail",
 
   INVENTORY: "Inventory",
+  INVENTORY_DETAIL: "Inventory Detail",
 
   NEW_CAR: "New Car",
   VEHICLE_DETAIL: "Vehicle detail",

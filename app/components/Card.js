@@ -1,6 +1,5 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
-// import { Image } from "react-native-expo-image-cache";
 
 import AppText from "./AppText";
 import defaultStyles from "../config/styles";

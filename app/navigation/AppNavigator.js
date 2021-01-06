@@ -4,11 +4,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TradeNavigator from "./TradeNavigator";
-import InventoryScreen from "../screens/InventoryScreen";
-import AccountScreen from "../screens/AccountScreen";
+import InventoryNavigator from "./InventoryNavigator";
 import NewCarButton from "./NewCarButton";
 import NewCarNavigator from "./NewCarNavigator";
 import MessageNavigator from "./MessageNavigator";
+import AccountScreen from "../screens/AccountScreen";
 
 import defaultStyles from "../config/styles";
 import routes from "./routes";
@@ -54,7 +54,7 @@ const AppNavigator = () => {
       />
       <Tab.Screen
         name={routes.INVENTORY}
-        component={InventoryScreen}
+        component={InventoryNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons
