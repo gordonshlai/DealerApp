@@ -15,6 +15,7 @@ import {
   AppFormDateTimePicker,
   AppFormField,
   AppFormPicker,
+  FormImagePicker,
   SubmitButton,
 } from "../components/forms";
 
@@ -63,6 +64,19 @@ function VehicleDescriptionScreen({ navigation, route }) {
     })
   );
 
+  const postImagesApi = useApi((id, formData, { onUploadProgress, header }) =>
+    client.post("api/inventory/images?vehicle=" + id, formData, {
+      onUploadProgress: (progress) => {
+        onUploadProgress(progress.loaded / progress.total);
+      },
+      header,
+    })
+  );
+
+  const deleteImageApi = useApi((id) =>
+    client.delete("api/inventory/images/" + id)
+  );
+
   const [error, setError] = useState();
 
   const handleSubmit = async (vehicleDescriptionInput) => {
@@ -103,13 +117,61 @@ function VehicleDescriptionScreen({ navigation, route }) {
 
     const result = vehicleDetail.id
       ? await patchInventoryApi.request(data, (progress) =>
-          setProgress(progress)
+          setProgress(progress / 3)
         )
       : await postInventoryApi.request(data, (progress) =>
-          setProgress(progress)
+          setProgress(progress / 3)
         );
-    console.log(result);
     if (!result.ok) return setError(result.data.message);
+    setProgress(1 / 3);
+
+    if (vehicleDetail.images) {
+      for (originalImage of vehicleDetail.images) {
+        let deleteImage = true;
+        for (inputImage of vehicleDescriptionInput.images) {
+          if (originalImage.id === inputImage.id) {
+            deleteImage = false;
+            break;
+          }
+        }
+        if (deleteImage) {
+          const deleteImageResponse = await deleteImageApi.request(
+            originalImage.id
+          );
+          console.log(deleteImageResponse);
+          if (!deleteImageResponse.ok)
+            return setError(deleteImageResponse.data.message);
+        }
+      }
+    }
+    setProgress(2 / 3);
+
+    let formData = new FormData();
+    let newImages = false;
+    for (inputImage of vehicleDescriptionInput.images) {
+      if (!inputImage.id) {
+        inputImage.name = inputImage.uri;
+        formData.append("files[]", inputImage);
+        newImages = true;
+      }
+    }
+    if (newImages) {
+      const vehicleId = vehicleDetail.id ? vehicleDetail.id : result.data.id;
+      const postImagesResponse = await postImagesApi.request(
+        vehicleId,
+        formData,
+        {
+          onUploadProgress: (progress) => setProgress(progress / 3 + 2 / 3),
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(postImagesResponse);
+      if (!postImagesResponse.ok)
+        return setError(postImagesResponse.data.message);
+    }
+    setProgress(1);
   };
 
   return (
@@ -164,11 +226,15 @@ function VehicleDescriptionScreen({ navigation, route }) {
                   vehicleDetail && vehicleDetail.description
                     ? vehicleDetail.description
                     : "",
+                images:
+                  vehicleDetail && vehicleDetail.images
+                    ? vehicleDetail.images
+                    : [],
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              {({ errors, isValid, submitCount }) => (
+              {({ errors, values, isValid, submitCount }) => (
                 <>
                   <View style={styles.fieldContainer}>
                     <Info
@@ -265,6 +331,14 @@ function VehicleDescriptionScreen({ navigation, route }) {
                       textAlignVertical="center"
                     />
                   </View>
+                  <View style={styles.fieldContainer}>
+                    <Info
+                      name="camera"
+                      text={`Images (${values["images"].length})`}
+                      color={defaultStyles.colors.mediumGrey}
+                    />
+                    <FormImagePicker name="images" />
+                  </View>
                   <AppErrorMessage
                     error="Please fix the errors above before moving on."
                     visible={!isValid && submitCount}
@@ -298,6 +372,7 @@ const styles = StyleSheet.create({
   fieldContainer: {
     marginBottom: 10,
     alignItems: "flex-start",
+    flex: 1,
   },
 });
 

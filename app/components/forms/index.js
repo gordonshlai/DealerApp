@@ -4,5 +4,6 @@ export { default as AppErrorMessage } from "./AppErrorMessage";
 export { default as AppFormPicker } from "./AppFormPicker";
 export { default as AppFormDateTimePicker } from "./AppFormDateTimePicker";
 export { default as AppInfoMessage } from "./AppInfoMessage";
+export { default as FormImagePicker } from "./FormImagePicker";
 export { default as RegistrationPlateInput } from "./RegistrationPlateInput";
 export { default as SubmitButton } from "./SubmitButton";
