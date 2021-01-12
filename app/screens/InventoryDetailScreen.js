@@ -63,6 +63,7 @@ function InventoryDetailScreen({ navigation, route }) {
     "Sold on Trade to Trade"
   );
   const [areYouSureModalVisible, setAreYouSureModalVisible] = useState(false);
+  const [handlePatchFlag, setHandlePatchFlag] = useState(false);
 
   const getVehicleApi = useApi(() =>
     client.get("api/inventory/vehicles/" + vehicle.id)
@@ -99,6 +100,10 @@ function InventoryDetailScreen({ navigation, route }) {
       ),
     });
   }, [navigation]);
+
+  useDidMountEffect(() => {
+    handlePatch();
+  }, [handlePatchFlag]);
 
   const numberWithCommas = (x) => {
     let parts = x.toString().split(".");
@@ -533,6 +538,7 @@ function InventoryDetailScreen({ navigation, route }) {
           </>
         )}
       </ScrollView>
+
       <Modal
         visible={optionModalVisible}
         statusBarTranslucent
@@ -568,7 +574,7 @@ function InventoryDetailScreen({ navigation, route }) {
                   onPress={() => {
                     setOptionModalVisible(false);
                     setAction(actions.indexOf("In Stock"));
-                    handlePatch();
+                    setHandlePatchFlag(!handlePatchFlag);
                   }}
                 >
                   <AppText style={styles.options}>Mark as IN STOCK</AppText>
@@ -580,7 +586,7 @@ function InventoryDetailScreen({ navigation, route }) {
                   onPress={() => {
                     setOptionModalVisible(false);
                     setAction(actions.indexOf("Sold"));
-                    handlePatch();
+                    setHandlePatchFlag(!handlePatchFlag);
                   }}
                 >
                   <AppText style={styles.options}>Mark as SOLD</AppText>
@@ -628,7 +634,7 @@ function InventoryDetailScreen({ navigation, route }) {
         setVisible={setDisclaimerVisible}
         onAcceptPress={() => {
           setDisclaimerVisible(false);
-          handlePatch();
+          setHandlePatchFlag(!handlePatchFlag);
         }}
         onCancelPress={() => setDisclaimerVisible(false)}
       />
@@ -689,7 +695,7 @@ function InventoryDetailScreen({ navigation, route }) {
               color={colors.primary}
               onPress={() => {
                 setUnlistVehicleVisible(false);
-                handlePatch();
+                setHandlePatchFlag(!handlePatchFlag);
               }}
             />
             <AppButton
