@@ -15,6 +15,7 @@ import routes from "../navigation/routes";
 import OptionButton from "../components/OptionButton";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
+import { AppErrorMessage } from "../components/forms";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -45,6 +46,8 @@ const sortByDisplayArray = [
 
 function HomeScreen({ navigation }) {
   const { loadTradeFlag } = useContext(AuthContext);
+
+  const [error, setError] = useState();
 
   const [makesArray, setMakesArray] = useState([]);
 
@@ -85,7 +88,7 @@ function HomeScreen({ navigation }) {
   const getData = async () => {
     const result = await getVehiclesApi.request();
     console.log(endpoint);
-    if (!result.ok) return;
+    if (!result.ok) return setError(result.data.message);
     const newVehicles = result.data.data;
     const newVehiclesArray = parseObjectToArray(newVehicles);
     setVehicles([...vehicles, ...newVehiclesArray]);
@@ -94,7 +97,7 @@ function HomeScreen({ navigation }) {
   const getMakes = async () => {
     let makeEndpoint = "api/trade/all/makes?seller=" + seller + "&env=" + env;
     const result = await client.get(makeEndpoint);
-    if (!result.ok) return;
+    if (!result.ok) return setError(result.data.message);
     const makes = result.data;
     const makesArray = parseObjectToArray(makes);
     setMakesArray(["all", ...makesArray]);
@@ -128,6 +131,7 @@ function HomeScreen({ navigation }) {
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the vehicles.
           </AppText>
+          <AppErrorMessage visible={error} visible={error} />
           <AppButton title="RETRY" onPress={handleRefresh} />
         </>
       ) : (

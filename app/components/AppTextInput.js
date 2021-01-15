@@ -11,9 +11,9 @@ import defaultStyles from "../config/styles";
  * @param {string|number} width - the width of the component
  * @param {} otherProps - all other properties to add into the text component
  */
-const AppTextInput = ({ icon, width = "100%", ...otherProps }) => {
+const AppTextInput = ({ icon, style, ...otherProps }) => {
   return (
-    <View style={[styles.container, { width }]}>
+    <View style={[styles.container, style]}>
       {icon && (
         <MaterialCommunityIcons
           name={icon}
@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginVertical: 7,
     alignItems: "center",
+    width: "100%",
   },
   icon: {
     marginRight: 10,

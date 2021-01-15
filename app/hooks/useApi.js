@@ -18,7 +18,7 @@ export default useApi = (apiFunc) => {
     const response = await apiFunc(...args);
     setLoading(false);
 
-    if (response.status === 401) return logOut();
+    if (response.status === 401 && !response.data.message) return logOut();
 
     setError(!response.ok);
     setData(response.data);

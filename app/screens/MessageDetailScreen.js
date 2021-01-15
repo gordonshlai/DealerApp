@@ -186,35 +186,33 @@ function MessageDetailScreen({ navigation, route }) {
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <Screen style={styles.modal}>
-          <View>
-            <AppText style={styles.actionTitle}>
-              {action === "save" && getThreadsApi.data.participant.saved === "0"
-                ? "Save Message?"
-                : action === "save" &&
-                  getThreadsApi.data.participant.saved === "1"
-                ? "Unsave Message?"
-                : action === "archive" &&
-                  getThreadsApi.data.participant.archived === "0"
-                ? "Archive Message?"
-                : "Unarchive Message?"}
-            </AppText>
-            <View style={styles.actionButtonsContainer}>
-              <AppButton
-                icon="check"
-                title="Confirm"
-                color={colors.success}
-                onPress={handleAction}
-              />
-              <AppButton
-                icon="cancel"
-                title="Cancel"
-                color={colors.secondary}
-                onPress={() => setModalVisible(false)}
-              />
-            </View>
+        <View style={styles.modal}>
+          <AppText style={styles.actionTitle}>
+            {action === "save" && getThreadsApi.data.participant.saved === "0"
+              ? "Save Message?"
+              : action === "save" &&
+                getThreadsApi.data.participant.saved === "1"
+              ? "Unsave Message?"
+              : action === "archive" &&
+                getThreadsApi.data.participant.archived === "0"
+              ? "Archive Message?"
+              : "Unarchive Message?"}
+          </AppText>
+          <View style={styles.actionButtonsContainer}>
+            <AppButton
+              icon="check"
+              title="Confirm"
+              color={colors.success}
+              onPress={handleAction}
+            />
+            <AppButton
+              icon="cancel"
+              title="Cancel"
+              color={colors.secondary}
+              onPress={() => setModalVisible(false)}
+            />
           </View>
-        </Screen>
+        </View>
       </Modal>
     </>
   );
@@ -240,6 +238,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "center",
     backgroundColor: colors.lightGrey + "aa",
+    flex: 1,
   },
   actionTitle: {
     textAlign: "center",

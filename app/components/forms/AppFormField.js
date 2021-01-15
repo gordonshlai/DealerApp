@@ -8,10 +8,10 @@ import AppErrorMessage from "./AppErrorMessage";
  * A field of a form, consist of an icon, text input and an error message.
  * @module components/forms/AppFormField
  * @param {string} name - the name of the field defined by the consumer of this component
- * @param {string|number} width - the width of the component
+ * @param {string|number} style - the style of the component container
  * @param {} otherProps - other properties to add to the text input component
  */
-const AppFormField = ({ name, width, ...otherProps }) => {
+const AppFormField = ({ name, style, ...otherProps }) => {
   const {
     setFieldTouched,
     setFieldValue,
@@ -25,7 +25,7 @@ const AppFormField = ({ name, width, ...otherProps }) => {
         onBlur={() => setFieldTouched(name)}
         onChangeText={(text) => setFieldValue(name, text)}
         value={values[name]}
-        width={width}
+        style={style}
         {...otherProps}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />
