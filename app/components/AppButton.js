@@ -15,7 +15,7 @@ function AppButton({
   icon,
   title,
   backgroundColor = colors.success,
-  color = colors.white,
+  color = "white",
   size = 14,
   badge,
   border = true,

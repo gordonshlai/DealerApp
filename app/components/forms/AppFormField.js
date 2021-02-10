@@ -11,7 +11,7 @@ import AppErrorMessage from "./AppErrorMessage";
  * @param {string|number} style - the style of the component container
  * @param {} otherProps - other properties to add to the text input component
  */
-const AppFormField = ({ name, style, ...otherProps }) => {
+const AppFormField = ({ name, style, color, ...otherProps }) => {
   const {
     setFieldTouched,
     setFieldValue,
@@ -26,6 +26,7 @@ const AppFormField = ({ name, style, ...otherProps }) => {
         onChangeText={(text) => setFieldValue(name, text)}
         value={values[name]}
         style={style}
+        color={color}
         {...otherProps}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />

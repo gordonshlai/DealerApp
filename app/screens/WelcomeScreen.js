@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
 import AppButton from "../components/AppButton";
@@ -20,23 +20,16 @@ import routes from "../navigation/routes";
 function WelcomeScreen({ navigation }) {
   return (
     <>
-      <ImageBackground
-        style={styles.background}
-        source={require("../assets/Splash-Screen-High-Res.png")}
-      />
-      {/* <LinearGradient
+      <LinearGradient
         colors={["#143C4B", "#0E262F"]}
         style={styles.background}
-      /> */}
+      />
       <View style={styles.container}>
-        {/* <View style={styles.logoContainer}>
-          <Image style={styles.logo} source={require("../assets/logo.png")} />
-          <AppText style={styles.tagline}>Wise about warranties</AppText>
-        </View> */}
+        <Image style={styles.logo} source={require("../assets/logo.png")} />
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Sign in"
-            onPress={() => navigation.navigate(routes.SIGN_IN_1)}
+            onPress={() => navigation.navigate(routes.SIGN_IN)}
           />
           <AppButton
             title="Register"
@@ -59,7 +52,6 @@ function WelcomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    resizeMode: "cover",
   },
   buttonsContainer: {
     padding: 20,
@@ -73,23 +65,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
   },
-  // logo: {
-  //   width: 224,
-  //   height: 80,
-  // },
-  // logoContainer: {
-  //   position: "absolute",
-  //   top: 70,
-  //   alignItems: "center",
-  // },
-  tagline: {
-    fontSize: 20,
-    fontWeight: "bold",
-    paddingVertical: 10,
+  logo: {
+    width: "60%",
+    height: "100%",
+    resizeMode: "contain",
+    alignSelf: "center",
+    position: "absolute",
   },
   text: {
-    fontSize: 6,
-    color: colors.mediumGrey,
+    fontSize: 8,
+    color: colors.lightGrey,
     marginVertical: 15,
   },
 });

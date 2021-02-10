@@ -4,8 +4,7 @@
  */
 export default Object.freeze({
   WELCOME: "Welcome",
-  SIGN_IN_1: "Sign In 1",
-  SIGN_IN_2: "Sign In 2",
+  SIGN_IN: "Sign In",
   REGISTER_1: "Register 1",
   REGISTER_2: "Register 2",
   REGISTER_3: "Register 3",

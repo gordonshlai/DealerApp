@@ -11,7 +11,7 @@ import defaultStyles from "../config/styles";
  * @param {string|number} width - the width of the component
  * @param {} otherProps - all other properties to add into the text component
  */
-const AppTextInput = ({ icon, style, ...otherProps }) => {
+const AppTextInput = ({ icon, style, color, ...otherProps }) => {
   return (
     <View style={[styles.container, style]}>
       {icon && (
@@ -24,7 +24,7 @@ const AppTextInput = ({ icon, style, ...otherProps }) => {
       )}
       <TextInput
         placeholderTextColor={"#bbb"}
-        style={[defaultStyles.text, styles.text]}
+        style={[defaultStyles.text, styles.text, { color: color }]}
         {...otherProps}
       />
     </View>
@@ -33,8 +33,8 @@ const AppTextInput = ({ icon, style, ...otherProps }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    borderRadius: 5,
+    borderColor: defaultStyles.colors.lightGrey,
+    borderBottomWidth: 1,
     flexDirection: "row",
     padding: 12,
     marginVertical: 7,

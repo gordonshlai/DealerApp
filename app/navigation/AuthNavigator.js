@@ -2,8 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import WelcomeScreen from "../screens/WelcomeScreen";
-import SignInScreen1 from "../screens/SignInScreen1";
-import SignInScreen2 from "../screens/SignInScreen2";
+import SignInScreen from "../screens/SignInScreen";
 import RegisterScreen1 from "../screens/RegisterScreen1";
 import RegisterScreen2 from "../screens/RegisterScreen2";
 import RegisterScreen3 from "../screens/RegisterScreen3";
@@ -29,8 +28,7 @@ const AuthNavigator = () => (
     }}
   >
     <Stack.Screen name={routes.WELCOME} component={WelcomeScreen} />
-    <Stack.Screen name={routes.SIGN_IN_1} component={SignInScreen1} />
-    <Stack.Screen name={routes.SIGN_IN_2} component={SignInScreen2} />
+    <Stack.Screen name={routes.SIGN_IN} component={SignInScreen} />
     <Stack.Screen name={routes.REGISTER_1} component={RegisterScreen1} />
     <Stack.Screen name={routes.REGISTER_2} component={RegisterScreen2} />
     <Stack.Screen name={routes.REGISTER_3} component={RegisterScreen3} />

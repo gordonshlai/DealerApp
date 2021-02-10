@@ -9,12 +9,13 @@ import AppButton from "../AppButton";
  * @param {string} title - the text to display on the button
  * @param {string} color - the background color of the button
  */
-const SubmitButton = ({ icon, title, color, size, style }) => {
+const SubmitButton = ({ icon, title, backgroundColor, color, size, style }) => {
   const { handleSubmit } = useFormikContext();
   return (
     <AppButton
       icon={icon}
       title={title}
+      backgroundColor={backgroundColor}
       color={color}
       size={size}
       style={style}
