@@ -1,10 +1,11 @@
 import React from "react";
 import { Image, ImageBackground, StyleSheet, View } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 
 import routes from "../navigation/routes";
 
@@ -16,31 +17,39 @@ import routes from "../navigation/routes";
 /**
  * The welcome screen functional component.
  */
-// function WelcomeScreen({ navigation }) {
 function WelcomeScreen({ navigation }) {
   return (
     <>
       <ImageBackground
         style={styles.background}
-        source={require("../assets/background.jpg")}
+        source={require("../assets/Splash-Screen-High-Res.png")}
       />
+      {/* <LinearGradient
+        colors={["#143C4B", "#0E262F"]}
+        style={styles.background}
+      /> */}
       <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image style={styles.logo} source={require("../assets/logo-2.png")} />
+        {/* <View style={styles.logoContainer}>
+          <Image style={styles.logo} source={require("../assets/logo.png")} />
           <AppText style={styles.tagline}>Wise about warranties</AppText>
-        </View>
+        </View> */}
         <View style={styles.buttonsContainer}>
           <AppButton
-            icon="login"
-            title="SIGN IN"
+            title="Sign in"
             onPress={() => navigation.navigate(routes.SIGN_IN_1)}
           />
           <AppButton
-            icon="plus"
-            title="REGISTER"
-            color={defaultStyles.colors.secondary}
+            title="Register"
+            backgroundColor={null}
             onPress={() => navigation.navigate(routes.REGISTER_1)}
           />
+          <AppText style={styles.text}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et elit
+            hendrerit, vulputate libero ut, blandit libero. Vestibulum quis
+            tincidunt dui, sollicitudin porttitor dui. Aliquam id augue eget dui
+            iaculis rhoncus quis vitae sem. Pellentesque vestibulum consectetur
+            nisl vel faucibus.
+          </AppText>
         </View>
       </View>
     </>
@@ -50,7 +59,7 @@ function WelcomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    opacity: 0.5,
+    resizeMode: "cover",
   },
   buttonsContainer: {
     padding: 20,
@@ -64,19 +73,24 @@ const styles = StyleSheet.create({
     alignItems: "center",
     position: "absolute",
   },
-  logo: {
-    width: 224,
-    height: 80,
-  },
-  logoContainer: {
-    position: "absolute",
-    top: 70,
-    alignItems: "center",
-  },
+  // logo: {
+  //   width: 224,
+  //   height: 80,
+  // },
+  // logoContainer: {
+  //   position: "absolute",
+  //   top: 70,
+  //   alignItems: "center",
+  // },
   tagline: {
     fontSize: 20,
     fontWeight: "bold",
     paddingVertical: 10,
+  },
+  text: {
+    fontSize: 6,
+    color: colors.mediumGrey,
+    marginVertical: 15,
   },
 });
 

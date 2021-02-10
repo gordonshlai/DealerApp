@@ -2,7 +2,7 @@ import React from "react";
 import { Text, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 
 /**
  * A custom button of the application
@@ -14,9 +14,11 @@ import defaultStyles from "../config/styles";
 function AppButton({
   icon,
   title,
-  color = defaultStyles.colors.primary,
-  size = 18,
+  backgroundColor = colors.success,
+  color = colors.white,
+  size = 14,
   badge,
+  border = true,
   onPress,
   style,
 }) {
@@ -24,22 +26,17 @@ function AppButton({
     <TouchableOpacity
       style={[
         styles.button,
-        { backgroundColor: color, padding: color === null ? 5 : 10 },
+        {
+          backgroundColor: backgroundColor,
+          padding: backgroundColor === null && !border ? 5 : 12,
+          marginVertical: backgroundColor === null && !border ? 5 : 7,
+        },
+        border ? styles.border : null,
         style,
       ]}
       onPress={onPress}
     >
-      {icon && (
-        <MaterialCommunityIcons
-          name={icon}
-          size={size}
-          color={
-            color === null
-              ? defaultStyles.colors.primary
-              : defaultStyles.colors.white
-          }
-        />
-      )}
+      {icon && <MaterialCommunityIcons name={icon} size={size} color={color} />}
       {title && (
         <Text
           style={[
@@ -47,10 +44,7 @@ function AppButton({
             {
               fontSize: size,
               marginLeft: icon ? 5 : 0,
-              color:
-                color === null
-                  ? defaultStyles.colors.primary
-                  : defaultStyles.colors.white,
+              color: color,
             },
           ]}
         >
@@ -60,16 +54,8 @@ function AppButton({
       {badge && (
         <MaterialCommunityIcons
           name="check"
-          style={[
-            styles.badge,
-            {
-              backgroundColor:
-                color === null
-                  ? defaultStyles.colors.primary
-                  : defaultStyles.colors.white,
-            },
-          ]}
-          color={color === null ? defaultStyles.colors.white : color}
+          style={[styles.badge, { backgroundColor: color }]}
+          color={colors.white}
           size={12}
         />
       )}
@@ -79,11 +65,10 @@ function AppButton({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 5,
+    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
-    marginVertical: 5,
   },
   title: {
     fontWeight: "bold",
@@ -94,6 +79,10 @@ const styles = StyleSheet.create({
     top: 0,
     borderRadius: 6,
     overflow: "hidden",
+  },
+  border: {
+    borderColor: colors.success,
+    borderWidth: 1,
   },
 });
 

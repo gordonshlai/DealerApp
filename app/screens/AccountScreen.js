@@ -1,14 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Image, ScrollView, Modal } from "react-native";
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
+import {
+  View,
+  StyleSheet,
+  Image,
+  ScrollView,
+  Modal,
+  RefreshControl,
+} from "react-native";
 import * as Yup from "yup";
 
 import useAuth from "../auth/useAuth";
 import useApi from "../hooks/useApi";
 import client from "../api/client";
 import colors from "../config/colors";
-import Screen from "../components/Screen";
+
+import AppButton from "../components/AppButton";
+import AppText from "../components/AppText";
 import {
   AppErrorMessage,
   AppForm,
@@ -18,7 +25,6 @@ import {
 import { ListItem, ListItemSeparator } from "../components/lists";
 import Icon from "../components/Icon";
 import AppTextInput from "../components/AppTextInput";
-import { RefreshControl } from "react-native";
 import ActivityIndicator from "../components/ActivityIndicator";
 import Info from "../components/Info";
 
@@ -72,7 +78,6 @@ function AccountScreen(props) {
     getUserApi.data.user.name = name;
     getUserApi.data.user.email = email;
     const result = await patchUserApi.request(getUserApi.data.user);
-    console.log(result);
     if (!result.ok) return setError(getUserApi.data.message);
     setEditing(false);
     getUser();
@@ -133,6 +138,7 @@ function AccountScreen(props) {
                   <View style={styles.formFieldContainer}>
                     <AppText style={styles.fieldTitle}>Account ID</AppText>
                     <AppTextInput
+                      icon="identifier"
                       editable={false}
                       style={styles.nonEditable}
                       value={getUserApi.data.user.account.account_id}
@@ -140,8 +146,9 @@ function AccountScreen(props) {
                   </View>
 
                   <View style={styles.formFieldContainer}>
-                    <AppText style={styles.fieldTitle}>Comapny</AppText>
+                    <AppText style={styles.fieldTitle}>Company</AppText>
                     <AppTextInput
+                      icon="office-building"
                       editable={false}
                       style={styles.nonEditable}
                       value={getUserApi.data.user.account.name}
