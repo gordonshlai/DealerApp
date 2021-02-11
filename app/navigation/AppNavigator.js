@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 
 import TradeNavigator from "./TradeNavigator";
 import InventoryNavigator from "./InventoryNavigator";
@@ -28,32 +28,29 @@ const AppNavigator = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeBackgroundColor: "white",
         activeTintColor: defaultStyles.colors.primary,
-        inactiveBackgroundColor: "white",
         inactiveTintColor: defaultStyles.colors.black,
         style: {
           shadowColor: defaultStyles.colors.black,
           shadowRadius: 5,
           shadowOpacity: 0.5,
+          elevation: 10,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
         },
       }}
     >
       <Tab.Screen
-        name={routes.TRADE}
+        name="Trade Cars"
         component={TradeNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="cart-outline"
-              color={color}
-              size={size}
-            />
+            <Fontisto name="arrow-swap" color={color} size={size} />
           ),
         }}
       />
       <Tab.Screen
-        name={routes.INVENTORY}
+        name="My Inventory"
         component={InventoryNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (

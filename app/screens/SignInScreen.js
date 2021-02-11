@@ -127,18 +127,17 @@ const SignInScreen = ({ navigation }) => {
                   title="Back"
                   backgroundColor={null}
                   onPress={() => navigation.navigate(routes.WELCOME)}
-                  // onPress={() => navigation.goBack()}
                 />
+                <AppText style={styles.text}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
+                  et elit hendrerit, vulputate libero ut, blandit libero.
+                  Vestibulum quis tincidunt dui, sollicitudin porttitor dui.
+                  Aliquam id augue eget dui iaculis rhoncus quis vitae sem.
+                  Pellentesque vestibulum consectetur nisl vel faucibus.
+                </AppText>
               </AppForm>
             </ScrollView>
           </KeyboardAvoidingView>
-          <AppText style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et elit
-            hendrerit, vulputate libero ut, blandit libero. Vestibulum quis
-            tincidunt dui, sollicitudin porttitor dui. Aliquam id augue eget dui
-            iaculis rhoncus quis vitae sem. Pellentesque vestibulum consectetur
-            nisl vel faucibus.
-          </AppText>
         </Screen>
       </View>
     </>
@@ -180,8 +179,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: colors.lightGrey,
     alignSelf: "center",
-    position: "absolute",
-    bottom: 0,
+    marginTop: 20,
   },
 });
 

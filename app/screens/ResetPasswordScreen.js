@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     color: colors.lightGrey,
     alignSelf: "center",
     position: "absolute",
-    bottom: 0,
+    bottom: 20,
   },
 });
 

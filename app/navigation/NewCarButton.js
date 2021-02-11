@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 
 function NewListingButton({ onPress }) {
   return (
@@ -17,14 +17,17 @@ function NewListingButton({ onPress }) {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: defaultStyles.colors.primary,
+    backgroundColor: colors.primary,
     borderColor: "white",
     borderRadius: 40,
-    borderWidth: 10,
-    bottom: Platform.OS == "ios" ? 15 : 20,
+    bottom: Platform.OS == "ios" ? 30 : 35,
     height: 70,
     justifyContent: "center",
     width: 70,
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
   },
 });
 

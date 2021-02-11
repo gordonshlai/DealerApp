@@ -33,7 +33,7 @@ import colors from "../config/colors";
 /**
  * The register screen, allowing user to input their details for registrating a new account
  * and handling the registration operation based on the user input.
- * @module screens/RegisterScreen2
+ * @module screens/RegisterScreen1
  */
 
 /**
@@ -59,7 +59,7 @@ const validationSchema = Yup.object().shape({
 /**
  * The register screen functional component
  */
-function RegisterScreen2({ navigation, route }) {
+function RegisterScreen1({ navigation }) {
   // const registerApi = useApi(userApi.register);
   // const loginApi = useApi(authApi.login);
 
@@ -233,4 +233,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisterScreen2;
+export default RegisterScreen1;

@@ -6,14 +6,16 @@
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
-      "image": "./app/assets/Splash-Screen-High-Res.png",
+      "image": "./app/assets/Splash-Screen.png",
       "resizeMode": "cover",
       "backgroundColor": "#0E262F"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },

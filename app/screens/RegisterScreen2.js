@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  KeyboardAvoidingView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import AppButton from "../components/AppButton";
@@ -32,18 +33,32 @@ function RegisterScreen2({ navigation }) {
       />
       <View style={styles.container}>
         <Screen style={styles.screen}>
-          <ScrollView>
-            <Image style={styles.logo} source={require("../assets/logo.png")} />
-            <AppText style={styles.message}>
-              THANK YOU FOR REGISTERING, BEFORE YOU CAN LOGIN YOUR ACCOUNT WILL
-              NEED TO BE A APPROVED BY A MEMBER OF THE WISE TEAM.
-            </AppText>
-            <AppButton
-              icon="login"
-              title="SIGN IN"
-              onPress={() => navigation.navigate(routes.SIGN_IN)}
-            />
-          </ScrollView>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
+            <ScrollView>
+              <Image
+                style={styles.logo}
+                source={require("../assets/logo.png")}
+              />
+              <AppText style={styles.message}>
+                THANK YOU FOR REGISTERING, BEFORE YOU CAN LOGIN YOUR ACCOUNT
+                WILL NEED TO BE A APPROVED BY A MEMBER OF THE WISE TEAM.
+              </AppText>
+              <AppButton
+                icon="login"
+                title="SIGN IN"
+                onPress={() => navigation.navigate(routes.SIGN_IN)}
+              />
+            </ScrollView>
+          </KeyboardAvoidingView>
+          <AppText style={styles.text}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et elit
+            hendrerit, vulputate libero ut, blandit libero. Vestibulum quis
+            tincidunt dui, sollicitudin porttitor dui. Aliquam id augue eget dui
+            iaculis rhoncus quis vitae sem. Pellentesque vestibulum consectetur
+            nisl vel faucibus.
+          </AppText>
         </Screen>
       </View>
     </>
@@ -75,6 +90,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     padding: 25,
     marginVertical: 30,
+  },
+  text: {
+    fontSize: 8,
+    color: colors.lightGrey,
+    alignSelf: "center",
+    position: "absolute",
+    bottom: 20,
   },
 });
 
