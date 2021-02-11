@@ -8,6 +8,7 @@ import {
   StyleSheet,
   View,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
@@ -26,7 +27,7 @@ import {
 import Screen from "../components/Screen";
 import client from "../api/client";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 import routes from "../navigation/routes";
 
 /**
@@ -78,9 +79,9 @@ const ResetPasswordScreen = ({ navigation }) => {
 
   return (
     <>
-      <ImageBackground
+      <LinearGradient
+        colors={["#143C4B", "#0E262F"]}
         style={styles.background}
-        source={require("../assets/background.jpg")}
       />
 
       <ActivityIndicator visible={resetPasswordApi.loading} />
@@ -92,9 +93,8 @@ const ResetPasswordScreen = ({ navigation }) => {
             <ScrollView>
               <Image
                 style={styles.logo}
-                source={require("../assets/logo-2.png")}
+                source={require("../assets/logo.png")}
               />
-              <AppText style={styles.tagline}>Reset Password</AppText>
               <AppForm
                 initialValues={{ email: "" }}
                 onSubmit={handleSubmit}
@@ -102,30 +102,34 @@ const ResetPasswordScreen = ({ navigation }) => {
               >
                 <AppErrorMessage error={error} visible={error} />
                 <AppInfoMessage info={info} visible={info} />
-                <AppFormField
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  keyboardType="email-address"
-                  name="email"
-                  icon="email"
-                  placeholder="Email"
-                  textContentType="emailAddress"
-                />
+                <View style={styles.formFieldContainer}>
+                  <AppText style={styles.fieldName}>Email</AppText>
+                  <AppFormField
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    keyboardType="email-address"
+                    name="email"
+                    placeholder="Type Your Email"
+                    textContentType="emailAddress"
+                  />
+                </View>
 
-                <SubmitButton
-                  icon="exclamation"
-                  color={defaultStyles.colors.warning}
-                  title="Send Password Reset"
-                />
+                <SubmitButton title="Send Password Reset" />
               </AppForm>
               <AppButton
-                icon="arrow-left-bold-outline"
-                title="BACK"
-                color={defaultStyles.colors.secondary}
+                title="Back"
+                backgroundColor={null}
                 onPress={() => navigation.goBack()}
               />
             </ScrollView>
           </KeyboardAvoidingView>
+          <AppText style={styles.text}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et elit
+            hendrerit, vulputate libero ut, blandit libero. Vestibulum quis
+            tincidunt dui, sollicitudin porttitor dui. Aliquam id augue eget dui
+            iaculis rhoncus quis vitae sem. Pellentesque vestibulum consectetur
+            nisl vel faucibus.
+          </AppText>
         </Screen>
       </View>
     </>
@@ -135,29 +139,34 @@ const ResetPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    opacity: 0.3,
   },
   container: {
     height: "100%",
     width: "100%",
     position: "absolute",
   },
+  screen: {
+    padding: 20,
+  },
   logo: {
     width: 226,
     height: 80,
     alignSelf: "center",
-    marginTop: 50,
-    marginBottom: 20,
+    marginVertical: 30,
   },
-  screen: {
-    padding: 10,
+  formFieldContainer: {
+    marginVertical: 15,
   },
-  tagline: {
-    fontSize: 20,
+  fieldName: {
+    color: colors.lightGrey,
     fontWeight: "bold",
-    paddingBottom: 50,
+  },
+  text: {
+    fontSize: 8,
+    color: colors.lightGrey,
     alignSelf: "center",
-    color: defaultStyles.colors.darkGrey,
+    position: "absolute",
+    bottom: 0,
   },
 });
 

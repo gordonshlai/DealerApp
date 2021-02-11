@@ -153,7 +153,6 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     position: "absolute",
-    justifyContent: "center",
   },
   screen: {
     padding: 20,
@@ -182,7 +181,7 @@ const styles = StyleSheet.create({
     color: colors.lightGrey,
     alignSelf: "center",
     position: "absolute",
-    bottom: 30,
+    bottom: 0,
   },
 });
 
