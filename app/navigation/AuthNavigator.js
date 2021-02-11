@@ -5,7 +5,6 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import SignInScreen from "../screens/SignInScreen";
 import RegisterScreen1 from "../screens/RegisterScreen1";
 import RegisterScreen2 from "../screens/RegisterScreen2";
-import RegisterScreen3 from "../screens/RegisterScreen3";
 import ResetPasswordScreen from "../screens/ResetPasswordScreen";
 
 import routes from "./routes";
@@ -31,7 +30,6 @@ const AuthNavigator = () => (
     <Stack.Screen name={routes.SIGN_IN} component={SignInScreen} />
     <Stack.Screen name={routes.REGISTER_1} component={RegisterScreen1} />
     <Stack.Screen name={routes.REGISTER_2} component={RegisterScreen2} />
-    <Stack.Screen name={routes.REGISTER_3} component={RegisterScreen3} />
     <Stack.Screen
       name={routes.RESET_PASSWORD}
       component={ResetPasswordScreen}
