@@ -7,7 +7,9 @@ import {
   Modal,
   RefreshControl,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import useAuth from "../auth/useAuth";
 import useApi from "../hooks/useApi";
@@ -27,6 +29,7 @@ import Icon from "../components/Icon";
 import AppTextInput from "../components/AppTextInput";
 import ActivityIndicator from "../components/ActivityIndicator";
 import Info from "../components/Info";
+import Screen from "../components/Screen";
 
 const detailsValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -48,6 +51,7 @@ const changePasswordValidationSchema = Yup.object().shape({
 });
 
 function AccountScreen(props) {
+  const tabBarHeight = useBottomTabBarHeight();
   const { logOut } = useAuth();
 
   const [error, setError] = useState();
@@ -99,118 +103,141 @@ function AccountScreen(props) {
 
   return (
     <>
+      <LinearGradient
+        colors={["#143C4B", "#0E262F"]}
+        style={styles.background}
+      />
       <ActivityIndicator
         visible={
           getUserApi.loading || patchUserApi.loading || patchPasswordApi.loading
         }
       />
-      {getUserApi.error ? (
-        <>
-          <AppText style={styles.errorMessage}>
-            Couldn't retrieve user detail.
-          </AppText>
-          <AppErrorMessage visible={error} visible={error} />
-          <AppButton title="RETRY" onPress={getUser} />
-        </>
-      ) : (
-        <>
-          <ScrollView
-            refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={getUser} />
-            }
-          >
-            <Image
-              source={require("../assets/logo-2.png")}
-              style={styles.logo}
-            />
-            {getUserApi.data.user && (
-              <View style={styles.card}>
-                <AppForm
-                  initialValues={{
-                    name: getUserApi.data.user ? getUserApi.data.user.name : "",
-                    email: getUserApi.data.user
-                      ? getUserApi.data.user.email
-                      : "",
-                  }}
-                  onSubmit={handleChangeDetailsSubmit}
-                  validationSchema={detailsValidationSchema}
-                >
-                  <View style={styles.formFieldContainer}>
+      <Screen style={styles.screen}>
+        {getUserApi.error ? (
+          <>
+            <AppText style={styles.errorMessage}>
+              Couldn't retrieve user detail.
+            </AppText>
+            <AppErrorMessage visible={error} visible={error} />
+            <AppButton title="RETRY" onPress={getUser} />
+          </>
+        ) : (
+          <>
+            <ScrollView
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={getUser} />
+              }
+            >
+              <Image
+                source={require("../assets/logo.png")}
+                style={styles.logo}
+              />
+              {getUserApi.data.user && (
+                <View>
+                  <AppText style={styles.sectionTitle}>Details</AppText>
+
+                  <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>Account ID</AppText>
-                    <AppTextInput
-                      icon="identifier"
-                      editable={false}
-                      style={styles.nonEditable}
-                      value={getUserApi.data.user.account.account_id}
-                    />
+                    <AppText style={styles.fieldValue}>
+                      {getUserApi.data.user.account.account_id}
+                    </AppText>
                   </View>
 
-                  <View style={styles.formFieldContainer}>
+                  <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>Company</AppText>
-                    <AppTextInput
-                      icon="office-building"
-                      editable={false}
-                      style={styles.nonEditable}
-                      value={getUserApi.data.user.account.name}
-                    />
+                    <AppText style={styles.fieldValue}>
+                      {getUserApi.data.user.account.name}
+                    </AppText>
                   </View>
-
-                  <View style={styles.formFieldContainer}>
-                    <AppText style={styles.fieldTitle}>Name</AppText>
-                    <AppFormField
-                      autoCapitalize="none"
-                      autoCorrect={false}
-                      icon="account"
-                      name="name"
-                      placeholder="Name"
-                      editable={editing}
-                      onContentSizeChange={() => setError(null)}
-                      style={editing ? styles.editable : styles.nonEditable}
-                    />
-                  </View>
-
-                  <View style={styles.formFieldContainer}>
-                    <AppText style={styles.fieldTitle}>Email</AppText>
-                    <AppFormField
-                      autoCorrect={false}
-                      icon="email"
-                      name="email"
-                      placeholder="Email"
-                      editable={editing}
-                      onContentSizeChange={() => setError(null)}
-                      style={editing ? styles.editable : styles.nonEditable}
-                    />
-                  </View>
-                  <AppErrorMessage error={error} visible={patchUserApi.error} />
 
                   {!editing ? (
-                    <AppButton
-                      icon="pencil"
-                      title="Edit"
-                      color={colors.secondary}
-                      onPress={() => setEditing(true)}
-                    />
+                    <>
+                      <View style={styles.fieldContainer}>
+                        <AppText style={styles.fieldTitle}>Name</AppText>
+                        <AppText style={styles.fieldValue}>
+                          {getUserApi.data.user.name}
+                        </AppText>
+                      </View>
+                      <View style={styles.fieldContainer}>
+                        <AppText style={styles.fieldTitle}>Email</AppText>
+                        <AppText style={styles.fieldValue}>
+                          {getUserApi.data.user.email}
+                        </AppText>
+                      </View>
+                      <AppButton
+                        title="Edit Details"
+                        backgroundColor={null}
+                        onPress={() => setEditing(true)}
+                      />
+                    </>
                   ) : (
-                    <SubmitButton
-                      icon="check"
-                      title="Save"
-                      color={colors.success}
-                    />
+                    <View style={styles.formContainer}>
+                      <AppForm
+                        initialValues={{
+                          name: getUserApi.data.user
+                            ? getUserApi.data.user.name
+                            : "",
+                          email: getUserApi.data.user
+                            ? getUserApi.data.user.email
+                            : "",
+                        }}
+                        onSubmit={handleChangeDetailsSubmit}
+                        validationSchema={detailsValidationSchema}
+                      >
+                        <View style={styles.editFieldContainer}>
+                          <AppText style={styles.editFieldTitle}>Name</AppText>
+                          <AppFormField
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            name="name"
+                            placeholder="Name"
+                            color="white"
+                            onContentSizeChange={() => setError(null)}
+                          />
+                        </View>
+                        <View style={styles.editFieldContainer}>
+                          <AppText style={styles.editFieldTitle}>Email</AppText>
+                          <AppFormField
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            name="email"
+                            placeholder="Email"
+                            color="white"
+                            onContentSizeChange={() => setError(null)}
+                          />
+                        </View>
+                        <AppErrorMessage
+                          error={error}
+                          visible={patchUserApi.error}
+                        />
+                        <View
+                          style={{
+                            flexDirection: "row",
+                            marginVertical: 10,
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <AppButton
+                            title="Back"
+                            backgroundColor={null}
+                            onPress={() => setEditing(false)}
+                            style={{ width: "45%" }}
+                          />
+                          <SubmitButton title="Save" style={{ width: "45%" }} />
+                        </View>
+                      </AppForm>
+                    </View>
                   )}
-                </AppForm>
-              </View>
-            )}
-            <View style={styles.listItemsContainer}>
+                </View>
+              )}
               {!changePasswordVisible ? (
-                <ListItem
-                  IconComponent={
-                    <Icon name="lock-reset" backgroundColor={colors.success} />
-                  }
+                <AppButton
                   title="Change Password"
+                  backgroundColor={null}
                   onPress={() => setChangePasswordVisible(true)}
                 />
               ) : (
-                <View style={styles.card}>
+                <View style={styles.formContainer}>
                   <AppForm
                     initialValues={{
                       current_password: "",
@@ -220,150 +247,171 @@ function AccountScreen(props) {
                     onSubmit={handleChangePasswordSubmit}
                     validationSchema={changePasswordValidationSchema}
                   >
-                    <View style={styles.formFieldContainer}>
+                    <View style={styles.editFieldContainer}>
+                      <AppText style={styles.editFieldTitle}>
+                        Current Password
+                      </AppText>
                       <AppFormField
                         autoCapitalize="none"
                         autoCorrect={false}
-                        icon="lock-clock"
                         name="current_password"
                         placeholder="Current Password"
                         secureTextEntry
+                        color="white"
                         onContentSizeChange={() => setError(null)}
-                        style={styles.editable}
                       />
                     </View>
 
-                    <View style={styles.formFieldContainer}>
+                    <View style={styles.editFieldContainer}>
+                      <AppText style={styles.editFieldTitle}>
+                        New Password
+                      </AppText>
                       <AppFormField
                         autoCapitalize="none"
                         autoCorrect={false}
-                        icon="lock"
                         name="password_1"
                         placeholder="New Password"
                         secureTextEntry
+                        color="white"
                         onContentSizeChange={() => setError(null)}
-                        style={styles.editable}
                       />
                     </View>
 
-                    <View style={styles.formFieldContainer}>
+                    <View style={styles.editFieldContainer}>
+                      <AppText style={styles.editFieldTitle}>
+                        Repeat New Password
+                      </AppText>
                       <AppFormField
                         autoCapitalize="none"
                         autoCorrect={false}
-                        icon="lock-reset"
                         name="password_2"
                         placeholder="Repeat New Password"
                         secureTextEntry
-                        style={styles.editable}
+                        color="white"
+                        onContentSizeChange={() => setError(null)}
                       />
                     </View>
                     <AppErrorMessage
                       error={error}
                       visible={patchPasswordApi.error}
                     />
-                    <SubmitButton
-                      icon="check"
-                      title="Save"
-                      color={colors.success}
-                    />
+                    <View style={styles.buttonsContainer}>
+                      <AppButton
+                        title="Back"
+                        backgroundColor={null}
+                        onPress={() => setChangePasswordVisible(false)}
+                        style={{ width: "45%" }}
+                      />
+                      <SubmitButton title="Save" style={{ width: "45%" }} />
+                    </View>
                   </AppForm>
-                  <AppButton
-                    icon="cancel"
-                    title="Cancel"
-                    color={null}
-                    onPress={() => setChangePasswordVisible(false)}
-                  />
                 </View>
               )}
-              <ListItemSeparator />
-              <ListItem
-                IconComponent={
-                  <Icon name="logout" backgroundColor={colors.warning} />
-                }
+              <AppButton
                 title="Log Out"
                 onPress={() => setLogoutModalVisible(true)}
+                style={{ marginBottom: tabBarHeight }}
               />
-            </View>
-          </ScrollView>
+            </ScrollView>
 
-          <Modal
-            visible={logoutModalVisible}
-            animationType="fade"
-            transparent
-            onRequestClose={() => setLogoutModalVisible(false)}
-          >
-            <View style={styles.modal}>
-              <AppText style={styles.actionTitle}>Log Out?</AppText>
-              <View style={styles.actionButtonsContainer}>
-                <AppButton
-                  icon="check"
-                  title="Confirm"
-                  color={colors.warning}
-                  onPress={logOut}
-                />
-                <AppButton
-                  icon="cancel"
-                  title="Cancel"
-                  color={colors.secondary}
-                  onPress={() => setLogoutModalVisible(false)}
+            <Modal
+              visible={logoutModalVisible}
+              animationType="fade"
+              transparent
+              onRequestClose={() => setLogoutModalVisible(false)}
+            >
+              <View style={styles.modal}>
+                <AppText style={styles.actionTitle}>Log Out?</AppText>
+                <View style={styles.buttonsContainer}>
+                  <AppButton
+                    title="Cancel"
+                    backgroundColor={null}
+                    color={colors.success}
+                    style={{ width: "45%" }}
+                    onPress={() => setLogoutModalVisible(false)}
+                  />
+                  <AppButton
+                    title="Confirm"
+                    style={{ width: "45%" }}
+                    onPress={logOut}
+                  />
+                </View>
+              </View>
+            </Modal>
+
+            {updatedMessage && (
+              <View style={styles.updatedContainer}>
+                <Info
+                  name="check"
+                  size={24}
+                  text={updatedMessage}
+                  color="white"
+                  textStyle={styles.updatedText}
                 />
               </View>
-            </View>
-          </Modal>
-
-          {updatedMessage && (
-            <View style={styles.updatedContainer}>
-              <Info
-                name="check"
-                size={24}
-                text={updatedMessage}
-                color="white"
-                textStyle={styles.updatedText}
-              />
-            </View>
-          )}
-        </>
-      )}
+            )}
+          </>
+        )}
+      </Screen>
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    height: "100%",
+    width: "100%",
+    position: "absolute",
+  },
+  screen: {
+    paddingHorizontal: 20,
+  },
   errorMessage: {
     alignSelf: "center",
+    color: "white",
     fontWeight: "bold",
     fontSize: 24,
   },
   logo: {
     height: 100,
-    width: "80%",
+    width: "70%",
     resizeMode: "contain",
-    marginTop: 60,
-    marginBottom: 10,
+    marginBottom: 30,
     alignSelf: "center",
   },
-  card: {
-    backgroundColor: "white",
-    margin: 20,
-    padding: 20,
-    borderRadius: 20,
+  sectionTitle: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  fieldContainer: {
+    flexDirection: "row",
+    marginVertical: 10,
   },
   fieldTitle: {
+    width: "40%",
+    color: colors.lightGrey,
+  },
+  fieldValue: {
+    width: "60%",
+    color: "white",
     fontWeight: "bold",
   },
-  formFieldContainer: {
-    marginBottom: 10,
+  formContainer: {
+    marginVertical: 20,
   },
-  editable: {
-    backgroundColor: "white",
-    borderWidth: 1,
-    borderColor: colors.lightGrey,
+  editFieldTitle: {
+    color: "white",
+    fontWeight: "bold",
   },
-  nonEditable: {
-    backgroundColor: colors.lightGrey,
+  editFieldContainer: {
+    marginVertical: 10,
   },
-  listItemsContainer: {
-    marginBottom: 20,
+  buttonsContainer: {
+    flexDirection: "row",
+    marginVertical: 10,
+    justifyContent: "space-between",
   },
   modal: {
     paddingHorizontal: 20,

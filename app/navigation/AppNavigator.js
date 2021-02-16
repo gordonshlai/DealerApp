@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 
@@ -15,6 +14,7 @@ import routes from "./routes";
 import AuthContext from "../auth/context";
 import AppText from "../components/AppText";
 import colors from "../config/colors";
+import AccountNavigator from "./AccountNavigator";
 
 const Tab = createBottomTabNavigator();
 /**
@@ -29,7 +29,7 @@ const AppNavigator = () => {
     <Tab.Navigator
       tabBarOptions={{
         activeTintColor: defaultStyles.colors.primary,
-        inactiveTintColor: defaultStyles.colors.black,
+        inactiveTintColor: defaultStyles.colors.mediumGrey,
         style: {
           shadowColor: defaultStyles.colors.black,
           shadowRadius: 5,
@@ -37,6 +37,8 @@ const AppNavigator = () => {
           elevation: 10,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
+          keyboardHidesTabBar: true,
+          position: "absolute",
         },
       }}
     >
@@ -54,11 +56,7 @@ const AppNavigator = () => {
         component={InventoryNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="car-multiple"
-              color={color}
-              size={size}
-            />
+            <MaterialCommunityIcons name="car" color={color} size={size} />
           ),
         }}
       />
@@ -83,19 +81,14 @@ const AppNavigator = () => {
         component={MessageNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <>
-              <MaterialCommunityIcons
-                name="message-text-outline"
-                color={color}
-                size={size}
-              />
-              {unread && (
-                <View style={styles.unreadBadge}>
-                  <AppText style={styles.unreadNumber}>{unread}</AppText>
-                </View>
-              )}
-            </>
+            <MaterialCommunityIcons
+              name="message-text-outline"
+              color={color}
+              size={size}
+            />
           ),
+          tabBarBadge: unread ? unread : null,
+          tabBarBadgeStyle: { backgroundColor: colors.primary, color: "white" },
         }}
       />
       <Tab.Screen
@@ -103,35 +96,12 @@ const AppNavigator = () => {
         component={AccountScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="account-outline"
-              color={color}
-              size={size}
-            />
+            <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
         }}
       />
     </Tab.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  unreadBadge: {
-    alignItems: "center",
-    position: "absolute",
-    right: 10,
-    top: 0,
-    backgroundColor: colors.primary,
-    paddingVertical: 2,
-    paddingHorizontal: 7,
-    borderRadius: 10,
-    justifyContent: "center",
-  },
-  unreadNumber: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: "bold",
-  },
-});
 
 export default AppNavigator;

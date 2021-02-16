@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, View } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import AppButton from "../components/AppButton";
 import Loading from "../components/Loading";
 
@@ -46,6 +47,7 @@ const sortByDisplayArray = [
 
 function HomeScreen({ navigation }) {
   const { loadTradeFlag } = useContext(AuthContext);
+  const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
 
@@ -125,7 +127,7 @@ function HomeScreen({ navigation }) {
   };
 
   return (
-    <Screen style={styles.screen}>
+    <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
       {getVehiclesApi.error ? (
         <>
           <AppText style={styles.errorMessage}>

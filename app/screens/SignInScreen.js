@@ -164,6 +164,7 @@ const styles = StyleSheet.create({
   },
   fieldName: {
     color: "white",
+    fontWeight: "bold",
   },
   formFieldContainer: {
     marginVertical: 15,
