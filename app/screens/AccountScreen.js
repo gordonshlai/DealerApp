@@ -24,12 +24,10 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-import { ListItem, ListItemSeparator } from "../components/lists";
-import Icon from "../components/Icon";
-import AppTextInput from "../components/AppTextInput";
 import ActivityIndicator from "../components/ActivityIndicator";
 import Info from "../components/Info";
 import Screen from "../components/Screen";
+import Menu from "../components/Menu";
 
 const detailsValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -128,6 +126,9 @@ function AccountScreen(props) {
                 <RefreshControl refreshing={refreshing} onRefresh={getUser} />
               }
             >
+              <View style={styles.menuContainer}>
+                <Menu />
+              </View>
               <Image
                 source={require("../assets/logo.png")}
                 style={styles.logo}
@@ -371,6 +372,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 24,
+  },
+  menuContainer: {
+    width: "100%",
+    alignItems: "flex-end",
+    right: -20,
+    zIndex: 1,
   },
   logo: {
     height: 100,

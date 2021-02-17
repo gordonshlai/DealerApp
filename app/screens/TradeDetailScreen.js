@@ -85,19 +85,18 @@ function TradeDetailScreen({ route, navigation }) {
     setPrice(price);
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <AppButton
-          icon="dots-vertical"
-          color={null}
-          size={24}
-          style={{ marginRight: 10 }}
-          onPress={() => setModalVisible(true)}
-        />
-      ),
-    });
-  }, [navigation]);
+  // useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <AppButton
+  //         icon="dots-vertical"
+  //         size={24}
+  //         style={{ marginRight: 10 }}
+  //         onPress={() => setModalVisible(true)}
+  //       />
+  //     ),
+  //   });
+  // }, [navigation]);
 
   return (
     <>

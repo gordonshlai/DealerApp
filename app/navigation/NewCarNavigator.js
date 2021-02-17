@@ -8,6 +8,8 @@ import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import routes from "./routes";
 
 import defaultStyles from "../config/styles";
+import Menu from "../components/Menu";
+import colors from "../config/colors";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +19,8 @@ const NewCarNavigator = () => (
       headerBackTitleVisible: false,
       headerBackTitle: "",
       headerTitleStyle: { marginHorizontal: 10 },
+      headerStyle: { backgroundColor: colors.secondary },
+      headerTintColor: "white",
       headerBackImage: () => (
         <MaterialCommunityIcons
           name="arrow-left"
@@ -25,13 +29,10 @@ const NewCarNavigator = () => (
           style={{ paddingHorizontal: 10 }}
         />
       ),
+      headerRight: () => <Menu />,
     }}
   >
-    <Stack.Screen
-      name={routes.NEW_CAR}
-      component={NewCarScreen}
-      options={{ headerShown: false }}
-    />
+    <Stack.Screen name={routes.NEW_CAR} component={NewCarScreen} />
     <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}

@@ -9,13 +9,13 @@ export default Object.freeze({
   REGISTER_2: "Register 2",
   RESET_PASSWORD: "Reset Password",
 
-  TRADE: "Trade",
+  TRADE: "Trade Cars",
   TRADE_DETAIL: "Trade Detail",
 
-  INVENTORY: "Inventory",
+  INVENTORY: "My Inventory",
   INVENTORY_DETAIL: "Inventory Detail",
 
-  NEW_CAR: "New Car",
+  NEW_CAR: "Add New Vehicle",
   VEHICLE_DETAIL: "Vehicle detail",
   VEHICLE_DESCRIPTION: "Vehicle description",
 

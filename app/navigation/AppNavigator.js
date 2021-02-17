@@ -43,7 +43,7 @@ const AppNavigator = () => {
       }}
     >
       <Tab.Screen
-        name="Trade Cars"
+        name={routes.TRADE}
         component={TradeNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -52,7 +52,7 @@ const AppNavigator = () => {
         }}
       />
       <Tab.Screen
-        name="My Inventory"
+        name={routes.INVENTORY}
         component={InventoryNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (

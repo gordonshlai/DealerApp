@@ -5,6 +5,8 @@ import routes from "./routes";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import defaultStyles from "../config/styles";
+import Menu from "../components/Menu";
+import colors from "../config/colors";
 
 const Stack = createStackNavigator();
 
@@ -14,8 +16,9 @@ const AccountNavigator = () => (
       headerBackTitleVisible: false,
       headerBackTitle: "",
       headerStyle: {
-        backgroundColor: "#143C4B",
+        backgroundColor: colors.secondary,
       },
+      headerTintColor: "white",
       headerTitleStyle: { marginHorizontal: 10 },
       headerBackImage: () => (
         <MaterialCommunityIcons
@@ -25,6 +28,7 @@ const AccountNavigator = () => (
           style={{ paddingHorizontal: 10 }}
         />
       ),
+      headerRight: () => <Menu />,
     }}
   >
     <Stack.Screen name={routes.ACCOUNT} component={AccountScreen} />
