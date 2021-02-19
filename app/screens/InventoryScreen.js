@@ -13,7 +13,7 @@ import Picker from "../components/Picker";
 import client from "../api/client";
 import useApi from "../hooks/useApi";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
@@ -138,16 +138,21 @@ function InventoryScreen({ navigation }) {
             <View style={styles.optionBar}>
               <AppButton
                 title="Filter"
-                color={null}
+                backgroundColor={null}
+                color={colors.primary}
+                border={false}
                 icon="filter-variant"
+                size={16}
                 badge={status !== statusArray[0] || make !== "all"}
                 onPress={() => setFilterModalVisible(true)}
               />
               <View style={styles.searchButtonContainer}>
                 <AppButton
                   icon={serachBarVisible ? "magnify-close" : "magnify"}
-                  color={null}
-                  size={24}
+                  backgroundColor={null}
+                  color={colors.primary}
+                  border={false}
+                  size={20}
                   badge={search !== ""}
                   onPress={() => setSearchBarVisible(!serachBarVisible)}
                 />
@@ -161,6 +166,7 @@ function InventoryScreen({ navigation }) {
               <AppTextInput
                 icon="magnify"
                 placeholder="(Registration)"
+                style={{ backgroundColor: "white" }}
                 onChangeText={handleSearch}
               />
             </View>
@@ -213,12 +219,12 @@ function InventoryScreen({ navigation }) {
               })
             }
             selectedButtonStyle={{
-              backgroundColor: defaultStyles.colors.secondary,
+              backgroundColor: colors.secondary,
             }}
             selectedIndex={statusArray.indexOf(filter.status)}
             textStyle={{
               fontSize: 16,
-              color: defaultStyles.colors.secondary,
+              color: colors.secondary,
               textAlign: "center",
             }}
           />
@@ -257,7 +263,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     alignSelf: "center",
-    color: defaultStyles.colors.primary,
+    color: colors.primary,
     paddingTop: 20,
   },
   optionBar: {
@@ -272,11 +278,11 @@ const styles = StyleSheet.create({
   },
   modal: {
     padding: 20,
-    backgroundColor: defaultStyles.colors.white,
+    backgroundColor: colors.white,
   },
   modalTitle: {
     alignSelf: "center",
-    color: defaultStyles.colors.primary,
+    color: colors.primary,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,

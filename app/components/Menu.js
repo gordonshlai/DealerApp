@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Modal, View, StyleSheet, FlatList } from "react-native";
+import {
+  Modal,
+  View,
+  StyleSheet,
+  FlatList,
+  TouchableHighlight,
+} from "react-native";
 
 import AppButton from "./AppButton";
 import Screen from "./Screen";
@@ -9,7 +15,6 @@ import routes from "../navigation/routes";
 import colors from "../config/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AppText from "./AppText";
-import { TouchableHighlight } from "react-native";
 
 const list = [
   routes.TRADE,

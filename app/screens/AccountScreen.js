@@ -126,9 +126,6 @@ function AccountScreen(props) {
                 <RefreshControl refreshing={refreshing} onRefresh={getUser} />
               }
             >
-              <View style={styles.menuContainer}>
-                <Menu />
-              </View>
               <Image
                 source={require("../assets/logo.png")}
                 style={styles.logo}
@@ -372,12 +369,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 24,
-  },
-  menuContainer: {
-    width: "100%",
-    alignItems: "flex-end",
-    right: -20,
-    zIndex: 1,
   },
   logo: {
     height: 100,

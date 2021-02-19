@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TradeScreen from "../screens/TradeScreen";
 import TradeDetailScreen from "../screens/TradeDetailScreen";
 
 import routes from "./routes";
 import colors from "../config/colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 
 const Stack = createStackNavigator();
@@ -20,6 +20,7 @@ const TradeNavigator = () => {
         headerTitleStyle: { marginHorizontal: 10 },
         headerStyle: {
           backgroundColor: colors.secondary,
+          shadowColor: "transparent",
         },
         headerTintColor: "white",
         headerBackImage: () => (

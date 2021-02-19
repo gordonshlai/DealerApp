@@ -1,6 +1,5 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import InventoryScreen from "../screens/InventoryScreen";
 import InventoryDetailScreen from "../screens/InventoryDetailScreen";
@@ -9,6 +8,7 @@ import colors from "../config/colors";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
 import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import Menu from "../components/Menu";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -18,7 +18,10 @@ const InventoryNavigator = () => (
       headerBackTitleVisible: false,
       headerBackTitle: "",
       headerTitleStyle: { marginHorizontal: 10 },
-      headerStyle: { backgroundColor: colors.secondary },
+      headerStyle: {
+        backgroundColor: colors.secondary,
+        shadowColor: "transparent",
+      },
       headerTintColor: "white",
       headerBackImage: () => (
         <MaterialCommunityIcons

@@ -19,7 +19,7 @@ import {
   SubmitButton,
 } from "../components/forms";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 import useApi from "../hooks/useApi";
 import routes from "../navigation/routes";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -52,7 +52,6 @@ function NewCarScreen({ navigation }) {
         >
           <Screen style={styles.screen}>
             <View style={styles.card}>
-              <AppText style={styles.title}>ADD A NEW CAR</AppText>
               <AppForm
                 initialValues={{ registration: "" }}
                 onSubmit={handleSubmit}
@@ -60,27 +59,27 @@ function NewCarScreen({ navigation }) {
               >
                 <RegistrationPlateInput
                   name="registration"
+                  placeholder="ENTER REGISTRATION"
                   onContentSizeChange={() => setError("")}
                 />
                 <AppErrorMessage error={error} visible={error} />
-                <SubmitButton
-                  icon="magnify"
-                  color={defaultStyles.colors.success}
-                  title="FIND"
-                />
+                <SubmitButton title="Find Vehicle" />
               </AppForm>
               <AppButton
-                title="WITHOUT REGISTRATION"
-                color={defaultStyles.colors.secondary}
+                title="Add without registration"
+                backgroundColor={null}
+                color={colors.success}
                 onPress={() => navigation.navigate(routes.VEHICLE_DETAIL)}
               />
             </View>
-            <AppButton
-              icon="cancel"
-              color={null}
-              title="CANCEL"
-              onPress={() => navigation.goBack()}
-            />
+            <View style={styles.card}>
+              <AppButton
+                backgroundColor={null}
+                color={colors.success}
+                title="Back"
+                onPress={() => navigation.goBack()}
+              />
+            </View>
           </Screen>
         </KeyboardAvoidingView>
       </ScrollView>
@@ -93,17 +92,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   card: {
-    backgroundColor: defaultStyles.colors.white,
+    backgroundColor: "white",
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,
-  },
-  title: {
-    alignSelf: "center",
-    color: defaultStyles.colors.primary,
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
   },
 });
 

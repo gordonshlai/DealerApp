@@ -10,6 +10,7 @@ import {
   Dimensions,
   Linking,
 } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import * as Yup from "yup";
 
@@ -33,7 +34,7 @@ import Disclaimer from "../components/Disclaimer";
 import client from "../api/client";
 import useApi from "../hooks/useApi";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 import Screen from "../components/Screen";
 import ErrorMessage from "../components/forms/AppErrorMessage";
 import routes from "../navigation/routes";
@@ -48,6 +49,7 @@ function TradeDetailScreen({ route, navigation }) {
 
   const { loadMessagesFlag, setLoadMessagesFlag } = useContext(AuthContext);
 
+  const tabBarHeight = useBottomTabBarHeight();
   const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -117,7 +119,7 @@ function TradeDetailScreen({ route, navigation }) {
             <AppButton title="RETRY" onPress={() => getVehicleApi.request()} />
           </View>
         ) : (
-          <>
+          <View style={{ paddingBottom: tabBarHeight }}>
             <View style={[styles.informationContainer, { padding: 0 }]}>
               {getVehicleApi.data.images && (
                 <View style={styles.imageContainer}>
@@ -171,10 +173,7 @@ function TradeDetailScreen({ route, navigation }) {
                     <View style={styles.detailField}>
                       <AppText style={styles.detailTitle}>Asking Price</AppText>
                       <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: defaultStyles.colors.success },
-                        ]}
+                        style={[styles.detailValue, { color: colors.success }]}
                       >
                         {getVehicleApi.data.price_asking === "0.00"
                           ? " POA"
@@ -189,7 +188,7 @@ function TradeDetailScreen({ route, navigation }) {
                       <AppText
                         style={[
                           styles.detailValue,
-                          { color: defaultStyles.colors.secondary },
+                          { color: colors.secondary },
                         ]}
                       >
                         {getVehicleApi.data.price_cap === "0.00"
@@ -208,7 +207,7 @@ function TradeDetailScreen({ route, navigation }) {
                       <AppText
                         style={[
                           styles.detailValue,
-                          { color: defaultStyles.colors.secondary },
+                          { color: colors.secondary },
                         ]}
                       >
                         {dayjs(getVehicleApi.data.listed_at).format(
@@ -221,10 +220,7 @@ function TradeDetailScreen({ route, navigation }) {
                     <View style={styles.detailField}>
                       <AppText style={styles.detailTitle}>Offers</AppText>
                       <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: defaultStyles.colors.black },
-                        ]}
+                        style={[styles.detailValue, { color: colors.black }]}
                       >
                         {getVehicleApi.data.offers_count}
                       </AppText>
@@ -243,10 +239,7 @@ function TradeDetailScreen({ route, navigation }) {
                 <>
                   <AppText style={styles.detailTitle}>Seller</AppText>
                   <AppText
-                    style={[
-                      styles.detailValue,
-                      { color: defaultStyles.colors.secondary },
-                    ]}
+                    style={[styles.detailValue, { color: colors.secondary }]}
                   >
                     {getVehicleApi.data.seller.name}
                   </AppText>
@@ -262,7 +255,9 @@ function TradeDetailScreen({ route, navigation }) {
                   <AppButton
                     icon="google-maps"
                     title="Show on map   >"
-                    color={null}
+                    backgroundColor={null}
+                    color={colors.primary}
+                    border={false}
                     onPress={() =>
                       Linking.openURL(
                         "https://www.google.com/maps/place/" +
@@ -435,7 +430,7 @@ function TradeDetailScreen({ route, navigation }) {
                   : "Not provided"}
               </AppText>
             </View>
-          </>
+          </View>
         )}
       </ScrollView>
 
@@ -455,7 +450,7 @@ function TradeDetailScreen({ route, navigation }) {
                 <AppButton
                   icon="message-processing"
                   title="MAKE ENQUIRY"
-                  color={defaultStyles.colors.secondary}
+                  color={colors.secondary}
                   onPress={() => {
                     setModalVisible(false);
                     setDisclaimerVisible(true);
@@ -481,7 +476,7 @@ function TradeDetailScreen({ route, navigation }) {
                     keyboardType="numeric"
                   />
                   <SubmitButton
-                    color={defaultStyles.colors.success}
+                    color={colors.success}
                     icon="check"
                     title="SUBMIT OFFER"
                   />
@@ -611,7 +606,7 @@ const styles = StyleSheet.create({
   },
   address: {
     fontStyle: "italic",
-    color: defaultStyles.colors.mediumGrey,
+    color: colors.mediumGrey,
     textAlign: "center",
   },
   enquireButton: {
@@ -620,18 +615,18 @@ const styles = StyleSheet.create({
   modal: {
     paddingVertical: 50,
     paddingHorizontal: 20,
-    backgroundColor: defaultStyles.colors.mediumGrey + "44",
+    backgroundColor: colors.mediumGrey + "44",
     flex: 1,
   },
   modalCard: {
-    backgroundColor: defaultStyles.colors.lightGrey,
+    backgroundColor: colors.lightGrey,
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,
   },
   modalTitle: {
     alignSelf: "center",
-    color: defaultStyles.colors.primary,
+    color: colors.primary,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,

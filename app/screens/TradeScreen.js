@@ -11,12 +11,12 @@ import Screen from "../components/Screen";
 import client from "../api/client";
 import useApi from "../hooks/useApi";
 
-import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
 import OptionButton from "../components/OptionButton";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import { AppErrorMessage } from "../components/forms";
+import colors from "../config/colors";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -141,8 +141,11 @@ function HomeScreen({ navigation }) {
           <View style={styles.optionBar}>
             <OptionButton
               title={make.toUpperCase()}
-              color={null}
+              backgroundColor={null}
+              color={colors.primary}
+              border={false}
               icon="car"
+              size={16}
               initialValue="all"
               value={make}
               queryArray={makesArray}
@@ -151,9 +154,12 @@ function HomeScreen({ navigation }) {
               handleRefresh={handleRefresh}
             />
             <OptionButton
-              title="Sort By"
-              color={null}
-              icon="sort"
+              title="Sort"
+              backgroundColor={null}
+              color={colors.primary}
+              border={false}
+              icon="sort-variant"
+              size={16}
               initialValue="listed-desc"
               value={sortBy}
               queryArray={sortByQueryArray}
@@ -206,7 +212,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     alignSelf: "center",
-    color: defaultStyles.colors.primary,
+    color: colors.primary,
     paddingTop: 20,
   },
   optionBar: {
@@ -219,18 +225,18 @@ const styles = StyleSheet.create({
   modal: {
     paddingHorizontal: 20,
     paddingVertical: 50,
-    backgroundColor: defaultStyles.colors.lightGrey,
+    backgroundColor: colors.lightGrey,
     flex: 1,
   },
   modalCard: {
-    backgroundColor: defaultStyles.colors.white,
+    backgroundColor: colors.white,
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,
   },
   modalTitle: {
     alignSelf: "center",
-    color: defaultStyles.colors.primary,
+    color: colors.primary,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,

@@ -11,8 +11,11 @@ import Screen from "./Screen";
 
 function OptionButton({
   title = "Sort By",
+  backgroundColor,
   color,
-  icon = "sort",
+  border,
+  icon = "sort-variant",
+  size,
   initialValue,
   value,
   queryArray,
@@ -25,8 +28,11 @@ function OptionButton({
     <>
       <AppButton
         title={title}
+        backgroundColor={backgroundColor}
         color={color}
+        border={border}
         icon={icon}
+        size={size}
         badge={value !== initialValue}
         onPress={() => setModalVisible(true)}
       />

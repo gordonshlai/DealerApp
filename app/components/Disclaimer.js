@@ -60,7 +60,8 @@ function Disclaimer({ visible, setVisible, onAcceptPress, onCancelPress }) {
             <AppButton
               icon="cancel"
               title="CANCEL"
-              color={colors.secondary}
+              backgroundColor={null}
+              color={colors.success}
               onPress={onCancelPress}
             />
           </View>

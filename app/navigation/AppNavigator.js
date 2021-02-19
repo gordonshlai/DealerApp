@@ -12,7 +12,6 @@ import AccountScreen from "../screens/AccountScreen";
 import defaultStyles from "../config/styles";
 import routes from "./routes";
 import AuthContext from "../auth/context";
-import AppText from "../components/AppText";
 import colors from "../config/colors";
 import AccountNavigator from "./AccountNavigator";
 
@@ -93,7 +92,7 @@ const AppNavigator = () => {
       />
       <Tab.Screen
         name={routes.ACCOUNT}
-        component={AccountScreen}
+        component={AccountNavigator}
         options={{
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />

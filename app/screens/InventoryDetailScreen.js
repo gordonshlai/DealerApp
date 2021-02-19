@@ -9,6 +9,7 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
@@ -44,6 +45,7 @@ const actions = [
 function InventoryDetailScreen({ navigation, route }) {
   const vehicle = route.params;
 
+  const tabBarHeight = useBottomTabBarHeight();
   const {
     loadInventoryDetailFlag,
     loadInventoryFlag,
@@ -89,7 +91,9 @@ function InventoryDetailScreen({ navigation, route }) {
       headerRight: () => (
         <AppButton
           icon="dots-vertical"
-          color={null}
+          backgroundColor={null}
+          color={colors.primary}
+          border={false}
           size={24}
           badge={false}
           style={{ marginRight: 10 }}
@@ -162,7 +166,7 @@ function InventoryDetailScreen({ navigation, route }) {
             />
           </View>
         ) : (
-          <>
+          <View style={{ paddingBottom: tabBarHeight }}>
             <View style={[styles.informationContainer, { padding: 0 }]}>
               {getVehicleApi.data.images && (
                 <View style={styles.imageContainer}>
@@ -298,11 +302,6 @@ function InventoryDetailScreen({ navigation, route }) {
                     getVehicleApi.data.sales_status == 2
                       ? "Unlist from Trade to Trade"
                       : "List on Trade to Trade"
-                  }
-                  color={
-                    getVehicleApi.data.sales_status == 2
-                      ? colors.primary
-                      : colors.success
                   }
                   onPress={() => {
                     if (getVehicleApi.data.sales_status != 2) {
@@ -535,7 +534,7 @@ function InventoryDetailScreen({ navigation, route }) {
                 ))}
               </View>
             )}
-          </>
+          </View>
         )}
       </ScrollView>
 

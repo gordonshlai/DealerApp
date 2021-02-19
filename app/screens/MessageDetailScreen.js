@@ -6,6 +6,7 @@ import React, {
   useState,
 } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import * as Yup from "yup";
 
@@ -38,6 +39,7 @@ const validationSchema = Yup.object().shape({
 function MessageDetailScreen({ navigation, route }) {
   const messageId = route.params.messageId;
 
+  const tabBarHeight = useBottomTabBarHeight();
   const {
     unread,
     setUnread,
@@ -103,7 +105,9 @@ function MessageDetailScreen({ navigation, route }) {
         <View style={{ flexDirection: "row" }}>
           <AppButton
             icon="content-save"
-            color={null}
+            backgroundColor={null}
+            color={colors.primary}
+            border={false}
             size={24}
             badge={
               getThreadsApi.data.participant &&
@@ -116,7 +120,9 @@ function MessageDetailScreen({ navigation, route }) {
           />
           <AppButton
             icon="archive"
-            color={null}
+            backgroundColor={null}
+            color={colors.primary}
+            border={false}
             size={24}
             badge={
               getThreadsApi.data.participant &&
@@ -135,7 +141,7 @@ function MessageDetailScreen({ navigation, route }) {
 
   return (
     <>
-      <View style={styles.screen}>
+      <View style={[styles.screen, { paddingBottom: tabBarHeight }]}>
         <View style={{ flex: 1 }}>
           <FlatList
             inverted
@@ -172,6 +178,7 @@ function MessageDetailScreen({ navigation, route }) {
                   name="text"
                   placeholder="Type a message"
                   multiline
+                  style={{ backgroundColor: "white" }}
                   onContentSizeChange={() => setError(null)}
                 />
               </View>
@@ -200,17 +207,12 @@ function MessageDetailScreen({ navigation, route }) {
           </AppText>
           <View style={styles.actionButtonsContainer}>
             <AppButton
-              icon="check"
-              title="Confirm"
-              color={colors.success}
-              onPress={handleAction}
-            />
-            <AppButton
-              icon="cancel"
               title="Cancel"
-              color={colors.secondary}
+              backgroundColor={null}
+              color={colors.success}
               onPress={() => setModalVisible(false)}
             />
+            <AppButton title="Confirm" onPress={handleAction} />
           </View>
         </View>
       </Modal>
@@ -230,6 +232,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     backgroundColor: colors.primary,
+    borderWidth: 0,
     padding: 10,
     borderRadius: 10,
     marginLeft: 5,

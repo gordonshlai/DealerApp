@@ -1,15 +1,14 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import NewCarScreen from "../screens/NewCarScreen";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
 import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import routes from "./routes";
 
-import defaultStyles from "../config/styles";
-import Menu from "../components/Menu";
 import colors from "../config/colors";
+import Menu from "../components/Menu";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Stack = createStackNavigator();
 
@@ -19,13 +18,16 @@ const NewCarNavigator = () => (
       headerBackTitleVisible: false,
       headerBackTitle: "",
       headerTitleStyle: { marginHorizontal: 10 },
-      headerStyle: { backgroundColor: colors.secondary },
+      headerStyle: {
+        backgroundColor: colors.secondary,
+        shadowColor: "transparent",
+      },
       headerTintColor: "white",
       headerBackImage: () => (
         <MaterialCommunityIcons
-          name="arrow-left"
+          name="chevron-left"
           size={32}
-          color={defaultStyles.colors.primary}
+          color={colors.primary}
           style={{ paddingHorizontal: 10 }}
         />
       ),

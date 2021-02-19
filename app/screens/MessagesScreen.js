@@ -172,11 +172,14 @@ function MessagesScreen({ navigation }) {
           <View style={styles.optionBar}>
             <View style={styles.optionBarRow}>
               <OptionButton
-                title="Sort By"
-                color={null}
-                icon="sort"
+                title="Sort"
+                backgroundColor={null}
+                color={colors.primary}
+                border={false}
+                icon="sort-variant"
                 initialValue="desc"
                 value={sortBy}
+                size={16}
                 queryArray={sortByQueryArray}
                 displayArray={sortByDisplayArray}
                 setValue={setSortBy}
@@ -188,7 +191,10 @@ function MessagesScreen({ navigation }) {
               />
               <OptionButton
                 title="Filter"
-                color={null}
+                backgroundColor={null}
+                color={colors.primary}
+                border={false}
+                size={16}
                 icon="filter-variant"
                 initialValue="all"
                 value={filter}
@@ -201,6 +207,7 @@ function MessagesScreen({ navigation }) {
             <AppTextInput
               icon="magnify"
               placeholder="Search"
+              style={{ backgroundColor: "white" }}
               onChangeText={handleSearch}
             />
           </View>

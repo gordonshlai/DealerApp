@@ -5,6 +5,7 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  LogBox,
 } from "react-native";
 import * as Yup from "yup";
 
@@ -27,7 +28,6 @@ import client from "../api/client";
 import { Formik } from "formik";
 import dayjs from "dayjs";
 
-import { LogBox } from "react-native";
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",
 ]);

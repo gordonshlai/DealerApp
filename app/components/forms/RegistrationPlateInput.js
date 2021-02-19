@@ -34,7 +34,10 @@ function RegistrationPlateInput({ name, ...otherProps }) {
           autoCorrect={false}
           placeholder=""
           textAlign="center"
-          style={styles.textInput}
+          style={[
+            styles.textInput,
+            { fontSize: values[name] !== "" ? 40 : 16 },
+          ]}
           {...otherProps}
         />
       </View>
@@ -55,9 +58,7 @@ const styles = StyleSheet.create({
   },
   textInput: {
     width: "100%",
-    fontSize: 40,
     textAlign: "center",
-    backgroundColor: "white",
     flex: 1,
   },
 });
