@@ -21,10 +21,9 @@ const styles = StyleSheet.create({
   container: {
     fontWeight: "bold",
     alignSelf: "center",
-    borderRadius: 5,
-    borderWidth: 1,
+    borderRadius: 3,
     backgroundColor: defaultStyles.colors.warning,
-    paddingHorizontal: 5,
+    paddingHorizontal: 3,
     overflow: "hidden",
   },
 });

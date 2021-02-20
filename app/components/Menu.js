@@ -5,7 +5,9 @@ import {
   StyleSheet,
   FlatList,
   TouchableHighlight,
+  Platform,
 } from "react-native";
+import Constants from "expo-constants";
 
 import AppButton from "./AppButton";
 import Screen from "./Screen";
@@ -47,7 +49,7 @@ function Menu() {
         onRequestClose={() => setModalVisible(false)}
       >
         <View style={styles.background}>
-          <Screen style={styles.container}>
+          <View style={styles.container}>
             <View style={styles.topBarContainer}>
               <AppButton
                 backgroundColor={null}
@@ -94,7 +96,7 @@ function Menu() {
                 title="Call Now"
               />
             </View>
-          </Screen>
+          </View>
         </View>
       </Modal>
     </>
@@ -112,19 +114,21 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     marginRight: 50,
+    flex: 1,
     shadowColor: colors.black,
     shadowRadius: 5,
     shadowOpacity: 0.5,
     elevation: 10,
   },
   topBarContainer: {
-    height: 80,
+    height: 80 + (Platform.OS === "ios" ? Constants.statusBarHeight : 0),
     backgroundColor: colors.secondary,
     alignItems: "flex-end",
     justifyContent: "center",
   },
   closeButton: {
     marginRight: 20,
+    marginTop: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
     alignSelf: "flex-end",
   },
   listItem: {

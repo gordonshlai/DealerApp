@@ -8,6 +8,7 @@ import authStorage from "./app/auth/storage";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
 import client from "./app/api/client";
+import { StatusBar } from "react-native";
 
 export default function App() {
   const [authToken, setAuthToken] = useState();
@@ -81,6 +82,7 @@ export default function App() {
       }}
     >
       <NavigationContainer theme={navigationTheme}>
+        <StatusBar barStyle="light-content" />
         {authToken ? <AppNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthContext.Provider>

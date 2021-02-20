@@ -190,6 +190,7 @@ function HomeScreen({ navigation }) {
                 onPress={() => navigation.navigate(routes.TRADE_DETAIL, item)}
               />
             )}
+            numColumns={2}
             refreshing={refreshing}
             onRefresh={handleRefresh}
             onEndReached={handleLazyLoading}

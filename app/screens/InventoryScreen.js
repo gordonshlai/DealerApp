@@ -194,6 +194,7 @@ function InventoryScreen({ navigation }) {
                   }
                 />
               )}
+              numColumns={2}
               refreshing={refreshing}
               onRefresh={handleRefresh}
               onEndReached={handleLazyLoading}

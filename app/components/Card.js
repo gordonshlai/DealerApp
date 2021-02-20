@@ -2,8 +2,7 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 import AppText from "./AppText";
-import defaultStyles from "../config/styles";
-import Info from "./Info";
+import colors from "../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Registration from "./Registration";
 
@@ -26,8 +25,8 @@ function Card({
   };
 
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.card}>
+    <View style={styles.card}>
+      <TouchableOpacity onPress={onPress}>
         <View style={styles.imageContainer}>
           {imageUrl ? (
             <Image
@@ -36,29 +35,34 @@ function Card({
               source={{ uri: imageUrl }}
             />
           ) : (
-            <MaterialCommunityIcons name="car" size={200} color="white" />
+            <MaterialCommunityIcons name="car" size={90} color="white" />
           )}
         </View>
         <View style={styles.detailsContainer}>
           <View style={styles.firstLine}>
-            <AppText style={styles.title} numberOfLines={2}>
+            <AppText style={styles.title} numberOfLines={1}>
               {title ? title : make + " " + model}
             </AppText>
           </View>
           <View style={styles.secondLine}>
-            <Info name="calendar" text={year} />
-            <Info name="speedometer" text={numberWithCommas(mileage) + " mi"} />
-            <Info name="engine" text={engineCapacity + " cc"} />
+            <AppText style={styles.info}>{year}</AppText>
+            <AppText style={styles.info}>
+              {numberWithCommas(mileage) + " mi"}
+            </AppText>
+            <AppText style={styles.info}>{engineCapacity + " cc"}</AppText>
           </View>
           <View style={styles.thirdLine}>
             <AppText style={styles.priceAsking} numberOfLines={1}>
               £{priceAsking === "0.00" ? " POA" : numberWithCommas(priceAsking)}
             </AppText>
-            <Registration registration={registration} />
+            <Registration
+              registration={registration}
+              style={styles.registration}
+            />
           </View>
         </View>
-      </View>
-    </TouchableOpacity>
+      </TouchableOpacity>
+    </View>
   );
 }
 
@@ -66,44 +70,61 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 10,
     backgroundColor: "white",
-    marginBottom: 20,
-    overflow: "hidden",
+    marginVertical: 10,
+    marginHorizontal: "2%",
+    width: "46%",
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
   },
   detailsContainer: {
-    padding: 20,
+    padding: 10,
   },
   imageContainer: {
-    height: 200,
+    height: 90,
     width: "100%",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "whitesmoke",
   },
   image: {
-    height: 200,
+    height: 90,
     width: "100%",
+    resizeMode: "cover",
   },
   firstLine: {
     flexDirection: "row",
-    marginBottom: 7,
+    marginBottom: 3,
   },
   title: {
     fontWeight: "bold",
+    fontSize: 12,
   },
   secondLine: {
     flexDirection: "row",
-    marginBottom: 7,
-    justifyContent: "space-around",
+    marginBottom: 9,
+    justifyContent: "space-between",
+  },
+  info: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: colors.mediumGrey,
   },
   thirdLine: {
     flexDirection: "row",
   },
   priceAsking: {
-    color: defaultStyles.colors.success,
-    fontSize: 18,
+    color: colors.success,
+    fontSize: 11,
     fontWeight: "bold",
     flex: 1,
+  },
+  registration: {
+    fontSize: 12,
   },
 });
 
