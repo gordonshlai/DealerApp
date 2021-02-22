@@ -82,7 +82,7 @@ const ResetPasswordScreen = ({ navigation }) => {
       <LinearGradient
         colors={["#143C4B", "#0E262F"]}
         style={styles.background}
-      />
+      ></LinearGradient>
 
       <ActivityIndicator visible={resetPasswordApi.loading} />
       <View style={styles.container}>
@@ -115,21 +115,14 @@ const ResetPasswordScreen = ({ navigation }) => {
                 </View>
 
                 <SubmitButton title="Send Password Reset" />
+                <AppButton
+                  title="Back"
+                  backgroundColor={null}
+                  onPress={() => navigation.goBack()}
+                />
               </AppForm>
-              <AppButton
-                title="Back"
-                backgroundColor={null}
-                onPress={() => navigation.goBack()}
-              />
             </ScrollView>
           </KeyboardAvoidingView>
-          <AppText style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et elit
-            hendrerit, vulputate libero ut, blandit libero. Vestibulum quis
-            tincidunt dui, sollicitudin porttitor dui. Aliquam id augue eget dui
-            iaculis rhoncus quis vitae sem. Pellentesque vestibulum consectetur
-            nisl vel faucibus.
-          </AppText>
         </Screen>
       </View>
     </>
@@ -139,6 +132,7 @@ const ResetPasswordScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    justifyContent: "flex-end",
   },
   container: {
     height: "100%",
@@ -146,7 +140,8 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   screen: {
-    padding: 20,
+    paddingHorizontal: 20,
+    justifyContent: "center",
   },
   logo: {
     width: 226,
@@ -160,13 +155,6 @@ const styles = StyleSheet.create({
   fieldName: {
     color: colors.lightGrey,
     fontWeight: "bold",
-  },
-  text: {
-    fontSize: 8,
-    color: colors.lightGrey,
-    alignSelf: "center",
-    position: "absolute",
-    bottom: 20,
   },
 });
 

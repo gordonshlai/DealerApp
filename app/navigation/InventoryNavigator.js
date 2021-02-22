@@ -21,6 +21,7 @@ const InventoryNavigator = () => (
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
+        elevation: 0,
       },
       headerTintColor: "white",
       headerBackImage: () => (

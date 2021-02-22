@@ -42,7 +42,15 @@ function OptionButton({
         statusBarTranslucent
         onRequestClose={() => setModalVisible(false)}
       >
-        <Screen style={{ padding: 20 }}>
+        <Screen style={styles.screen}>
+          <AppButton
+            backgroundColor={null}
+            color={colors.success}
+            icon="close"
+            title="CLOSE"
+            style={{ alignSelf: "flex-end" }}
+            onPress={() => setModalVisible(false)}
+          />
           <FlatList
             data={displayArray}
             keyExtractor={(item) => item}
@@ -69,12 +77,6 @@ function OptionButton({
               </TouchableOpacity>
             )}
           />
-          <AppButton
-            icon="close"
-            title="CLOSE"
-            color={null}
-            onPress={() => setModalVisible(false)}
-          />
         </Screen>
       </Modal>
     </>
@@ -82,6 +84,9 @@ function OptionButton({
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    paddingHorizontal: 20,
+  },
   listItem: {
     padding: 15,
     flexDirection: "row",

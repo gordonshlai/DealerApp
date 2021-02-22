@@ -185,13 +185,6 @@ function RegisterScreen1({ navigation }) {
                 backgroundColor={null}
                 onPress={() => navigation.goBack()}
               />
-              <AppText style={styles.text}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et
-                elit hendrerit, vulputate libero ut, blandit libero. Vestibulum
-                quis tincidunt dui, sollicitudin porttitor dui. Aliquam id augue
-                eget dui iaculis rhoncus quis vitae sem. Pellentesque vestibulum
-                consectetur nisl vel faucibus.
-              </AppText>
             </ScrollView>
           </KeyboardAvoidingView>
         </Screen>
@@ -210,7 +203,7 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   screen: {
-    padding: 20,
+    paddingHorizontal: 20,
   },
   logo: {
     width: 224,
@@ -224,12 +217,6 @@ const styles = StyleSheet.create({
   fieldName: {
     color: colors.lightGrey,
     fontWeight: "bold",
-  },
-  text: {
-    fontSize: 8,
-    color: colors.lightGrey,
-    alignSelf: "center",
-    marginTop: 20,
   },
 });
 
