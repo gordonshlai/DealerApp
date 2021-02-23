@@ -187,7 +187,7 @@ function InventoryScreen({ navigation }) {
               <AppTextInput
                 icon="magnify"
                 placeholder="Enter Your Registration"
-                style={{ backgroundColor: "white" }}
+                style={{ backgroundColor: "white", borderRadius: 10 }}
                 onChangeText={handleSearch}
               />
             </View>

@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 import {
@@ -18,6 +19,7 @@ import AppTextInput from "../components/AppTextInput";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
+import ButtonGroup from "../components/ButtonGroup";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
@@ -28,6 +30,7 @@ function MessagesScreen({ navigation }) {
   const { unread, loadMessagesFlag, setLoadMessagesFlag } = useContext(
     AuthContext
   );
+  const tabBarHeight = useBottomTabBarHeight();
   const [messages, setMessages] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [concat, setConcat] = useState(false);
@@ -159,18 +162,47 @@ function MessagesScreen({ navigation }) {
   };
 
   return (
-    <Screen>
+    <>
+      <View
+        style={{
+          position: "absolute",
+          backgroundColor: colors.secondary,
+          width: "150%",
+          height: "40%",
+          alignSelf: "center",
+          borderBottomLeftRadius: 1500,
+          borderBottomRightRadius: 1500,
+        }}
+      />
       {getMessagesApi.error ? (
-        <View style={styles.errorMessageContainer}>
+        <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the messages.
           </AppText>
           <AppButton title="RETRY" onPress={handleRefresh} />
-        </View>
+        </Screen>
       ) : (
-        <>
+        <Screen style={{ paddingBottom: tabBarHeight / 2 }}>
+          <ButtonGroup
+            buttons={filterArray.map((item) => item.toUpperCase())}
+            selectedIndex={filterArray.indexOf(filter)}
+            onPress={(index) => {
+              setFilter(filterArray[index]);
+              handleRefresh();
+            }}
+          />
           <View style={styles.optionBar}>
-            <View style={styles.optionBarRow}>
+            <View style={styles.optionBarFirstRow}>
+              <AppTextInput
+                icon="magnify"
+                placeholder="Search"
+                style={{ backgroundColor: "white", borderRadius: 10, flex: 1 }}
+                onChangeText={handleSearch}
+              />
+              <ActivityIndicator
+                animating={getMessagesApi.loading}
+                color={colors.mediumGrey}
+              />
               <OptionButton
                 title="Sort"
                 backgroundColor={null}
@@ -185,91 +217,113 @@ function MessagesScreen({ navigation }) {
                 setValue={setSortBy}
                 handleRefresh={handleRefresh}
               />
-              <ActivityIndicator
-                animating={getMessagesApi.loading}
-                color={colors.mediumGrey}
-              />
-              <OptionButton
-                title="Filter"
-                backgroundColor={null}
-                color={colors.primary}
-                border={false}
-                size={16}
-                icon="filter-variant"
-                initialValue="all"
-                value={filter}
-                queryArray={filterArray}
-                displayArray={filterArray}
-                setValue={setFilter}
-                handleRefresh={handleRefresh}
-              />
             </View>
-            <AppTextInput
-              icon="magnify"
-              placeholder="Search"
-              style={{ backgroundColor: "white" }}
-              onChangeText={handleSearch}
+          </View>
+          <View
+            style={{
+              flex: 1,
+              padding: 20,
+              marginHorizontal: 10,
+              backgroundColor: "white",
+              borderRadius: 20,
+              shadowColor: colors.black,
+              shadowRadius: 5,
+              shadowOpacity: 0.5,
+              elevation: 10,
+            }}
+          >
+            {messages.length === 0 && !getMessagesApi.loading && (
+              <AppText style={styles.errorMessage}>No messages found</AppText>
+            )}
+            <FlatList
+              data={messages}
+              keyExtractor={(message) => message.id.toString()}
+              renderItem={({ item }) => (
+                <ListItem
+                  title={displayParticipants(item)}
+                  time={dayjs(item.last_message.created_at).format(
+                    "HH:mm DD/MM/YYYY"
+                  )}
+                  subTitle={item.last_message.clean_message}
+                  unread={
+                    unreadCount(item) ? unreadCount(item).toString() : null
+                  }
+                  onPress={() =>
+                    navigation.navigate(routes.MESSAGE_DETAIL, {
+                      messageId: item.id,
+                      title: displayParticipants(item),
+                    })
+                  }
+                  renderLeftActions={() => (
+                    <ListItemAction
+                      onPress={() => handleAction(item, "save")}
+                      icon="content-save"
+                      text={item.participant.saved === "0" ? "Save" : "Unsave"}
+                      backgroundColor={null}
+                      color={colors.success}
+                    />
+                  )}
+                  renderRightActions={() => (
+                    <ListItemAction
+                      onPress={() => handleAction(item, "archive")}
+                      icon="archive"
+                      text={
+                        item.participant.archived === "0"
+                          ? "Archive"
+                          : "Unarchive"
+                      }
+                      backgroundColor={null}
+                      color={colors.secondary}
+                    />
+                  )}
+                />
+              )}
+              ItemSeparatorComponent={ListItemSeparator}
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              onEndReached={handleLazyLoading}
+              onEndReachedThreshold={0.1}
+              ListFooterComponent={<Loading visible={getMessagesApi.loading} />}
             />
           </View>
-          {messages.length === 0 && !getMessagesApi.loading && (
-            <AppText style={styles.errorMessage}>No messages found</AppText>
-          )}
-          <FlatList
-            data={messages}
-            keyExtractor={(message) => message.id.toString()}
-            renderItem={({ item }) => (
-              <ListItem
-                title={displayParticipants(item)}
-                time={dayjs(item.last_message.created_at).format(
-                  "HH:mm DD/MM/YYYY"
-                )}
-                subTitle={item.last_message.clean_message}
-                unread={unreadCount(item) ? unreadCount(item).toString() : null}
-                onPress={() =>
-                  navigation.navigate(routes.MESSAGE_DETAIL, {
-                    messageId: item.id,
-                    title: displayParticipants(item),
-                  })
-                }
-                renderLeftActions={() => (
-                  <ListItemAction
-                    onPress={() => handleAction(item, "save")}
-                    icon="content-save"
-                    text={item.participant.saved === "0" ? "Save" : "Unsave"}
-                    backgroundColor={null}
-                    color={colors.success}
-                  />
-                )}
-                renderRightActions={() => (
-                  <ListItemAction
-                    onPress={() => handleAction(item, "archive")}
-                    icon="archive"
-                    text={
-                      item.participant.archived === "0"
-                        ? "Archive"
-                        : "Unarchive"
-                    }
-                    backgroundColor={null}
-                    color={colors.secondary}
-                  />
-                )}
+          <View
+            style={{
+              padding: 20,
+              marginVertical: 30,
+              backgroundColor: "white",
+              shadowColor: colors.black,
+              shadowRadius: 5,
+              shadowOpacity: 0.5,
+              elevation: 10,
+            }}
+          >
+            <AppText style={styles.contactText}>
+              Contact your Account Manager directly
+            </AppText>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginTop: 10,
+              }}
+            >
+              <AppButton
+                backgroundColor={null}
+                color={colors.success}
+                title="Call Now"
+                style={{ width: "47%" }}
               />
-            )}
-            ItemSeparatorComponent={ListItemSeparator}
-            refreshing={refreshing}
-            onRefresh={handleRefresh}
-            onEndReached={handleLazyLoading}
-            onEndReachedThreshold={0.1}
-            ListFooterComponent={<Loading visible={getMessagesApi.loading} />}
-          />
-        </>
+              <AppButton title="Message" style={{ width: "47%" }} />
+            </View>
+          </View>
+        </Screen>
       )}
-    </Screen>
+    </>
   );
 }
 
 const styles = StyleSheet.create({
-  errorMessageContainer: {
+  screen: {
     paddingHorizontal: 20,
   },
   errorMessage: {
@@ -282,11 +336,16 @@ const styles = StyleSheet.create({
   },
   optionBar: {
     padding: 10,
+    borderTopWidth: 1,
+    borderColor: "white",
   },
-  optionBarRow: {
+  optionBarFirstRow: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "flex-end",
     alignItems: "center",
+  },
+  contactText: {
+    fontWeight: "bold",
   },
 });
 

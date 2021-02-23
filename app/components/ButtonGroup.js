@@ -31,7 +31,7 @@ function ButtonGroup({
       <FlatList
         horizontal
         data={buttons}
-        keyExtractor={(button, index) => index}
+        keyExtractor={(button, index) => index.toString()}
         renderItem={({ item, index }) => (
           <TouchableHighlight
             style={
