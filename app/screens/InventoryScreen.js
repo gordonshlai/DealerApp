@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, View, Modal } from "react-native";
-import { ButtonGroup } from "react-native-elements";
+// import { ButtonGroup } from "react-native-elements";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import AppButton from "../components/AppButton";
@@ -18,10 +18,11 @@ import colors from "../config/colors";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
-import { TouchableHighlight } from "react-native";
 import OptionButton from "../components/OptionButton";
+import ButtonGroup from "../components/ButtonGroup";
 
 const statusArray = ["stock", "listed", "sold"];
+const statusDisplayArray = ["In Stock", "Trade Listed", "Sold"];
 
 function InventoryScreen({ navigation }) {
   const { loadInventoryFlag } = useContext(AuthContext);
@@ -134,83 +135,14 @@ function InventoryScreen({ navigation }) {
         </Screen>
       ) : (
         <>
-          <View style={styles.vehicleStatusContainer}>
-            <TouchableHighlight
-              style={[
-                styles.vehicleStatusTextContainer,
-                {
-                  borderBottomColor:
-                    status === "stock" ? colors.primary : "transparent",
-                },
-              ]}
-              onPress={() => {
-                setStatus("stock");
-                handleRefresh();
-              }}
-            >
-              <AppText
-                style={[
-                  styles.vehicleStatusText,
-                  {
-                    color:
-                      status === "stock" ? colors.primary : colors.mediumGrey,
-                  },
-                ]}
-              >
-                In Stock
-              </AppText>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={[
-                styles.vehicleStatusTextContainer,
-                {
-                  borderBottomColor:
-                    status === "listed" ? colors.primary : "transparent",
-                },
-              ]}
-              onPress={() => {
-                setStatus("listed");
-                handleRefresh();
-              }}
-            >
-              <AppText
-                style={[
-                  styles.vehicleStatusText,
-                  {
-                    color:
-                      status === "listed" ? colors.primary : colors.mediumGrey,
-                  },
-                ]}
-              >
-                Trade Listed
-              </AppText>
-            </TouchableHighlight>
-            <TouchableHighlight
-              style={[
-                styles.vehicleStatusTextContainer,
-                {
-                  borderBottomColor:
-                    status === "sold" ? colors.primary : "transparent",
-                },
-              ]}
-              onPress={() => {
-                setStatus("sold");
-                handleRefresh();
-              }}
-            >
-              <AppText
-                style={[
-                  styles.vehicleStatusText,
-                  {
-                    color:
-                      status === "sold" ? colors.primary : colors.mediumGrey,
-                  },
-                ]}
-              >
-                Sold
-              </AppText>
-            </TouchableHighlight>
-          </View>
+          <ButtonGroup
+            buttons={statusDisplayArray}
+            selectedIndex={statusArray.indexOf(status)}
+            onPress={(index) => {
+              setStatus(statusArray[index]);
+              handleRefresh();
+            }}
+          />
           <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
             <View style={styles.optionBar}>
               {/* <AppButton
@@ -345,20 +277,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: "bold",
     fontSize: 24,
-  },
-  vehicleStatusContainer: {
-    flexDirection: "row",
-  },
-  vehicleStatusTextContainer: {
-    flex: 1,
-    borderBottomWidth: 3,
-  },
-  vehicleStatusText: {
-    backgroundColor: colors.secondary,
-    fontSize: 12,
-    fontWeight: "bold",
-    padding: 10,
-    textAlign: "center",
   },
   optionBar: {
     flexDirection: "row",
