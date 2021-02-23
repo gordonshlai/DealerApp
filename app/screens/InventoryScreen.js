@@ -127,7 +127,7 @@ function InventoryScreen({ navigation }) {
   return (
     <>
       {getVehiclesApi.error ? (
-        <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
+        <Screen style={styles.screen}>
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the vehicles.
           </AppText>
@@ -143,7 +143,7 @@ function InventoryScreen({ navigation }) {
               handleRefresh();
             }}
           />
-          <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
+          <Screen style={styles.screen}>
             <View style={styles.optionBar}>
               {/* <AppButton
                 title="Filter"
@@ -220,7 +220,11 @@ function InventoryScreen({ navigation }) {
               onRefresh={handleRefresh}
               onEndReached={handleLazyLoading}
               onEndReachedThreshold={0.1}
-              ListFooterComponent={<Loading visible={getVehiclesApi.loading} />}
+              ListFooterComponent={
+                <View style={{ paddingBottom: tabBarHeight / 2 }}>
+                  <Loading visible={getVehiclesApi.loading} />
+                </View>
+              }
             />
           </Screen>
         </>

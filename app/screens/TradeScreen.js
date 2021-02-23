@@ -127,7 +127,7 @@ function HomeScreen({ navigation }) {
   };
 
   return (
-    <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
+    <Screen style={styles.screen}>
       {getVehiclesApi.error ? (
         <>
           <AppText style={styles.errorMessage}>
@@ -195,7 +195,11 @@ function HomeScreen({ navigation }) {
             onRefresh={handleRefresh}
             onEndReached={handleLazyLoading}
             onEndReachedThreshold={0.1}
-            ListFooterComponent={<Loading visible={getVehiclesApi.loading} />}
+            ListFooterComponent={
+              <View style={{ paddingBottom: tabBarHeight / 2 }}>
+                <Loading visible={getVehiclesApi.loading} />
+              </View>
+            }
           />
         </>
       )}

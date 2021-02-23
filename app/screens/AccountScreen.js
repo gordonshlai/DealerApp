@@ -308,7 +308,7 @@ function AccountScreen(props) {
               <AppButton
                 title="Log Out"
                 onPress={() => setLogoutModalVisible(true)}
-                style={{ marginBottom: tabBarHeight }}
+                style={{ marginBottom: tabBarHeight / 2 }}
               />
             </ScrollView>
 

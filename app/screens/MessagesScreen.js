@@ -175,14 +175,14 @@ function MessagesScreen({ navigation }) {
         }}
       />
       {getMessagesApi.error ? (
-        <Screen style={[styles.screen, { paddingBottom: tabBarHeight / 2 }]}>
+        <Screen style={styles.screen}>
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the messages.
           </AppText>
           <AppButton title="RETRY" onPress={handleRefresh} />
         </Screen>
       ) : (
-        <Screen style={{ paddingBottom: tabBarHeight / 2 }}>
+        <Screen>
           <ButtonGroup
             buttons={filterArray.map((item) => item.toUpperCase())}
             selectedIndex={filterArray.indexOf(filter)}
@@ -289,7 +289,8 @@ function MessagesScreen({ navigation }) {
           <View
             style={{
               padding: 20,
-              marginVertical: 30,
+              marginTop: 30,
+              marginBottom: tabBarHeight / 2,
               backgroundColor: "white",
               shadowColor: colors.black,
               shadowRadius: 5,
