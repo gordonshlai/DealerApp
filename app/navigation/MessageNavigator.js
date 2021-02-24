@@ -24,7 +24,7 @@ const MessageNavigator = () => (
       headerTintColor: "white",
       headerBackImage: () => (
         <MaterialCommunityIcons
-          name="arrow-left"
+          name="chevron-left"
           size={32}
           color={colors.primary}
           style={{ paddingHorizontal: 10 }}

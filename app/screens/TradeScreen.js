@@ -196,7 +196,7 @@ function HomeScreen({ navigation }) {
             onEndReached={handleLazyLoading}
             onEndReachedThreshold={0.1}
             ListFooterComponent={
-              <View style={{ paddingBottom: tabBarHeight / 2 }}>
+              <View style={{ paddingBottom: tabBarHeight }}>
                 <Loading visible={getVehiclesApi.loading} />
               </View>
             }

@@ -1,7 +1,6 @@
 import React from "react";
 import Constants from "expo-constants";
 import { StyleSheet, SafeAreaView, View } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 /**
  * A wrapper of other components inside a safe area view
@@ -10,12 +9,9 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
  * @param {object} style - styles to add into the conatiner of this component
  */
 function Screen({ children, style }) {
-  const tabBarHeight = useBottomTabBarHeight();
   return (
     <SafeAreaView style={[styles.screen]}>
-      <View style={[styles.view, { paddingBottom: tabBarHeight / 2 }, style]}>
-        {children}
-      </View>
+      <View style={[styles.view, style]}>{children}</View>
     </SafeAreaView>
   );
 }

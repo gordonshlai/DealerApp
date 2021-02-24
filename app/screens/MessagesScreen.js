@@ -1,5 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  ActivityIndicator,
+  Dimensions,
+} from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
@@ -167,11 +173,11 @@ function MessagesScreen({ navigation }) {
         style={{
           position: "absolute",
           backgroundColor: colors.secondary,
-          width: "150%",
-          height: "40%",
+          width: Dimensions.get("screen").height,
+          height: Dimensions.get("screen").height,
           alignSelf: "center",
-          borderBottomLeftRadius: 1500,
-          borderBottomRightRadius: 1500,
+          borderRadius: Dimensions.get("screen").height,
+          top: -Dimensions.get("screen").height * 0.7,
         }}
       />
       {getMessagesApi.error ? (
@@ -242,7 +248,7 @@ function MessagesScreen({ navigation }) {
                 <ListItem
                   title={displayParticipants(item)}
                   time={dayjs(item.last_message.created_at).format(
-                    "HH:mm DD/MM/YYYY"
+                    "HH:mm   DD/MM/YYYY"
                   )}
                   subTitle={item.last_message.clean_message}
                   unread={
@@ -290,7 +296,7 @@ function MessagesScreen({ navigation }) {
             style={{
               padding: 20,
               marginTop: 30,
-              marginBottom: tabBarHeight / 2,
+              marginBottom: tabBarHeight,
               backgroundColor: "white",
               shadowColor: colors.black,
               shadowRadius: 5,

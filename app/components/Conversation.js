@@ -6,10 +6,12 @@ import AppText from "./AppText";
 function Conversation({ title, subTitle, time, isYourself }) {
   return (
     <View
-      style={{
-        width: "90%",
-        alignSelf: isYourself ? "flex-end" : "flex-start",
-      }}
+      style={[
+        styles.container,
+        {
+          alignSelf: isYourself ? "flex-end" : "flex-start",
+        },
+      ]}
     >
       <View
         style={[
@@ -26,25 +28,35 @@ function Conversation({ title, subTitle, time, isYourself }) {
 }
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    width: "90%",
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
+  },
   title: {
+    fontSize: 16,
     fontWeight: "bold",
     marginBottom: 3,
+    color: "white",
   },
   subTitle: {
+    fontSize: 16,
     flex: 1,
+    color: "white",
   },
   time: {
-    color: colors.mediumGrey,
+    color: colors.lightGrey,
     fontSize: 12,
     textAlign: "right",
   },
   isYourself: {
-    backgroundColor: colors.primary + "aa",
+    backgroundColor: colors.primary,
     alignSelf: "flex-end",
   },
   notYourself: {
-    backgroundColor: colors.mediumGrey + "33",
+    backgroundColor: colors.mediumGrey,
     alignSelf: "flex-start",
   },
   threadContainer: {

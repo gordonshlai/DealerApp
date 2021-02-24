@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { View, StyleSheet, FlatList } from "react-native";
+import { View, StyleSheet, FlatList, Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import * as Yup from "yup";
@@ -99,63 +99,77 @@ function MessageDetailScreen({ navigation, route }) {
     setLoadMessagesFlag(!loadMessagesFlag);
   };
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <View style={{ flexDirection: "row" }}>
-          <AppButton
-            icon="content-save"
-            backgroundColor={null}
-            color={colors.primary}
-            border={false}
-            size={24}
-            badge={
-              getThreadsApi.data.participant &&
-              getThreadsApi.data.participant.saved !== "0"
-            }
-            onPress={() => {
-              setModalVisible(true);
-              setAction("save");
-            }}
-          />
-          <AppButton
-            icon="archive"
-            backgroundColor={null}
-            color={colors.primary}
-            border={false}
-            size={24}
-            badge={
-              getThreadsApi.data.participant &&
-              getThreadsApi.data.participant.archived !== "0"
-            }
-            style={{ marginRight: 10 }}
-            onPress={() => {
-              setModalVisible(true);
-              setAction("archive");
-            }}
-          />
-        </View>
-      ),
-    });
-  }, [navigation, getThreadsApi.data]);
-
   return (
     <>
-      <View style={[styles.screen, { paddingBottom: tabBarHeight }]}>
+      <View
+        style={{
+          position: "absolute",
+          backgroundColor: colors.secondary,
+          width: Dimensions.get("screen").height,
+          height: Dimensions.get("screen").height,
+          alignSelf: "center",
+          borderRadius: Dimensions.get("screen").height,
+          top: -Dimensions.get("screen").height * 0.7,
+        }}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+          justifyContent: "flex-end",
+          backgroundColor: colors.secondary,
+        }}
+      >
+        <AppButton
+          icon="content-save-outline"
+          backgroundColor={null}
+          color={colors.primary}
+          border={false}
+          size={24}
+          badge={
+            getThreadsApi.data.participant &&
+            getThreadsApi.data.participant.saved !== "0"
+          }
+          onPress={() => {
+            setModalVisible(true);
+            setAction("save");
+          }}
+        />
+        <AppButton
+          icon="archive"
+          backgroundColor={null}
+          color={colors.primary}
+          border={false}
+          size={24}
+          badge={
+            getThreadsApi.data.participant &&
+            getThreadsApi.data.participant.archived !== "0"
+          }
+          style={{ marginRight: 10 }}
+          onPress={() => {
+            setModalVisible(true);
+            setAction("archive");
+          }}
+        />
+      </View>
+      <Screen
+        style={[styles.screen, { paddingBottom: (tabBarHeight * 2) / 3 }]}
+      >
         <View style={{ flex: 1 }}>
           <FlatList
             inverted
             data={getThreadsApi.data.links}
             keyExtractor={(thread) => thread.id.toString()}
             renderItem={({ item }) => (
-              <Conversation
-                subTitle={cleanMessageParser(item.message)}
-                time={dayjs(item.created_at).format("HH:mm DD/MM/YYYY")}
-                isYourself={
-                  item.created_by.user.account.id ===
-                  getThreadsApi.data.participant.user.account.id
-                }
-              />
+              <View style={{ marginHorizontal: 20 }}>
+                <Conversation
+                  subTitle={cleanMessageParser(item.message)}
+                  time={dayjs(item.created_at).format("HH:mm   DD/MM/YYYY")}
+                  isYourself={
+                    item.created_by.user.account.id ===
+                    getThreadsApi.data.participant.user.account.id
+                  }
+                />
+              </View>
             )}
             ListFooterComponent={
               <Loading
@@ -165,7 +179,7 @@ function MessageDetailScreen({ navigation, route }) {
             }
           />
         </View>
-        <View>
+        <View style={{ marginHorizontal: 20 }}>
           <AppForm
             initialValues={{ text: "" }}
             onSubmit={handleSubmit}
@@ -176,17 +190,17 @@ function MessageDetailScreen({ navigation, route }) {
               <View style={{ flex: 1 }}>
                 <AppFormField
                   name="text"
-                  placeholder="Type a message"
+                  placeholder="Write message here"
                   multiline
-                  style={{ backgroundColor: "white" }}
+                  style={styles.textInput}
                   onContentSizeChange={() => setError(null)}
                 />
               </View>
-              <SubmitButton icon="send" size={24} style={styles.submitButton} />
+              <SubmitButton icon="send" size={30} style={styles.submitButton} />
             </View>
           </AppForm>
         </View>
-      </View>
+      </Screen>
       <Modal
         visible={modalVisible}
         animationType="fade"
@@ -211,8 +225,13 @@ function MessageDetailScreen({ navigation, route }) {
               backgroundColor={null}
               color={colors.success}
               onPress={() => setModalVisible(false)}
+              style={{ width: "45%" }}
             />
-            <AppButton title="Confirm" onPress={handleAction} />
+            <AppButton
+              title="Confirm"
+              onPress={handleAction}
+              style={{ width: "45%" }}
+            />
           </View>
         </View>
       </Modal>
@@ -222,20 +241,38 @@ function MessageDetailScreen({ navigation, route }) {
 
 const styles = StyleSheet.create({
   screen: {
-    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    // paddingHorizontal: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
     flex: 1,
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
   },
   sendMessageBar: {
     flexDirection: "row",
     alignItems: "center",
     paddingBottom: 15,
   },
+  textInput: {
+    backgroundColor: colors.white,
+    borderRadius: 50,
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
+  },
   submitButton: {
     backgroundColor: colors.primary,
     borderWidth: 0,
-    padding: 10,
-    borderRadius: 10,
     marginLeft: 5,
+    borderRadius: 50,
+    shadowColor: colors.black,
+    shadowRadius: 5,
+    shadowOpacity: 0.5,
+    elevation: 10,
   },
   modal: {
     paddingHorizontal: 20,
@@ -251,7 +288,7 @@ const styles = StyleSheet.create({
   },
   actionButtonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
 });
 
