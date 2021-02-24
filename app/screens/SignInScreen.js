@@ -69,87 +69,90 @@ const SignInScreen = ({ navigation }) => {
 
   return (
     <>
-      <LinearGradient
-        colors={["#143C4B", "#0E262F"]}
-        style={styles.background}
-      />
+      <View style={styles.background}>
+        <LinearGradient
+          colors={["#143C4B", "#0E262F"]}
+          style={styles.linearGradient}
+        />
+      </View>
 
       <ActivityIndicator visible={loginApi.loading} />
 
-      <View style={styles.container}>
-        <Screen style={styles.screen}>
+      <Screen>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          centerContent
+          contentContainerStyle={styles.scrollView}
+        >
           <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            behavior={Platform.OS == "ios" ? "padding" : ""}
           >
-            <ScrollView>
-              <Image
-                style={styles.logo}
-                source={require("../assets/logo.png")}
-              />
-              <AppForm
-                initialValues={{ email: "", password: "" }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Email</AppText>
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    name="email"
-                    placeholder="Type Your Email"
-                    textContentType="emailAddress"
-                    color="white"
-                  />
-                </View>
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Password</AppText>
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    name="password"
-                    placeholder="Type Your Password"
-                    secureTextEntry
-                    textContentType="password"
-                    color="white"
-                  />
-                </View>
-
-                <AppErrorMessage error={error} visible={error} />
-                <SubmitButton title="Sign in" style={{ marginTop: 30 }} />
-                <AppText
-                  style={styles.forgetPassword}
-                  onPress={() => navigation.navigate(routes.RESET_PASSWORD)}
-                >
-                  Forget Password?
-                </AppText>
-                <AppButton
-                  title="Back"
-                  backgroundColor={null}
-                  onPress={() => navigation.navigate(routes.WELCOME)}
+            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <AppForm
+              initialValues={{ email: "", password: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Email</AppText>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  name="email"
+                  placeholder="Type Your Email"
+                  textContentType="emailAddress"
+                  color="white"
                 />
-              </AppForm>
-            </ScrollView>
+              </View>
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Password</AppText>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  name="password"
+                  placeholder="Type Your Password"
+                  secureTextEntry
+                  textContentType="password"
+                  color="white"
+                />
+              </View>
+
+              <AppErrorMessage error={error} visible={error} />
+              <SubmitButton title="Sign in" style={{ marginTop: 30 }} />
+              <AppText
+                style={styles.forgetPassword}
+                onPress={() => navigation.navigate(routes.RESET_PASSWORD)}
+              >
+                Forget Password?
+              </AppText>
+              <AppButton
+                title="Back"
+                backgroundColor={null}
+                onPress={() => navigation.navigate(routes.WELCOME)}
+              />
+            </AppForm>
           </KeyboardAvoidingView>
-        </Screen>
-      </View>
+        </ScrollView>
+      </Screen>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  linearGradient: {
     flex: 1,
   },
-  container: {
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-  },
-  screen: {
-    paddingHorizontal: 20,
+  scrollView: {
+    flexGrow: 1,
     justifyContent: "center",
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   logo: {
     width: 224,

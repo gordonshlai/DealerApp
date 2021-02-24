@@ -95,114 +95,116 @@ function RegisterScreen1({ navigation }) {
 
   return (
     <>
-      <ActivityIndicator visible={registerApi.loading} />
-      <LinearGradient
-        colors={["#143C4B", "#0E262F"]}
-        style={styles.background}
-      />
-
-      <View style={styles.container}>
-        <Screen style={styles.screen}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          >
-            <ScrollView>
-              <Image
-                style={styles.logo}
-                source={require("../assets/logo.png")}
-              />
-              <AppForm
-                initialValues={{
-                  fullName: "",
-                  password: "",
-                  confirmPassword: "",
-                }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Full Name</AppText>
-                  <AppFormField
-                    autoCorrect={false}
-                    name="fullName"
-                    placeholder="Type Your Full Name"
-                    color="white"
-                  />
-                </View>
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Business Name</AppText>
-                  <AppFormField
-                    autoCorrect={false}
-                    name="businessName"
-                    placeholder="Type Your Business Name"
-                    color="white"
-                  />
-                </View>
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Email</AppText>
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    name="email"
-                    placeholder="Type Your Email"
-                    textContentType="emailAddress"
-                    color="white"
-                  />
-                </View>
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Password</AppText>
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    name="password"
-                    placeholder="Type Your Password"
-                    secureTextEntry
-                    textContentType="password"
-                    color="white"
-                  />
-                </View>
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Confirm Password</AppText>
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    secureTextEntry
-                    textContentType="password"
-                    color="white"
-                  />
-                </View>
-                <AppErrorMessage error={error} visible={error} />
-                <SubmitButton
-                  title="Register"
-                  backgroundColor={colors.success}
-                />
-              </AppForm>
-              <AppButton
-                title="Back"
-                backgroundColor={null}
-                onPress={() => navigation.goBack()}
-              />
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </Screen>
+      <View style={styles.background}>
+        <LinearGradient
+          colors={["#143C4B", "#0E262F"]}
+          style={styles.linearGradient}
+        />
       </View>
+
+      <ActivityIndicator visible={registerApi.loading} />
+
+      <Screen>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          centerContent
+          contentContainerStyle={styles.scrollView}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : ""}
+          >
+            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <AppForm
+              initialValues={{
+                fullName: "",
+                password: "",
+                confirmPassword: "",
+              }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Full Name</AppText>
+                <AppFormField
+                  autoCorrect={false}
+                  name="fullName"
+                  placeholder="Type Your Full Name"
+                  color="white"
+                />
+              </View>
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Business Name</AppText>
+                <AppFormField
+                  autoCorrect={false}
+                  name="businessName"
+                  placeholder="Type Your Business Name"
+                  color="white"
+                />
+              </View>
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Email</AppText>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  name="email"
+                  placeholder="Type Your Email"
+                  textContentType="emailAddress"
+                  color="white"
+                />
+              </View>
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Password</AppText>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  name="password"
+                  placeholder="Type Your Password"
+                  secureTextEntry
+                  textContentType="password"
+                  color="white"
+                />
+              </View>
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Confirm Password</AppText>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  secureTextEntry
+                  textContentType="password"
+                  color="white"
+                />
+              </View>
+              <AppErrorMessage error={error} visible={error} />
+              <SubmitButton title="Register" backgroundColor={colors.success} />
+            </AppForm>
+            <AppButton
+              title="Back"
+              backgroundColor={null}
+              onPress={() => navigation.goBack()}
+            />
+          </KeyboardAvoidingView>
+        </ScrollView>
+      </Screen>
     </>
   );
 }
 
 const styles = StyleSheet.create({
   background: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  linearGradient: {
     flex: 1,
   },
-  container: {
-    height: "100%",
-    width: "100%",
-    position: "absolute",
-  },
-  screen: {
+  scrollView: {
+    flexGrow: 1,
+    justifyContent: "center",
+    paddingBottom: 20,
     paddingHorizontal: 20,
   },
   logo: {

@@ -20,10 +20,13 @@ import routes from "../navigation/routes";
 function WelcomeScreen({ navigation }) {
   return (
     <>
-      <LinearGradient
-        colors={["#143C4B", "#0E262F"]}
-        style={styles.background}
-      />
+      <View style={styles.background}>
+        <LinearGradient
+          colors={["#143C4B", "#0E262F"]}
+          style={styles.linearGradient}
+        />
+      </View>
+
       <View style={styles.container}>
         <Image style={styles.logo} source={require("../assets/logo.png")} />
         <View style={styles.buttonsContainer}>
@@ -51,6 +54,11 @@ function WelcomeScreen({ navigation }) {
 
 const styles = StyleSheet.create({
   background: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  linearGradient: {
     flex: 1,
   },
   buttonsContainer: {
@@ -60,10 +68,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "flex-end",
     flex: 1,
-    height: "100%",
-    width: "100%",
     alignItems: "center",
-    position: "absolute",
   },
   logo: {
     width: "60%",
@@ -75,7 +80,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 8,
     color: colors.lightGrey,
-    marginVertical: 15,
+    marginTop: 15,
   },
 });
 

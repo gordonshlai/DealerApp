@@ -79,69 +79,72 @@ const ResetPasswordScreen = ({ navigation }) => {
 
   return (
     <>
-      <LinearGradient
-        colors={["#143C4B", "#0E262F"]}
-        style={styles.background}
-      ></LinearGradient>
+      <View style={styles.background}>
+        <LinearGradient
+          colors={["#143C4B", "#0E262F"]}
+          style={styles.linearGradient}
+        />
+      </View>
 
       <ActivityIndicator visible={resetPasswordApi.loading} />
-      <View style={styles.container}>
-        <Screen style={styles.screen}>
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
-          >
-            <ScrollView>
-              <Image
-                style={styles.logo}
-                source={require("../assets/logo.png")}
-              />
-              <AppForm
-                initialValues={{ email: "" }}
-                onSubmit={handleSubmit}
-                validationSchema={validationSchema}
-              >
-                <AppErrorMessage error={error} visible={error} />
-                <AppInfoMessage info={info} visible={info} />
-                <View style={styles.formFieldContainer}>
-                  <AppText style={styles.fieldName}>Email</AppText>
-                  <AppFormField
-                    autoCapitalize="none"
-                    autoCorrect={false}
-                    keyboardType="email-address"
-                    name="email"
-                    placeholder="Type Your Email"
-                    textContentType="emailAddress"
-                  />
-                </View>
 
-                <SubmitButton title="Send Password Reset" />
-                <AppButton
-                  title="Back"
-                  backgroundColor={null}
-                  onPress={() => navigation.goBack()}
+      <Screen>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          centerContent
+          contentContainerStyle={styles.scrollView}
+        >
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : ""}
+          >
+            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <AppForm
+              initialValues={{ email: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <AppErrorMessage error={error} visible={error} />
+              <AppInfoMessage info={info} visible={info} />
+              <View style={styles.formFieldContainer}>
+                <AppText style={styles.fieldName}>Email</AppText>
+                <AppFormField
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="email-address"
+                  name="email"
+                  placeholder="Type Your Email"
+                  textContentType="emailAddress"
                 />
-              </AppForm>
-            </ScrollView>
+              </View>
+
+              <SubmitButton title="Send Password Reset" />
+              <AppButton
+                title="Back"
+                backgroundColor={null}
+                onPress={() => navigation.goBack()}
+              />
+            </AppForm>
           </KeyboardAvoidingView>
-        </Screen>
-      </View>
+        </ScrollView>
+      </Screen>
     </>
   );
 };
 
 const styles = StyleSheet.create({
   background: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  container: {
-    height: "100%",
-    width: "100%",
     position: "absolute",
+    width: "100%",
+    height: "100%",
   },
-  screen: {
-    paddingHorizontal: 20,
+  linearGradient: {
+    flex: 1,
+  },
+  scrollView: {
+    flexGrow: 1,
     justifyContent: "center",
+    paddingBottom: 20,
+    paddingHorizontal: 20,
   },
   logo: {
     width: 226,
