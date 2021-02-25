@@ -1,14 +1,14 @@
 import React from "react";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import NewCarScreen from "../screens/NewCarScreen";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
 import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
-import routes from "./routes";
-
-import colors from "../config/colors";
 import Menu from "../components/Menu";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import routes from "./routes";
+import colors from "../config/colors";
 
 const Stack = createStackNavigator();
 
