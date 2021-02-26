@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, FlatList, Dimensions } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
@@ -27,9 +21,6 @@ import AuthContext from "../auth/context";
 import { Modal } from "react-native";
 import AppButton from "../components/AppButton";
 import Screen from "../components/Screen";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Icon from "../components/Icon";
-import { ListItem } from "../components/lists";
 import AppText from "../components/AppText";
 
 const validationSchema = Yup.object().shape({
@@ -137,7 +128,7 @@ function MessageDetailScreen({ navigation, route }) {
         <AppButton
           icon="archive"
           backgroundColor={null}
-          color={colors.primary}
+          color={colors.danger}
           border={false}
           size={24}
           badge={
@@ -163,7 +154,7 @@ function MessageDetailScreen({ navigation, route }) {
               <View style={{ marginHorizontal: 20 }}>
                 <Conversation
                   subTitle={cleanMessageParser(item.message)}
-                  time={dayjs(item.created_at).format("HH:mm   DD/MM/YYYY")}
+                  time={dayjs(item.created_at).format("HH:mm - DD/MM/YYYY")}
                   isYourself={
                     item.created_by.user.account.id ===
                     getThreadsApi.data.participant.user.account.id
@@ -242,13 +233,13 @@ function MessageDetailScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   screen: {
     marginHorizontal: 10,
-    // paddingHorizontal: 20,
     backgroundColor: "white",
     borderRadius: 20,
     flex: 1,
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   sendMessageBar: {
@@ -260,8 +251,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 50,
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   submitButton: {
@@ -270,8 +262,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     borderRadius: 50,
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   modal: {

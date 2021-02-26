@@ -73,7 +73,7 @@ function RegisterScreen1({ navigation }) {
    */
 
   const endpoint = "auth/register";
-  const registerApi = useApi(({ password }) =>
+  const registerApi = useApi(({ fullName, businessName, email, password }) =>
     client.post(endpoint, {
       name: fullName,
       note: businessName,

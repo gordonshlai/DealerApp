@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Image, TouchableHighlight } from "react-native";
 import Swipeable from "react-native-gesture-handler/Swipeable";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppText from "../AppText";
 import colors from "../../config/colors";
@@ -9,6 +10,8 @@ function ListItem({
   image,
   IconComponent,
   title,
+  saved,
+  archived,
   time,
   subTitle,
   unread,
@@ -27,19 +30,41 @@ function ListItem({
           {image && <Image style={styles.image} source={image} />}
           <View style={styles.detailsContainer}>
             <View style={styles.row}>
-              <AppText style={styles.title} numberOfLines={1}>
-                {title}
-              </AppText>
-              <AppText
-                style={[
-                  styles.time,
-                  unread
-                    ? { color: colors.primary, fontWeight: "bold" }
-                    : { color: colors.mediumGrey },
-                ]}
-              >
-                {time}
-              </AppText>
+              {title && (
+                <AppText style={styles.title} numberOfLines={1}>
+                  {title}
+                </AppText>
+              )}
+              <View style={{ flexDirection: "row" }}>
+                {saved && (
+                  <MaterialCommunityIcons
+                    name="content-save"
+                    color={colors.primary}
+                    size={20}
+                    style={{ marginRight: 4 }}
+                  />
+                )}
+                {archived && (
+                  <MaterialCommunityIcons
+                    name="archive"
+                    size={20}
+                    color={colors.danger}
+                    style={{ marginRight: 4 }}
+                  />
+                )}
+                {time && (
+                  <AppText
+                    style={[
+                      styles.time,
+                      unread
+                        ? { color: colors.primary, fontWeight: "bold" }
+                        : { color: colors.mediumGrey },
+                    ]}
+                  >
+                    {time}
+                  </AppText>
+                )}
+              </View>
             </View>
             <View style={styles.row}>
               {subTitle && (
@@ -84,7 +109,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: "bold",
-    marginBottom: 3,
+    marginVertical: 2,
   },
   time: {
     fontSize: 12,
@@ -101,6 +126,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 7,
     marginLeft: 10,
     justifyContent: "center",
+    flex: 0,
   },
   unreadText: {
     color: "white",

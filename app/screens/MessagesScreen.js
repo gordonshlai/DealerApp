@@ -113,13 +113,14 @@ function MessagesScreen({ navigation }) {
     const participant = item.participant;
     const participants = item.participants;
     let names = participants.map(
-      (participant) => participant.user.account.name
+      (participant) => participant.user && participant.user.account.name
     );
     let noRepeatNames = [];
     names.forEach((name) => {
       if (
         name !== participant.user.account.name &&
-        !noRepeatNames.includes(name)
+        !noRepeatNames.includes(name) &&
+        name !== null
       ) {
         noRepeatNames.push(name);
       }
@@ -225,19 +226,7 @@ function MessagesScreen({ navigation }) {
               />
             </View>
           </View>
-          <View
-            style={{
-              flex: 1,
-              padding: 20,
-              marginHorizontal: 10,
-              backgroundColor: "white",
-              borderRadius: 20,
-              shadowColor: colors.black,
-              shadowRadius: 5,
-              shadowOpacity: 0.5,
-              elevation: 10,
-            }}
-          >
+          <View style={styles.messagesContainer}>
             {messages.length === 0 && !getMessagesApi.loading && (
               <AppText style={styles.errorMessage}>No messages found</AppText>
             )}
@@ -247,8 +236,10 @@ function MessagesScreen({ navigation }) {
               renderItem={({ item }) => (
                 <ListItem
                   title={displayParticipants(item)}
+                  saved={item.participant.saved === "1"}
+                  archived={item.participant.archived === "1"}
                   time={dayjs(item.last_message.created_at).format(
-                    "HH:mm   DD/MM/YYYY"
+                    "HH:mm - DD/MM/YYYY"
                   )}
                   subTitle={item.last_message.clean_message}
                   unread={
@@ -265,8 +256,8 @@ function MessagesScreen({ navigation }) {
                       onPress={() => handleAction(item, "save")}
                       icon="content-save"
                       text={item.participant.saved === "0" ? "Save" : "Unsave"}
-                      backgroundColor={null}
-                      color={colors.success}
+                      backgroundColor={colors.lightGrey}
+                      color={colors.primary}
                     />
                   )}
                   renderRightActions={() => (
@@ -278,8 +269,8 @@ function MessagesScreen({ navigation }) {
                           ? "Archive"
                           : "Unarchive"
                       }
-                      backgroundColor={null}
-                      color={colors.secondary}
+                      backgroundColor={colors.lightGrey}
+                      color={colors.danger}
                     />
                   )}
                 />
@@ -293,34 +284,19 @@ function MessagesScreen({ navigation }) {
             />
           </View>
           <View
-            style={{
-              padding: 20,
-              marginTop: 30,
-              marginBottom: tabBarHeight,
-              backgroundColor: "white",
-              shadowColor: colors.black,
-              shadowRadius: 5,
-              shadowOpacity: 0.5,
-              elevation: 10,
-            }}
+            style={[styles.contactContainer, { marginBottom: tabBarHeight }]}
           >
             <AppText style={styles.contactText}>
               Contact your Account Manager directly
             </AppText>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 10,
-              }}
-            >
+            <View style={styles.contactButtonsContainer}>
               <AppButton
                 backgroundColor={null}
                 color={colors.success}
                 title="Call Now"
-                style={{ width: "47%" }}
+                style={styles.contactButton}
               />
-              <AppButton title="Message" style={{ width: "47%" }} />
+              <AppButton title="Message" style={styles.contactButton} />
             </View>
           </View>
         </Screen>
@@ -351,8 +327,39 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
   },
+  messagesContainer: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 10,
+    marginHorizontal: 10,
+    backgroundColor: "white",
+    borderRadius: 20,
+    shadowColor: colors.black,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
+    elevation: 10,
+  },
+  contactContainer: {
+    padding: 20,
+    marginTop: 30,
+    backgroundColor: "white",
+    shadowColor: colors.black,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
+    elevation: 10,
+  },
   contactText: {
     fontWeight: "bold",
+  },
+  contactButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  contactButton: {
+    width: "47%",
   },
 });
 

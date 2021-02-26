@@ -127,7 +127,7 @@ function HomeScreen({ navigation }) {
   };
 
   return (
-    <Screen style={styles.screen}>
+    <Screen>
       {getVehiclesApi.error ? (
         <>
           <AppText style={styles.errorMessage}>
@@ -200,6 +200,7 @@ function HomeScreen({ navigation }) {
                 <Loading visible={getVehiclesApi.loading} />
               </View>
             }
+            columnWrapperStyle={styles.columnWrapper}
           />
         </>
       )}
@@ -223,8 +224,6 @@ const styles = StyleSheet.create({
   optionBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  screen: {
     paddingHorizontal: 20,
   },
   modal: {
@@ -249,6 +248,10 @@ const styles = StyleSheet.create({
   listItem: {
     padding: 15,
     flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  columnWrapper: {
+    paddingHorizontal: 20,
     justifyContent: "space-between",
   },
 });

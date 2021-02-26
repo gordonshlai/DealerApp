@@ -33,6 +33,7 @@ function Card({
               style={styles.image}
               tint="light"
               source={{ uri: imageUrl }}
+              loadingIndicatorSource={require("../assets/animations/loading.json")}
             />
           ) : (
             <MaterialCommunityIcons name="car" size={90} color="white" />
@@ -71,11 +72,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: "white",
     marginVertical: 10,
-    marginHorizontal: "2%",
-    width: "46%",
+    width: "48%",
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   detailsContainer: {

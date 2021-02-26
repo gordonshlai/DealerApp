@@ -143,7 +143,7 @@ function InventoryScreen({ navigation }) {
               handleRefresh();
             }}
           />
-          <Screen style={styles.screen}>
+          <Screen>
             <View style={styles.optionBar}>
               {/* <AppButton
                 title="Filter"
@@ -181,13 +181,18 @@ function InventoryScreen({ navigation }) {
             </View>
             <View
               style={
-                serachBarVisible ? { opacity: 1 } : { height: 0, opacity: 0 }
+                serachBarVisible
+                  ? { opacity: 1, marginHorizontal: 20 }
+                  : { height: 0, opacity: 0 }
               }
             >
               <AppTextInput
                 icon="magnify"
                 placeholder="Enter Your Registration"
-                style={{ backgroundColor: "white", borderRadius: 10 }}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                }}
                 onChangeText={handleSearch}
               />
             </View>
@@ -225,6 +230,7 @@ function InventoryScreen({ navigation }) {
                   <Loading visible={getVehiclesApi.loading} />
                 </View>
               }
+              columnWrapperStyle={styles.columnWrapper}
             />
           </Screen>
         </>
@@ -274,9 +280,6 @@ function InventoryScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 20,
-  },
   errorMessage: {
     alignSelf: "center",
     fontWeight: "bold",
@@ -285,9 +288,7 @@ const styles = StyleSheet.create({
   optionBar: {
     flexDirection: "row",
     justifyContent: "space-between",
-  },
-  searchBarContainer: {
-    marginBottom: 10,
+    paddingHorizontal: 20,
   },
   noMatchingVehicles: {
     fontSize: 24,
@@ -295,6 +296,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     color: colors.primary,
     paddingTop: 20,
+  },
+  columnWrapper: {
+    paddingHorizontal: 20,
+    justifyContent: "space-between",
   },
   // modal: {
   //   padding: 20,

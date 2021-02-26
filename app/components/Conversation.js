@@ -31,8 +31,9 @@ const styles = StyleSheet.create({
   container: {
     width: "90%",
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.25,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   title: {
