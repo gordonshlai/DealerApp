@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
+import Svg, { Path, G, Circle } from "react-native-svg";
 
 import TradeNavigator from "./TradeNavigator";
 import InventoryNavigator from "./InventoryNavigator";
@@ -14,6 +15,10 @@ import routes from "./routes";
 import AuthContext from "../auth/context";
 import colors from "../config/colors";
 import AccountNavigator from "./AccountNavigator";
+import AccountIcon from "../components/icons/AccountIcon";
+import CarIcon from "../components/icons/CarIcon";
+import MessagesIcon from "../components/icons/MessagesIcon";
+import TradeCarsIcon from "../components/icons/TradeCarsIcon";
 
 const Tab = createBottomTabNavigator();
 const tabHiddenRoutes = [routes.TRADE_DETAIL, routes.INVENTORY_DETAIL];
@@ -58,9 +63,7 @@ const AppNavigator = () => {
         name={routes.TRADE}
         component={TradeNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Fontisto name="arrow-swap" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <TradeCarsIcon color={color} />,
         }}
         listeners={({ navigation, route }) => ({
           state: hideTabBar(navigation, route),
@@ -70,11 +73,7 @@ const AppNavigator = () => {
       <Tab.Screen
         name={routes.INVENTORY}
         component={InventoryNavigator}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="car" color={color} size={size} />
-          ),
-        }}
+        options={{ tabBarIcon: ({ color, size }) => <CarIcon color={color} /> }}
         listeners={({ navigation, route }) => ({
           state: hideTabBar(navigation, route),
         })}
@@ -104,15 +103,14 @@ const AppNavigator = () => {
         name={routes.MESSAGES}
         component={MessageNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="message-text-outline"
-              color={color}
-              size={size}
-            />
-          ),
+          tabBarIcon: ({ color, size }) => <MessagesIcon color={color} />,
           tabBarBadge: unread ? unread : null,
-          tabBarBadgeStyle: { backgroundColor: colors.primary, color: "white" },
+          tabBarBadgeStyle: {
+            backgroundColor: colors.primary,
+            color: "white",
+            borderColor: "white",
+            borderWidth: 1,
+          },
         }}
       />
 
@@ -120,9 +118,7 @@ const AppNavigator = () => {
         name={routes.ACCOUNT}
         component={AccountNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
-          ),
+          tabBarIcon: ({ color, size }) => <AccountIcon color={color} />,
         }}
       />
     </Tab.Navigator>

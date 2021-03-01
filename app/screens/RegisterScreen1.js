@@ -79,6 +79,7 @@ function RegisterScreen1({ navigation }) {
       note: businessName,
       email,
       password_1: password,
+      password_2: password,
     })
   );
 

@@ -116,8 +116,9 @@ const styles = StyleSheet.create({
     marginRight: 50,
     flex: 1,
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.3,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   topBarContainer: {
@@ -144,8 +145,9 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     backgroundColor: "white",
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.3,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
   contactText: {
