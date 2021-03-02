@@ -10,6 +10,7 @@ import AppTextInput from "../components/AppTextInput";
 import Card from "../components/Card";
 import Screen from "../components/Screen";
 import Picker from "../components/Picker";
+import NewCarButton from "../navigation/NewCarButton";
 
 import client from "../api/client";
 import useApi from "../hooks/useApi";
@@ -144,6 +145,8 @@ function InventoryScreen({ navigation }) {
             }}
           />
           <Screen>
+            <NewCarButton onPress={() => navigation.navigate(routes.NEW_CAR)} />
+
             <View style={styles.optionBar}>
               {/* <AppButton
                 title="Filter"

@@ -7,6 +7,7 @@ import Loading from "../components/Loading";
 import AppText from "../components/AppText";
 import Card from "../components/Card";
 import Screen from "../components/Screen";
+import NewCarButton from "../navigation/NewCarButton";
 
 import client from "../api/client";
 import useApi from "../hooks/useApi";
@@ -138,6 +139,7 @@ function HomeScreen({ navigation }) {
         </>
       ) : (
         <>
+          <NewCarButton onPress={() => navigation.navigate(routes.NEW_CAR)} />
           <View style={styles.optionBar}>
             <OptionButton
               title={make.toUpperCase()}

@@ -9,6 +9,8 @@ export default Object.freeze({
   REGISTER_2: "Register 2",
   RESET_PASSWORD: "Reset Password",
 
+  HOME: "Home",
+
   TRADE: "Trade Cars",
   TRADE_DETAIL: "Trade Detail",
 

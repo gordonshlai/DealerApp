@@ -3,21 +3,24 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 
+import HomeNavigator from "./HomeNavigator";
 import TradeNavigator from "./TradeNavigator";
 import InventoryNavigator from "./InventoryNavigator";
-import NewCarButton from "./NewCarButton";
 import NewCarNavigator from "./NewCarNavigator";
 import MessageNavigator from "./MessageNavigator";
-
-import defaultStyles from "../config/styles";
-import routes from "./routes";
-import AuthContext from "../auth/context";
-import colors from "../config/colors";
 import AccountNavigator from "./AccountNavigator";
+
+import NewCarButton from "./NewCarButton";
 import AccountIcon from "../components/icons/AccountIcon";
 import CarIcon from "../components/icons/CarIcon";
 import MessagesIcon from "../components/icons/MessagesIcon";
 import TradeCarsIcon from "../components/icons/TradeCarsIcon";
+import HomeIcon from "../components/icons/HomeIcon";
+
+import routes from "./routes";
+import defaultStyles from "../config/styles";
+import colors from "../config/colors";
+import AuthContext from "../auth/context";
 
 const Tab = createBottomTabNavigator();
 const tabHiddenRoutes = [routes.TRADE_DETAIL, routes.INVENTORY_DETAIL];
@@ -29,15 +32,12 @@ const tabHiddenRoutes = [routes.TRADE_DETAIL, routes.INVENTORY_DETAIL];
  */
 const AppNavigator = () => {
   const { unread } = useContext(AuthContext);
-  const [tabBarButtonVisible, setTabBarButtonVisible] = useState(true);
 
   const hideTabBar = (navigation, route) => {
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarVisible: false });
-      setTabBarButtonVisible(false);
     } else {
       navigation.setOptions({ tabBarVisible: true });
-      setTabBarButtonVisible(true);
     }
   };
 
@@ -59,6 +59,14 @@ const AppNavigator = () => {
       }}
     >
       <Tab.Screen
+        name={routes.HOME}
+        component={HomeNavigator}
+        options={{
+          tabBarIcon: ({ color, size }) => <HomeIcon color={color} />,
+        }}
+      />
+
+      <Tab.Screen
         name={routes.TRADE}
         component={TradeNavigator}
         options={{
@@ -75,26 +83,6 @@ const AppNavigator = () => {
         options={{ tabBarIcon: ({ color, size }) => <CarIcon color={color} /> }}
         listeners={({ navigation, route }) => ({
           state: hideTabBar(navigation, route),
-        })}
-      />
-
-      <Tab.Screen
-        name={routes.NEW_CAR}
-        component={NewCarNavigator}
-        options={({ navigation }) => ({
-          tabBarButton: () =>
-            tabBarButtonVisible && (
-              <NewCarButton
-                onPress={() => navigation.navigate(routes.NEW_CAR)}
-              />
-            ),
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons
-              name="plus-circle"
-              color={color}
-              size={size}
-            />
-          ),
         })}
       />
 

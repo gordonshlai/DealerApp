@@ -1,15 +1,19 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import colors from "../config/colors";
 
-function NewListingButton({ onPress }) {
+function NewListingButton({ onPress, style }) {
+  const tabBarHeight = useBottomTabBarHeight();
+
   return (
-    <TouchableOpacity onPress={onPress}>
-      <View style={styles.container}>
-        <MaterialCommunityIcons name="plus" color="white" size={40} />
-      </View>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.container, { bottom: tabBarHeight }, style]}
+    >
+      <MaterialCommunityIcons name="plus" color="white" size={40} />
     </TouchableOpacity>
   );
 }
@@ -17,16 +21,18 @@ function NewListingButton({ onPress }) {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    backgroundColor: colors.primary,
-    borderColor: "white",
-    borderRadius: 40,
-    bottom: Platform.OS == "ios" ? 30 : 35,
-    height: 70,
     justifyContent: "center",
-    width: 70,
+    position: "absolute",
+    zIndex: 1,
+    backgroundColor: colors.primary,
+    borderRadius: 40,
+    height: 60,
+    width: 60,
+    right: 30,
     shadowColor: colors.black,
-    shadowRadius: 5,
-    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    shadowOpacity: 0.3,
+    shadowOffset: { height: 5 },
     elevation: 10,
   },
 });

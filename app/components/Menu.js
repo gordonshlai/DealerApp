@@ -19,9 +19,9 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import AppText from "./AppText";
 
 const list = [
+  routes.HOME,
   routes.TRADE,
   routes.INVENTORY,
-  routes.NEW_CAR,
   routes.MESSAGES,
   routes.ACCOUNT,
 ];
