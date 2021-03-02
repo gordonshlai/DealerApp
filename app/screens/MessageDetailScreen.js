@@ -22,6 +22,7 @@ import { Modal } from "react-native";
 import AppButton from "../components/AppButton";
 import Screen from "../components/Screen";
 import AppText from "../components/AppText";
+import Background from "../components/Background";
 
 const validationSchema = Yup.object().shape({
   text: Yup.string().label("Text Message"),
@@ -92,17 +93,7 @@ function MessageDetailScreen({ navigation, route }) {
 
   return (
     <>
-      <View
-        style={{
-          position: "absolute",
-          backgroundColor: colors.secondary,
-          width: Dimensions.get("screen").height,
-          height: Dimensions.get("screen").height,
-          alignSelf: "center",
-          borderRadius: Dimensions.get("screen").height,
-          top: -Dimensions.get("screen").height * 0.7,
-        }}
-      />
+      <Background />
       <View
         style={{
           flexDirection: "row",

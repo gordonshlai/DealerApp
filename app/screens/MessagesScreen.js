@@ -26,6 +26,7 @@ import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import ButtonGroup from "../components/ButtonGroup";
+import Background from "../components/Background";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
@@ -170,17 +171,7 @@ function MessagesScreen({ navigation }) {
 
   return (
     <>
-      <View
-        style={{
-          position: "absolute",
-          backgroundColor: colors.secondary,
-          width: Dimensions.get("screen").height,
-          height: Dimensions.get("screen").height,
-          alignSelf: "center",
-          borderRadius: Dimensions.get("screen").height,
-          top: -Dimensions.get("screen").height * 0.7,
-        }}
-      />
+      <Background />
       {getMessagesApi.error ? (
         <Screen style={styles.screen}>
           <AppText style={styles.errorMessage}>

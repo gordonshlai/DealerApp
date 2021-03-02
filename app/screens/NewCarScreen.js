@@ -23,6 +23,7 @@ import colors from "../config/colors";
 import useApi from "../hooks/useApi";
 import routes from "../navigation/routes";
 import ActivityIndicator from "../components/ActivityIndicator";
+import Background from "../components/Background";
 
 const validationSchema = Yup.object().shape({
   registration: Yup.string().required().label("Registration"),
@@ -45,6 +46,7 @@ function NewCarScreen({ navigation }) {
 
   return (
     <>
+      <Background />
       <ActivityIndicator visible={registrationLookupApi.loading} />
       <ScrollView>
         <KeyboardAvoidingView
