@@ -213,20 +213,22 @@ function InventoryScreen({ navigation }) {
               data={vehicles}
               keyExtractor={(vehicle) => vehicle.id.toString()}
               renderItem={({ item }) => (
-                <Card
-                  title={item.title}
-                  make={item.make}
-                  model={item.model}
-                  year={item.year}
-                  mileage={item.mileage}
-                  engineCapacity={item.engine_capacity}
-                  priceAsking={item.price_asking}
-                  registration={item.registration}
-                  imageUrl={item.thumb ? item.thumb.url : ""}
-                  onPress={() =>
-                    navigation.navigate(routes.INVENTORY_DETAIL, item)
-                  }
-                />
+                <View style={{ width: "48%" }}>
+                  <Card
+                    title={item.title}
+                    make={item.make}
+                    model={item.model}
+                    year={item.year}
+                    mileage={item.mileage}
+                    engineCapacity={item.engine_capacity}
+                    priceAsking={item.price_asking}
+                    registration={item.registration}
+                    imageUrl={item.thumb ? item.thumb.url : ""}
+                    onPress={() =>
+                      navigation.navigate(routes.INVENTORY_DETAIL, item)
+                    }
+                  />
+                </View>
               )}
               numColumns={2}
               refreshing={refreshing}

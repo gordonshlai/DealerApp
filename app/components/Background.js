@@ -12,7 +12,7 @@ function Background(props) {
         height: Dimensions.get("screen").height,
         alignSelf: "center",
         borderRadius: Dimensions.get("screen").height,
-        top: -Dimensions.get("screen").height * 0.7,
+        top: -Dimensions.get("screen").height * 0.65,
       }}
     />
   );

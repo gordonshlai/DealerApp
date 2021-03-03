@@ -62,7 +62,9 @@ const AppNavigator = () => {
         name={routes.HOME}
         component={HomeNavigator}
         options={{
-          tabBarIcon: ({ color, size }) => <HomeIcon color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <HomeIcon color={color} size={size} />
+          ),
         }}
       />
 

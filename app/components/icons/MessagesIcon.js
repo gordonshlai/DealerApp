@@ -1,12 +1,13 @@
 import React from "react";
 import Svg, { Path, G, Circle } from "react-native-svg";
+import colors from "../../config/colors";
 
-function MessagesIcon({ color, size }) {
+function MessagesIcon({ color = colors.mediumGrey, size }) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width="20.19"
-      height="20.19"
+      width={size ? size : "20.19"}
+      height={size ? size : "20.19"}
       viewBox="0 0 20.19 20.19"
     >
       <G id="Group_187" data-name="Group 187" transform="translate(1 1)">
@@ -26,7 +27,13 @@ function MessagesIcon({ color, size }) {
           data-name="Group 99"
           transform="translate(3.521 5.867)"
         >
-          <Circle id="Oval" cx="1.133" cy="1.133" r="1.133" fill="#fff" />
+          <Circle
+            id="Oval"
+            cx="1.133"
+            cy="1.133"
+            r="1.133"
+            fill={color === "white" ? colors.lightGrey : "#fff"}
+          />
           <Circle
             id="Oval-2"
             data-name="Oval"
@@ -34,7 +41,7 @@ function MessagesIcon({ color, size }) {
             cy="1.133"
             r="1.133"
             transform="translate(4.53)"
-            fill="#fff"
+            fill={color === "white" ? colors.lightGrey : "#fff"}
           />
           <Circle
             id="Oval-3"
@@ -43,7 +50,7 @@ function MessagesIcon({ color, size }) {
             cy="1.133"
             r="1.133"
             transform="translate(9.061)"
-            fill="#fff"
+            fill={color === "white" ? colors.lightGrey : "#fff"}
           />
         </G>
       </G>

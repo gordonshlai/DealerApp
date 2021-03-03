@@ -31,27 +31,39 @@ function ListItem({
           <View style={styles.detailsContainer}>
             <View style={styles.row}>
               {title && (
-                <AppText style={styles.title} numberOfLines={1}>
-                  {title}
-                </AppText>
+                <View style={{ width: "50%" }}>
+                  <AppText style={styles.title} numberOfLines={2}>
+                    {title}
+                  </AppText>
+                </View>
               )}
-              <View style={{ flexDirection: "row" }}>
-                {saved && (
-                  <MaterialCommunityIcons
-                    name="content-save"
-                    color={colors.primary}
-                    size={20}
-                    style={{ marginRight: 4 }}
-                  />
-                )}
-                {archived && (
-                  <MaterialCommunityIcons
-                    name="archive"
-                    size={20}
-                    color={colors.danger}
-                    style={{ marginRight: 4 }}
-                  />
-                )}
+              <View
+                style={{
+                  flexDirection: "row",
+                  width: "50%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View
+                  style={{ flexDirection: "row", justifyContent: "flex-start" }}
+                >
+                  {saved && (
+                    <MaterialCommunityIcons
+                      name="content-save"
+                      color={colors.primary}
+                      size={20}
+                      style={{ marginLeft: 4 }}
+                    />
+                  )}
+                  {archived && (
+                    <MaterialCommunityIcons
+                      name="archive"
+                      size={20}
+                      color={colors.danger}
+                      style={{ marginLeft: 4 }}
+                    />
+                  )}
+                </View>
                 {time && (
                   <AppText
                     style={[

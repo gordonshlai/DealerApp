@@ -1,13 +1,14 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg";
+import colors from "../../config/colors";
 
-function TradeCarsIcon({ color, size }) {
+function TradeCarsIcon({ color = colors.mediumGrey, size }) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width="25.704"
-      height="20.19"
-      viewBox="0 0 25.704 20.19"
+      width={size ? (size * 25.04) / 20.19 : "25.704"}
+      height={size ? size : "20.19"}
+      viewBox={"0 0 25.704 20.19"}
     >
       <Path
         id="Icon_ionic-md-swap"

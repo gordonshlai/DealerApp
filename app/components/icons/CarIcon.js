@@ -5,8 +5,8 @@ function CarIcon({ color, size }) {
   return (
     <Svg
       xmlns="http://www.w3.org/2000/svg"
-      width="23.988"
-      height="19.19"
+      width={size ? (size * 23.988) / 19.19 : "23.988"}
+      height={size ? size : "19.19"}
       viewBox="0 0 23.988 19.19"
     >
       <Path

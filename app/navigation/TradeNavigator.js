@@ -24,6 +24,7 @@ const TradeNavigator = () => (
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
+        elevation: 0,
       },
       headerTintColor: "white",
       headerBackImage: () => (
@@ -45,7 +46,11 @@ const TradeNavigator = () => (
         headerTitle: route.params.title,
       })}
     />
-    <Stack.Screen name={routes.NEW_CAR} component={NewCarNavigator} />
+    <Stack.Screen
+      name={routes.NEW_CAR}
+      component={NewCarNavigator}
+      options={{ headerShown: false }}
+    />
     <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}

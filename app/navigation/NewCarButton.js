@@ -11,7 +11,7 @@ function NewListingButton({ onPress, style }) {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={[styles.container, { bottom: tabBarHeight }, style]}
+      style={[styles.container, { bottom: (tabBarHeight * 2) / 3 }, style]}
     >
       <MaterialCommunityIcons name="plus" color="white" size={40} />
     </TouchableOpacity>
@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
     position: "absolute",
     zIndex: 1,
     backgroundColor: colors.primary,
-    borderRadius: 40,
+    borderRadius: 30,
     height: 60,
     width: 60,
-    right: 30,
+    right: 20,
     shadowColor: colors.black,
     shadowRadius: 10,
     shadowOpacity: 0.3,

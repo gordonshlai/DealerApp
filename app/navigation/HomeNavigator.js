@@ -1,4 +1,5 @@
 import React from "react";
+import { Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -7,6 +8,8 @@ import HomeScreen from "../screens/HomeScreen";
 
 import routes from "./routes";
 import colors from "../config/colors";
+import { Platform } from "react-native";
+import { Dimensions } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -15,12 +18,26 @@ const HomeNavigator = () => (
     screenOptions={{
       headerBackTitleVisible: false,
       headerBackTitle: "",
-      headerTitleStyle: { marginHorizontal: 10 },
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
+        elevation: 0,
       },
       headerTintColor: "white",
+      headerTitle: () => (
+        <Image
+          source={require("../assets/logo.png")}
+          style={{
+            width: 120,
+            height: 60,
+            resizeMode: "contain",
+            marginLeft:
+              Platform.OS === "android"
+                ? Dimensions.get("window").width / 2 - 60 - 20
+                : 0,
+          }}
+        />
+      ),
       headerBackImage: () => (
         <MaterialCommunityIcons
           name="arrow-left"
