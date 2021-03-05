@@ -4,33 +4,27 @@ import AppText from "./AppText";
 import Info from "./Info";
 
 import colors from "../config/colors";
+import defaultStyles from "../config/styles";
 import AppButton from "./AppButton";
+import Screen from "./Screen";
 
-function Disclaimer({ visible, setVisible, onAcceptPress, onCancelPress }) {
+function Disclaimer({
+  visible,
+  setVisible,
+  onAcceptPress,
+  onCancelPress,
+  ...otherprops
+}) {
   return (
     <Modal
       visible={visible}
       transparent
       onRequestClose={() => setVisible(false)}
+      {...otherprops}
     >
-      <View
-        style={{
-          paddingVertical: 50,
-          paddingHorizontal: 20,
-          backgroundColor: colors.mediumGrey + "aa",
-          justifyContent: "center",
-          flex: 1,
-        }}
-      >
-        <ScrollView>
-          <View
-            style={{
-              backgroundColor: colors.lightGrey,
-              borderRadius: 10,
-              padding: 20,
-              marginVertical: 10,
-            }}
-          >
+      <View style={styles.background}>
+        <Screen style={styles.container}>
+          <ScrollView>
             <Info
               name="alert-circle-outline"
               size={50}
@@ -64,17 +58,26 @@ function Disclaimer({ visible, setVisible, onAcceptPress, onCancelPress }) {
               color={colors.success}
               onPress={onCancelPress}
             />
-          </View>
-        </ScrollView>
+          </ScrollView>
+        </Screen>
       </View>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    backgroundColor: colors.white + "aa",
+    justifyContent: "center",
+    flex: 1,
+  },
   container: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
     padding: 20,
-    backgroundColor: colors.lightGrey,
+    margin: 10,
+    flex: 1,
+    ...defaultStyles.shadow,
   },
   textContainer: {
     marginVertical: 30,

@@ -66,10 +66,7 @@ function Slider({ images, height, width }) {
             >
               <Image
                 source={{ uri: image.url }}
-                style={{
-                  height: height * 0.8,
-                  width,
-                }}
+                style={{ height: height * 0.8, width }}
               />
             </TouchableWithoutFeedback>
           ))}
@@ -182,9 +179,10 @@ function Slider({ images, height, width }) {
 
 const styles = StyleSheet.create({
   pagination: {
-    backgroundColor: "#aaaaaa88",
+    backgroundColor: "#aaaaaaaa",
     color: "white",
     fontWeight: "bold",
+    fontSize: 12,
     padding: 5,
     borderRadius: 5,
     overflow: "hidden",

@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "../AppText";
 
 import colors from "../../config/colors";
+import { TouchableOpacity } from "react-native";
 
 function ListItemAction({
   onPress,
@@ -14,17 +15,18 @@ function ListItemAction({
   text = "Delete",
 }) {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <TouchableOpacity onPress={onPress}>
       <View style={[styles.container, { backgroundColor }]}>
         <MaterialCommunityIcons name={icon} size={35} color={color} />
         <AppText style={[styles.text, { color }]}>{text}</AppText>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     width: 150,
     justifyContent: "center",
     alignItems: "center",

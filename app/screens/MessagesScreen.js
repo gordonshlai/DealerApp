@@ -3,7 +3,7 @@ import {
   View,
   StyleSheet,
   FlatList,
-  ActivityIndicator,
+  // ActivityIndicator,
   Dimensions,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
@@ -27,6 +27,9 @@ import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import ButtonGroup from "../components/ButtonGroup";
 import Background from "../components/Background";
+import { AppErrorMessage } from "../components/forms";
+import defaultStyles from "../config/styles";
+import ActivityIndicator from "../components/ActivityIndicator";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
@@ -38,6 +41,7 @@ function MessagesScreen({ navigation }) {
     AuthContext
   );
   const tabBarHeight = useBottomTabBarHeight();
+  const [error, setError] = useState(false);
   const [messages, setMessages] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [concat, setConcat] = useState(false);
@@ -71,7 +75,7 @@ function MessagesScreen({ navigation }) {
   const getMessages = async () => {
     const result = await getMessagesApi.request();
     console.log(endpoint);
-    if (!result.ok) return;
+    if (!result.ok) return setError(result.data.message);
     const newMessages = result.data.data;
     const newMessagesArray = parseObjectToArray(newMessages);
     return newMessagesArray;
@@ -177,6 +181,7 @@ function MessagesScreen({ navigation }) {
           <AppText style={styles.errorMessage}>
             Couldn't retrieve the messages.
           </AppText>
+          <AppErrorMessage error={error} visible={error} />
           <AppButton title="RETRY" onPress={handleRefresh} />
         </Screen>
       ) : (
@@ -197,10 +202,10 @@ function MessagesScreen({ navigation }) {
                 style={{ backgroundColor: "white", borderRadius: 10, flex: 1 }}
                 onChangeText={handleSearch}
               />
-              <ActivityIndicator
+              {/* <ActivityIndicator
                 animating={getMessagesApi.loading}
                 color={colors.mediumGrey}
-              />
+              /> */}
               <OptionButton
                 title="Sort"
                 backgroundColor={null}
@@ -218,6 +223,9 @@ function MessagesScreen({ navigation }) {
             </View>
           </View>
           <View style={styles.messagesContainer}>
+            <ActivityIndicator
+              visible={saveArchiveMessageApi.loading || getMessagesApi.loading}
+            />
             {messages.length === 0 && !getMessagesApi.loading && (
               <AppText style={styles.errorMessage}>No messages found</AppText>
             )}
@@ -320,26 +328,19 @@ const styles = StyleSheet.create({
   },
   messagesContainer: {
     flex: 1,
+    justifyContent: "center",
     paddingVertical: 20,
     paddingHorizontal: 10,
     marginHorizontal: 10,
     backgroundColor: "white",
     borderRadius: 20,
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
   contactContainer: {
     padding: 20,
     marginTop: 30,
     backgroundColor: "white",
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
   contactText: {
     fontWeight: "bold",

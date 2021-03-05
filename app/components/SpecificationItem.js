@@ -4,19 +4,20 @@ import { View, StyleSheet } from "react-native";
 import Info from "./Info";
 import AppText from "./AppText";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 
 function SpecificationItem({
-  color = defaultStyles.colors.mediumGrey,
+  color = colors.mediumGrey,
   icon,
-  text,
+  title,
   value,
   style,
 }) {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.infoContainer}>
-        <Info name={icon} text={text} color={color} />
+        <AppText style={styles.title}>{title}</AppText>
+        {/* <Info name={icon} text={text} color={color} /> */}
       </View>
       <View style={styles.valueContainer}>
         {value && <AppText style={styles.value}>{value}</AppText>}
@@ -34,6 +35,9 @@ const styles = StyleSheet.create({
   infoContainer: {
     width: "50%",
     flexDirection: "row",
+  },
+  title: {
+    color: colors.mediumGrey,
   },
   valueContainer: {
     width: "45%",

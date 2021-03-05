@@ -79,7 +79,6 @@ function HomeScreen({ navigation }) {
 
   const getVehicles = async () => {
     const result = await getVehiclesApi.request();
-    console.log(result.data);
     if (!result.ok) return setError(result.data.message);
   };
 
@@ -194,7 +193,11 @@ function HomeScreen({ navigation }) {
                       registration={item.registration}
                       imageUrl={item.thumb ? item.thumb.url : ""}
                       onPress={() =>
-                        navigation.navigate(routes.TRADE_DETAIL, item)
+                        navigation.navigate(routes.TRADE, {
+                          screen: routes.TRADE_DETAIL,
+                          initial: false,
+                          params: item,
+                        })
                       }
                     />
                   </View>

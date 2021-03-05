@@ -15,6 +15,7 @@ import { ListItemSeparator } from "./lists";
 
 import routes from "../navigation/routes";
 import colors from "../config/colors";
+import defaultStyle from "../config/styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AppText from "./AppText";
 
@@ -109,17 +110,13 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-    backgroundColor: colors.white + "dd",
+    backgroundColor: colors.white + "aa",
   },
   container: {
     backgroundColor: "white",
     marginRight: 50,
     flex: 1,
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyle.shadow,
   },
   topBarContainer: {
     height: 80 + (Platform.OS === "ios" ? Constants.statusBarHeight : 0),
@@ -144,11 +141,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 30,
     backgroundColor: "white",
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyle.shadow,
   },
   contactText: {
     fontWeight: "bold",

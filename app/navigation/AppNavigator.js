@@ -66,6 +66,9 @@ const AppNavigator = () => {
             <HomeIcon color={color} size={size} />
           ),
         }}
+        listeners={({ navigation, route }) => ({
+          state: hideTabBar(navigation, route),
+        })}
       />
 
       <Tab.Screen
