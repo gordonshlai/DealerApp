@@ -231,7 +231,7 @@ function MessagesScreen({ navigation }) {
             )}
             <FlatList
               data={messages}
-              keyExtractor={(message) => message.id.toString()}
+              keyExtractor={(message, index) => index.toString()}
               renderItem={({ item }) => (
                 <ListItem
                   title={displayParticipants(item)}

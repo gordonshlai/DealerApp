@@ -53,29 +53,34 @@ function OptionButton({
           />
           <FlatList
             data={displayArray}
-            keyExtractor={(item) => item}
+            keyExtractor={(item, index) => index.toString()}
             ItemSeparatorComponent={ListItemSeparator}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.listItem}
-                onPress={() => {
-                  setModalVisible(false);
-                  const query = queryArray[displayArray.indexOf(item)];
-                  if (value === query) return;
-                  setValue(query);
-                  handleRefresh();
-                }}
-              >
-                <AppText>{item.toUpperCase()}</AppText>
-                {value === queryArray[displayArray.indexOf(item)] ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    color={colors.primary}
-                    size={24}
-                  />
-                ) : null}
-              </TouchableOpacity>
-            )}
+            renderItem={({ item }) => {
+              const query = queryArray[displayArray.indexOf(item)];
+              const isActive = value === query;
+              return (
+                <TouchableOpacity
+                  style={[styles.listItem, isActive && styles.activeItem]}
+                  onPress={() => {
+                    setModalVisible(false);
+                    if (isActive) return;
+                    setValue(query);
+                    handleRefresh();
+                  }}
+                >
+                  <AppText style={isActive && styles.activeText}>
+                    {item.toUpperCase()}
+                  </AppText>
+                  {isActive && (
+                    <MaterialCommunityIcons
+                      name="check"
+                      color={colors.primary}
+                      size={24}
+                    />
+                  )}
+                </TouchableOpacity>
+              );
+            }}
           />
         </Screen>
       </Modal>
@@ -91,6 +96,14 @@ const styles = StyleSheet.create({
     padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
+  },
+  activeItem: {
+    backgroundColor: colors.primary + "11",
+  },
+  activeText: {
+    fontWeight: "bold",
+    color: colors.primary,
   },
 });
 

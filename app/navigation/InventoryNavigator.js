@@ -41,12 +41,20 @@ const InventoryNavigator = () => (
       name={routes.INVENTORY_DETAIL}
       component={InventoryDetailScreen}
       options={({ route }) => ({
-        headerTitle: route.params.title
-          ? route.params.title
-          : route.params.make + " " + route.params.model,
+        headerTitle:
+          route.params.make +
+          " " +
+          route.params.model +
+          " (" +
+          route.params.year +
+          ")",
       })}
     />
-    <Stack.Screen name={routes.NEW_CAR} component={NewCarNavigator} />
+    <Stack.Screen
+      name={routes.NEW_CAR}
+      component={NewCarNavigator}
+      options={{ headerShown: false }}
+    />
     <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}

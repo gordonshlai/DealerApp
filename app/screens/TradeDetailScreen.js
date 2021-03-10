@@ -134,336 +134,358 @@ function TradeDetailScreen({ route, navigation }) {
       <ActivityIndicator
         visible={getVehicleApi.loading || enquiryApi.loading}
       />
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => getVehicleApi.request()}
-          />
-        }
-      >
-        {getVehicleApi.error ? (
-          <View style={{ padding: 20 }}>
-            <AppText style={styles.errorMessage}>
-              Couldn't retrieve the vehicle.
-            </AppText>
-            <AppErrorMessage error={error} visible={error} />
-            <AppButton title="RETRY" onPress={() => getVehicleApi.request()} />
-          </View>
-        ) : (
-          <Screen>
-            <View style={[styles.informationContainer, { padding: 0 }]}>
-              {getVehicleApi.data.images && (
-                <View
-                  style={[
-                    styles.imageContainer,
-                    {
-                      height: getVehicleApi.data.images.length > 1 ? 300 : 240,
-                    },
-                  ]}
-                >
-                  {getVehicleApi.data.images.length !== 0 ? (
-                    <Slider
-                      images={getVehicleApi.data.images}
-                      height={300}
-                      width={Dimensions.get("window").width - 20}
-                    />
-                  ) : (
-                    <MaterialCommunityIcons
-                      name="car"
-                      size={200}
-                      color="white"
-                    />
-                  )}
-                </View>
-              )}
-              <View style={{ padding: 20 }}>
-                <AppText style={styles.title} numberOfLines={2}>
-                  {getVehicleApi.data.title}
-                </AppText>
-                <AppText style={styles.tagline} numberOfLines={2}>
-                  {getVehicleApi.data.tagline}
-                </AppText>
-                <View style={[styles.detailRow, { marginBottom: 15 }]}>
-                  {getVehicleApi.data.registration && (
-                    <View style={styles.detailField}>
-                      <Registration
-                        registration={getVehicleApi.data.registration}
-                        style={{ fontSize: 24 }}
-                      />
-                    </View>
-                  )}
-                  {getVehicleApi.data.mileage && (
-                    <View style={styles.detailField}>
-                      <Info
-                        name="speedometer"
-                        text={
-                          numberWithCommas(getVehicleApi.data.mileage) + " mi"
-                        }
-                        textStyle={{ fontWeight: "bold" }}
-                        size={24}
-                      />
-                    </View>
-                  )}
-                </View>
 
-                <View style={styles.detailRow}>
-                  {getVehicleApi.data.price_asking && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>Asking Price</AppText>
-                      <AppText
-                        style={[styles.detailValue, { color: colors.primary }]}
-                      >
-                        {getVehicleApi.data.price_asking === "0.00"
-                          ? " POA"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_asking)}
-                      </AppText>
-                    </View>
-                  )}
-                  {getVehicleApi.data.price_cap && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>Guide Price</AppText>
-                      <AppText
-                        style={[styles.detailValue, { color: colors.success }]}
-                      >
-                        {getVehicleApi.data.price_cap === "0.00"
-                          ? "N/A"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_cap)}
-                      </AppText>
-                    </View>
-                  )}
-                </View>
-
-                <View style={styles.detailRow}>
-                  {getVehicleApi.data.listed_at && (
-                    <View style={styles.detailField}>
-                      <AppText style={[styles.detailTitle]}>Listed On</AppText>
-                      <AppText style={styles.detailValue}>
-                        {dayjs(getVehicleApi.data.listed_at).format(
-                          "DD/MM/YYYY"
-                        )}
-                      </AppText>
-                    </View>
-                  )}
-                  {getVehicleApi.data.offers_count && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>Offers</AppText>
-                      <AppText style={styles.detailValue}>
-                        {getVehicleApi.data.offers_count}
-                      </AppText>
-                    </View>
-                  )}
-                </View>
-              </View>
-            </View>
-
-            <View style={styles.informationContainer}>
-              <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
-                Specifications
-              </AppText>
-              {getVehicleApi.data.make && (
-                <>
-                  <SpecificationItem
-                    title="Make"
-                    value={getVehicleApi.data.make}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.model && (
-                <>
-                  <SpecificationItem
-                    title="Model"
-                    value={getVehicleApi.data.model}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.registration && (
-                <>
-                  <SpecificationItem
-                    title="Registration"
-                    value={formatingRegistration(
-                      getVehicleApi.data.registration
-                    )}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.mileage && (
-                <>
-                  <SpecificationItem
-                    title="Mileage"
-                    value={numberWithCommas(getVehicleApi.data.mileage)}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.colour && (
-                <>
-                  <SpecificationItem
-                    title="Color"
-                    value={getVehicleApi.data.colour}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.fuel && (
-                <>
-                  <SpecificationItem
-                    title="Fuel"
-                    value={getVehicleApi.data.fuel}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.engine_capacity && (
-                <>
-                  <SpecificationItem
-                    title="Engine Capacity"
-                    value={getVehicleApi.data.engine_capacity}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.year && (
-                <>
-                  <SpecificationItem
-                    title="Year"
-                    value={getVehicleApi.data.year}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.registration_date && (
-                <>
-                  <SpecificationItem
-                    title="Registration Date"
-                    value={dayjs(getVehicleApi.data.registration_date).format(
-                      "DD/MM/YYYY"
-                    )}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.mot_expiry && (
-                <>
-                  <SpecificationItem
-                    title="MOT Expiry"
-                    value={dayjs(getVehicleApi.data.mot_expiry).format(
-                      "DD/MM/YYYY"
-                    )}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.transmission && (
-                <>
-                  <SpecificationItem
-                    title="Transmission"
-                    value={getVehicleApi.data.transmission}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.seats && (
-                <>
-                  <SpecificationItem
-                    title="Seats"
-                    value={getVehicleApi.data.seats}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.doors && (
-                <>
-                  <SpecificationItem
-                    title="Doors"
-                    value={getVehicleApi.data.doors}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.body_style && (
-                <>
-                  <SpecificationItem
-                    title="Body Style"
-                    value={getVehicleApi.data.body_style}
-                  />
-                </>
-              )}
-            </View>
-
-            <View style={styles.informationContainer}>
-              {getVehicleApi.data.seller && (
-                <>
-                  <AppText style={styles.detailTitle}>Seller</AppText>
-                  <AppText
+      {getVehicleApi.error ? (
+        <View style={{ padding: 20 }}>
+          <AppText style={styles.errorMessage}>
+            Couldn't retrieve the vehicle.
+          </AppText>
+          <AppErrorMessage error={error} visible={error} />
+          <AppButton title="RETRY" onPress={() => getVehicleApi.request()} />
+        </View>
+      ) : (
+        <>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => getVehicleApi.request()}
+              />
+            }
+          >
+            <Screen>
+              <View style={[styles.informationContainer, { padding: 0 }]}>
+                {getVehicleApi.data.images && (
+                  <View
                     style={[
-                      styles.detailValue,
-                      { color: colors.secondary, marginVertical: 5 },
+                      styles.imageContainer,
+                      {
+                        height:
+                          getVehicleApi.data.images.length > 1 ? 300 : 240,
+                      },
                     ]}
                   >
-                    {getVehicleApi.data.seller.name}
+                    {getVehicleApi.data.images.length !== 0 ? (
+                      <Slider
+                        images={getVehicleApi.data.images}
+                        height={300}
+                        width={Dimensions.get("window").width - 20}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="car"
+                        size={200}
+                        color="white"
+                      />
+                    )}
+                  </View>
+                )}
+                <View style={{ padding: 20 }}>
+                  <AppText style={styles.title} numberOfLines={2}>
+                    {getVehicleApi.data.title ||
+                      getVehicleApi.data.make +
+                        " " +
+                        getVehicleApi.data.model +
+                        " (" +
+                        getVehicleApi.data.year +
+                        ")"}
                   </AppText>
-                  <Info
-                    name="map-marker"
-                    text={
-                      getVehicleApi.data.seller.city +
-                      ", " +
-                      getVehicleApi.data.seller.postcode
-                    }
-                    color={colors.mediumGrey}
-                    textStyle={{ fontStyle: "italic" }}
-                  />
-                  <AppButton
-                    title="Show on map   >"
-                    backgroundColor={null}
-                    color={colors.success}
-                    border={false}
-                    onPress={() =>
-                      Linking.openURL(
-                        "https://www.google.com/maps/place/" +
-                          getVehicleApi.data.seller.postcode
-                      )
-                    }
-                    style={{ alignSelf: "flex-start" }}
-                  />
-                </>
-              )}
-            </View>
+                  <AppText style={styles.tagline} numberOfLines={2}>
+                    {getVehicleApi.data.tagline}
+                  </AppText>
+                  <View style={[styles.detailRow, { marginBottom: 15 }]}>
+                    {getVehicleApi.data.registration && (
+                      <View style={styles.detailField}>
+                        <Registration
+                          registration={getVehicleApi.data.registration}
+                          style={{ fontSize: 24 }}
+                        />
+                      </View>
+                    )}
+                    {getVehicleApi.data.mileage && (
+                      <View style={styles.detailField}>
+                        <Info
+                          name="speedometer"
+                          text={
+                            numberWithCommas(getVehicleApi.data.mileage) + " mi"
+                          }
+                          textStyle={{ fontWeight: "bold" }}
+                          size={24}
+                        />
+                      </View>
+                    )}
+                  </View>
 
-            <View style={styles.informationContainer}>
-              <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
-                Description
-              </AppText>
-              <AppText>
-                {getVehicleApi.data.description
-                  ? getVehicleApi.data.description
-                  : "Not provided"}
-              </AppText>
+                  <View style={styles.detailRow}>
+                    {getVehicleApi.data.price_asking && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Asking Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: colors.primary },
+                          ]}
+                        >
+                          {getVehicleApi.data.price_asking === "0.00"
+                            ? " POA"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_asking)}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.price_cap && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Guide Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: colors.success },
+                          ]}
+                        >
+                          {getVehicleApi.data.price_cap === "0.00"
+                            ? "N/A"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_cap)}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={styles.detailRow}>
+                    {getVehicleApi.data.listed_at && (
+                      <View style={styles.detailField}>
+                        <AppText style={[styles.detailTitle]}>
+                          Listed On
+                        </AppText>
+                        <AppText style={styles.detailValue}>
+                          {dayjs(getVehicleApi.data.listed_at).format(
+                            "DD/MM/YYYY"
+                          )}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.offers_count && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>Offers</AppText>
+                        <AppText style={styles.detailValue}>
+                          {getVehicleApi.data.offers_count}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.informationContainer}>
+                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+                  Specifications
+                </AppText>
+                {getVehicleApi.data.make && (
+                  <>
+                    <SpecificationItem
+                      title="Make"
+                      value={getVehicleApi.data.make}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.model && (
+                  <>
+                    <SpecificationItem
+                      title="Model"
+                      value={getVehicleApi.data.model}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.registration && (
+                  <>
+                    <SpecificationItem
+                      title="Registration"
+                      value={formatingRegistration(
+                        getVehicleApi.data.registration
+                      )}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.mileage && (
+                  <>
+                    <SpecificationItem
+                      title="Mileage"
+                      value={numberWithCommas(getVehicleApi.data.mileage)}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.colour && (
+                  <>
+                    <SpecificationItem
+                      title="Color"
+                      value={getVehicleApi.data.colour}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.fuel && (
+                  <>
+                    <SpecificationItem
+                      title="Fuel"
+                      value={getVehicleApi.data.fuel}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.engine_capacity && (
+                  <>
+                    <SpecificationItem
+                      title="Engine Capacity"
+                      value={getVehicleApi.data.engine_capacity}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.year && (
+                  <>
+                    <SpecificationItem
+                      title="Year"
+                      value={getVehicleApi.data.year}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.registration_date && (
+                  <>
+                    <SpecificationItem
+                      title="Registration Date"
+                      value={dayjs(getVehicleApi.data.registration_date).format(
+                        "DD/MM/YYYY"
+                      )}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.mot_expiry && (
+                  <>
+                    <SpecificationItem
+                      title="MOT Expiry"
+                      value={dayjs(getVehicleApi.data.mot_expiry).format(
+                        "DD/MM/YYYY"
+                      )}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.transmission && (
+                  <>
+                    <SpecificationItem
+                      title="Transmission"
+                      value={getVehicleApi.data.transmission}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.seats && (
+                  <>
+                    <SpecificationItem
+                      title="Seats"
+                      value={getVehicleApi.data.seats}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.doors && (
+                  <>
+                    <SpecificationItem
+                      title="Doors"
+                      value={getVehicleApi.data.doors}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.body_style && (
+                  <>
+                    <SpecificationItem
+                      title="Body Style"
+                      value={getVehicleApi.data.body_style}
+                    />
+                  </>
+                )}
+              </View>
+
+              <View style={styles.informationContainer}>
+                {getVehicleApi.data.seller && (
+                  <>
+                    <AppText style={styles.detailTitle}>Seller</AppText>
+                    <AppText
+                      style={[
+                        styles.detailValue,
+                        { color: colors.secondary, marginVertical: 5 },
+                      ]}
+                    >
+                      {getVehicleApi.data.seller.name}
+                    </AppText>
+                    <Info
+                      name="map-marker"
+                      text={
+                        getVehicleApi.data.seller.city +
+                        ", " +
+                        getVehicleApi.data.seller.postcode
+                      }
+                      color={colors.mediumGrey}
+                      textStyle={{ fontStyle: "italic" }}
+                    />
+                    <AppButton
+                      title="Show on map   >"
+                      backgroundColor={null}
+                      color={colors.success}
+                      border={false}
+                      onPress={() =>
+                        Linking.openURL(
+                          "https://www.google.com/maps/place/" +
+                            getVehicleApi.data.seller.postcode
+                        )
+                      }
+                      style={{ alignSelf: "flex-start" }}
+                    />
+                  </>
+                )}
+              </View>
+
+              <View style={styles.informationContainer}>
+                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+                  Description
+                </AppText>
+                <AppText>
+                  {getVehicleApi.data.description
+                    ? getVehicleApi.data.description
+                    : "Not provided"}
+                </AppText>
+              </View>
+            </Screen>
+          </ScrollView>
+          <View>
+            <View style={styles.bottomButtonsContainer}>
+              <AppButton
+                title="Enquire"
+                backgroundColor={null}
+                color={colors.success}
+                style={{ width: "45%" }}
+                onPress={() => setEnquireModalVisible(true)}
+              />
+              <AppButton
+                title="Make Offer"
+                style={{ width: "45%" }}
+                onPress={() => setMakeOfferModalVisible(true)}
+              />
             </View>
-          </Screen>
-        )}
-      </ScrollView>
-      <View>
-        <View style={styles.bottomButtonsContainer}>
-          <AppButton
-            title="Enquire"
-            backgroundColor={null}
-            color={colors.success}
-            style={{ width: "45%" }}
-            onPress={() => setEnquireModalVisible(true)}
-          />
-          <AppButton
-            title="Make Offer"
-            style={{ width: "45%" }}
-            onPress={() => setMakeOfferModalVisible(true)}
-          />
-        </View>
-      </View>
+          </View>
+        </>
+      )}
 
       <Modal
         visible={makeOfferModalVisible}
@@ -744,7 +766,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     margin: 10,
     flex: 1,
-    borderRadius: 20,
+    borderRadius: 10,
     ...defaultStyles.shadow,
   },
   scrollView: {

@@ -10,7 +10,6 @@ import {
 import Constants from "expo-constants";
 
 import AppButton from "./AppButton";
-import Screen from "./Screen";
 import { ListItemSeparator } from "./lists";
 
 import routes from "../navigation/routes";

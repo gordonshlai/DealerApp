@@ -11,7 +11,7 @@ const lightGrey = "#E9ECEF";
 const mediumGrey = "#9f9f9f";
 const darkGrey = "#0c0c0c";
 const black = "#231F20";
-const danger = "#d9534f";
+const danger = "#D0021B";
 const warning = "#ffbb33";
 
 export default {

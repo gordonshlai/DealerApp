@@ -8,8 +8,8 @@ import {
   Dimensions,
   Modal,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
@@ -21,6 +21,7 @@ import Info from "../components/Info";
 import Registration from "../components/Registration";
 import Slider from "../components/Slider";
 import colors from "../config/colors";
+import defaultStyles from "../config/styles";
 import useApi from "../hooks/useApi";
 import SpecificationItem from "../components/SpecificationItem";
 import { ListItemSeparator } from "../components/lists";
@@ -28,24 +29,23 @@ import Screen from "../components/Screen";
 import routes from "../navigation/routes";
 import { AppErrorMessage } from "../components/forms";
 import Disclaimer from "../components/Disclaimer";
-import Picker from "../components/Picker";
-import useDidMountEffect from "../hooks/useDidMountEffect";
 import AuthContext from "../auth/context";
-
+import Background from "../components/Background";
+import MotHistory from "../components/MotHistory";
 dayjs.extend(customParseFormat);
 
 const actions = [
-  "In Stock",
-  "Sold",
+  "Mark as IN STOCK",
+  "Mark as SOLD",
   "List On Trade To Trade",
-  "Sold on Trade to Trade",
-  "delete",
+  "Delete Vehicle",
 ];
+
+const vehicleStatus = ["In Stock", "Sold", "Trade Listed"];
 
 function InventoryDetailScreen({ navigation, route }) {
   const vehicle = route.params;
 
-  const tabBarHeight = useBottomTabBarHeight();
   const {
     loadInventoryDetailFlag,
     loadInventoryFlag,
@@ -57,15 +57,9 @@ function InventoryDetailScreen({ navigation, route }) {
   const [error, setError] = useState(false);
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [optionModalVisible, setOptionModalVisible] = useState(false);
+  const [actionModalVisible, setActionModalVisible] = useState(false);
   const [disclaimerVisible, setDisclaimerVisible] = useState(false);
-  const [unlistVehicleModalVisible, setUnlistVehicleVisible] = useState(false);
-  const [action, setAction] = useState();
-  const [unlistVehicleReason, setUnlistVehicleReason] = useState(
-    "Sold on Trade to Trade"
-  );
   const [areYouSureModalVisible, setAreYouSureModalVisible] = useState(false);
-  const [handlePatchFlag, setHandlePatchFlag] = useState(false);
 
   const getVehicleApi = useApi(() =>
     client.get("api/inventory/vehicles/" + vehicle.id)
@@ -86,29 +80,6 @@ function InventoryDetailScreen({ navigation, route }) {
     getMotHistoryApi.request();
   }, [loadInventoryDetailFlag]);
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <AppButton
-          icon="dots-vertical"
-          backgroundColor={null}
-          color={colors.primary}
-          border={false}
-          size={24}
-          badge={false}
-          style={{ marginRight: 10 }}
-          onPress={() => {
-            setOptionModalVisible(true);
-          }}
-        />
-      ),
-    });
-  }, [navigation]);
-
-  useDidMountEffect(() => {
-    handlePatch();
-  }, [handlePatchFlag]);
-
   const numberWithCommas = (x) => {
     let parts = x.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -121,19 +92,21 @@ function InventoryDetailScreen({ navigation, route }) {
     return firstPart + " " + secondPart;
   };
 
-  const handlePatch = async () => {
-    getVehicleApi.data.sales_status = action;
+  const handlePatch = async (index) => {
+    getVehicleApi.data.sales_status = index;
     const result = await patchVehicleApi.request(getVehicleApi.data);
     if (!result.ok) {
       setError(result.data.message);
       setErrorModalVisible(true);
       return;
     }
-    console.log(result);
+    setLoadInventoryFlag(!loadInventoryFlag);
+    setLoadTradeFlag(!loadTradeFlag);
   };
 
   return (
     <>
+      <Background />
       <ActivityIndicator
         visible={
           getVehicleApi.loading ||
@@ -141,35 +114,385 @@ function InventoryDetailScreen({ navigation, route }) {
           patchVehicleApi.loading
         }
       />
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={() => {
+
+      {getVehicleApi.error ? (
+        <View style={{ padding: 20 }}>
+          <AppText style={styles.errorMessage}>
+            Couldn't retrieve the vehicle.
+          </AppText>
+          <AppErrorMessage error={error} visible={error} />
+          <AppButton
+            title="RETRY"
+            onPress={() => {
               getVehicleApi.request();
               getMotHistoryApi.request();
             }}
           />
-        }
-      >
-        {getVehicleApi.error ? (
-          <View style={{ padding: 20 }}>
-            <AppText style={styles.errorMessage}>
-              Couldn't retrieve the vehicle.
-            </AppText>
-            <AppButton
-              title="RETRY"
-              onPress={() => {
-                getVehicleApi.request();
-                getMotHistoryApi.request();
-              }}
-            />
+        </View>
+      ) : (
+        <>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={() => {
+                  getVehicleApi.request();
+                  getMotHistoryApi.request();
+                }}
+              />
+            }
+          >
+            <Screen>
+              <View style={[styles.informationContainer, { padding: 0 }]}>
+                {getVehicleApi.data.images && (
+                  <View
+                    style={[
+                      styles.imageContainer,
+                      {
+                        height:
+                          getVehicleApi.data.images.length > 1 ? 300 : 240,
+                      },
+                    ]}
+                  >
+                    {getVehicleApi.data.images.length !== 0 ? (
+                      <Slider
+                        images={getVehicleApi.data.images}
+                        height={300}
+                        width={Dimensions.get("window").width - 20}
+                      />
+                    ) : (
+                      <MaterialCommunityIcons
+                        name="car"
+                        size={200}
+                        color="white"
+                      />
+                    )}
+                    <AppText
+                      style={{
+                        position: "absolute",
+                        backgroundColor:
+                          getVehicleApi.data.sales_status == 0
+                            ? "orange"
+                            : getVehicleApi.data.sales_status == 1
+                            ? "crimson"
+                            : "green",
+                        top: 10,
+                        right: 10,
+                        padding: 5,
+                        color: "white",
+                        fontWeight: "bold",
+                        borderRadius: 10,
+                        overflow: "hidden",
+                      }}
+                    >
+                      {vehicleStatus[getVehicleApi.data.sales_status]}
+                    </AppText>
+                  </View>
+                )}
+                <View style={{ padding: 20 }}>
+                  <AppText style={styles.title} numberOfLines={2}>
+                    {getVehicleApi.data.title ||
+                      getVehicleApi.data.make +
+                        " " +
+                        getVehicleApi.data.model +
+                        " (" +
+                        getVehicleApi.data.year +
+                        ")"}
+                  </AppText>
+                  <AppText style={styles.tagline} numberOfLines={2}>
+                    {getVehicleApi.data.tagline}
+                  </AppText>
+                  <View style={[styles.detailRow, { marginBottom: 15 }]}>
+                    {getVehicleApi.data.registration && (
+                      <View style={styles.detailField}>
+                        <Registration
+                          registration={getVehicleApi.data.registration}
+                          style={{ fontSize: 24 }}
+                        />
+                      </View>
+                    )}
+                    {getVehicleApi.data.mileage && (
+                      <View style={styles.detailField}>
+                        <Info
+                          name="speedometer"
+                          text={
+                            numberWithCommas(getVehicleApi.data.mileage) + " mi"
+                          }
+                          textStyle={{ fontWeight: "bold" }}
+                          size={24}
+                        />
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={styles.detailRow}>
+                    {getVehicleApi.data.retail_price && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Retail Sale Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: colors.primary },
+                          ]}
+                        >
+                          {getVehicleApi.data.retail_price === "0.00"
+                            ? " POA"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.retail_price)}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.price_asking && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Trade Sale Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: colors.success },
+                          ]}
+                        >
+                          {getVehicleApi.data.price_asking === "0.00"
+                            ? " POA"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_asking)}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={[styles.detailRow, { marginBottom: 10 }]}>
+                    {getVehicleApi.data.price_civ && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Stand In Value
+                        </AppText>
+                        <AppText style={styles.detailValue}>
+                          {getVehicleApi.data.price_civ === "0.00"
+                            ? "N/A"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_civ)}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.price_cap && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Guide Sale Price
+                        </AppText>
+                        <AppText style={styles.detailValue}>
+                          {getVehicleApi.data.price_cap === "0.00"
+                            ? "N/A"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_cap)}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
+                </View>
+              </View>
+
+              <View style={styles.informationContainer}>
+                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+                  Specifications
+                </AppText>
+                {getVehicleApi.data.make && (
+                  <>
+                    <SpecificationItem
+                      title="Make"
+                      value={getVehicleApi.data.make}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.model && (
+                  <>
+                    <SpecificationItem
+                      title="Model"
+                      value={getVehicleApi.data.model}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.registration && (
+                  <>
+                    <SpecificationItem
+                      title="Registration"
+                      value={formatingRegistration(
+                        getVehicleApi.data.registration
+                      )}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.mileage && (
+                  <>
+                    <SpecificationItem
+                      title="Mileage"
+                      value={numberWithCommas(getVehicleApi.data.mileage)}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.colour && (
+                  <>
+                    <SpecificationItem
+                      title="Color"
+                      value={getVehicleApi.data.colour}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.fuel && (
+                  <>
+                    <SpecificationItem
+                      title="Fuel"
+                      value={getVehicleApi.data.fuel}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.engine_capacity && (
+                  <>
+                    <SpecificationItem
+                      title="Engine Capacity"
+                      value={getVehicleApi.data.engine_capacity}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.year && (
+                  <>
+                    <SpecificationItem
+                      title="Year"
+                      value={getVehicleApi.data.year}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.registration_date && (
+                  <>
+                    <SpecificationItem
+                      title="Registration Date"
+                      value={dayjs(getVehicleApi.data.registration_date).format(
+                        "DD/MM/YYYY"
+                      )}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.mot_expiry && (
+                  <>
+                    <SpecificationItem
+                      title="MOT Expiry"
+                      value={dayjs(getVehicleApi.data.mot_expiry).format(
+                        "DD/MM/YYYY"
+                      )}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.transmission && (
+                  <>
+                    <SpecificationItem
+                      title="Transmission"
+                      value={getVehicleApi.data.transmission}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.seats && (
+                  <>
+                    <SpecificationItem
+                      title="Seats"
+                      value={getVehicleApi.data.seats}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.doors && (
+                  <>
+                    <SpecificationItem
+                      title="Doors"
+                      value={getVehicleApi.data.doors}
+                    />
+                    <ListItemSeparator />
+                  </>
+                )}
+                {getVehicleApi.data.body_style && (
+                  <>
+                    <SpecificationItem
+                      title="Body Style"
+                      value={getVehicleApi.data.body_style}
+                    />
+                  </>
+                )}
+              </View>
+
+              <View style={styles.informationContainer}>
+                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+                  Description
+                </AppText>
+                <AppText>
+                  {getVehicleApi.data.description
+                    ? getVehicleApi.data.description
+                    : "Not provided"}
+                </AppText>
+              </View>
+
+              {getMotHistoryApi.data.tests && (
+                <View style={styles.informationContainer}>
+                  <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+                    MOT Histroy
+                  </AppText>
+                  {getMotHistoryApi.data.tests.map((item, index) => (
+                    <MotHistory item={item} index={index} key={index} />
+                  ))}
+                </View>
+              )}
+            </Screen>
+          </ScrollView>
+          <View>
+            <View style={styles.bottomButtonsContainer}>
+              <AppButton
+                title="Edit Vehicle"
+                backgroundColor={null}
+                color={colors.success}
+                style={{ width: "45%" }}
+                onPress={() =>
+                  navigation.navigate(routes.VEHICLE_DETAIL, getVehicleApi.data)
+                }
+              />
+              <AppButton
+                title="Actions"
+                style={{ width: "45%" }}
+                onPress={() => setActionModalVisible(true)}
+              />
+            </View>
           </View>
-        ) : (
-          <View style={{ paddingBottom: tabBarHeight }}>
-            <View style={[styles.informationContainer, { padding: 0 }]}>
+        </>
+      )}
+
+      <Modal
+        visible={actionModalVisible}
+        transparent
+        onRequestClose={() => setActionModalVisible(false)}
+      >
+        <View style={styles.modalBackground}>
+          <Screen>
+            <View style={styles.modalContainer}>
               {getVehicleApi.data.images && (
-                <View style={styles.imageContainer}>
+                <View
+                  style={[
+                    styles.imageContainer,
+                    {
+                      height: getVehicleApi.data.images.length > 1 ? 300 : 240,
+                    },
+                  ]}
+                >
                   {getVehicleApi.data.images.length !== 0 ? (
                     <Slider
                       images={getVehicleApi.data.images}
@@ -183,447 +506,83 @@ function InventoryDetailScreen({ navigation, route }) {
                       color="white"
                     />
                   )}
+                  <AppText
+                    style={{
+                      position: "absolute",
+                      backgroundColor:
+                        getVehicleApi.data.sales_status == 0
+                          ? "orange"
+                          : getVehicleApi.data.sales_status == 1
+                          ? "crimson"
+                          : "green",
+                      top: 10,
+                      right: 10,
+                      padding: 5,
+                      color: "white",
+                      fontWeight: "bold",
+                      borderRadius: 10,
+                      overflow: "hidden",
+                    }}
+                  >
+                    {vehicleStatus[getVehicleApi.data.sales_status]}
+                  </AppText>
                 </View>
               )}
-              <View style={{ padding: 20 }}>
-                <AppText style={styles.title} numberOfLines={2}>
-                  {getVehicleApi.data.title ||
-                    getVehicleApi.data.make +
-                      " " +
-                      getVehicleApi.data.model +
-                      " (" +
-                      getVehicleApi.data.year +
-                      ")"}
-                </AppText>
-                <AppText style={styles.tagline} numberOfLines={2}>
-                  {getVehicleApi.data.tagline}
-                </AppText>
-                <View style={[styles.detailRow, { marginBottom: 15 }]}>
-                  {getVehicleApi.data.registration && (
-                    <View style={styles.detailField}>
-                      <Registration
-                        registration={getVehicleApi.data.registration}
-                        style={{ fontSize: 24 }}
-                      />
-                    </View>
-                  )}
-                  {getVehicleApi.data.mileage && (
-                    <View style={styles.detailField}>
-                      <Info
-                        name="speedometer"
-                        text={
-                          numberWithCommas(getVehicleApi.data.mileage) + " mi"
-                        }
-                        textStyle={{ fontWeight: "bold" }}
-                        size={24}
-                      />
-                    </View>
-                  )}
-                </View>
-
-                <View style={styles.detailRow}>
-                  {getVehicleApi.data.retail_price && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>
-                        Retail Sale Price
-                      </AppText>
-                      <AppText
-                        style={[styles.detailValue, { color: colors.success }]}
-                      >
-                        {getVehicleApi.data.retail_price === "0.00"
-                          ? " POA"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.retail_price)}
-                      </AppText>
-                    </View>
-                  )}
-                  {getVehicleApi.data.price_asking && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>
-                        Trade Sale Price
-                      </AppText>
-                      <AppText
-                        style={[styles.detailValue, { color: colors.success }]}
-                      >
-                        {getVehicleApi.data.price_asking === "0.00"
-                          ? " POA"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_asking)}
-                      </AppText>
-                    </View>
-                  )}
-                </View>
-
-                <View style={[styles.detailRow, { marginBottom: 10 }]}>
-                  {getVehicleApi.data.price_civ && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>
-                        Stand In Value
-                      </AppText>
-                      <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: colors.secondary },
-                        ]}
-                      >
-                        {getVehicleApi.data.price_civ === "0.00"
-                          ? "N/A"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_civ)}
-                      </AppText>
-                    </View>
-                  )}
-                  {getVehicleApi.data.price_cap && (
-                    <View style={styles.detailField}>
-                      <AppText style={styles.detailTitle}>
-                        Guide Sale Price
-                      </AppText>
-                      <AppText
-                        style={[
-                          styles.detailValue,
-                          { color: colors.secondary },
-                        ]}
-                      >
-                        {getVehicleApi.data.price_cap === "0.00"
-                          ? "N/A"
-                          : "£" +
-                            numberWithCommas(getVehicleApi.data.price_cap)}
-                      </AppText>
-                    </View>
-                  )}
-                </View>
-                <AppButton
-                  icon={
-                    getVehicleApi.data.sales_status == 2
-                      ? "playlist-remove"
-                      : "playlist-check"
-                  }
-                  title={
-                    getVehicleApi.data.sales_status == 2
-                      ? "Unlist from Trade to Trade"
-                      : "List on Trade to Trade"
-                  }
-                  onPress={() => {
-                    if (getVehicleApi.data.sales_status != 2) {
-                      setDisclaimerVisible(true);
-                      setAction(actions.indexOf("List On Trade To Trade"));
-                    } else {
-                      setUnlistVehicleVisible(true);
-                    }
-                  }}
-                />
-              </View>
-            </View>
-
-            <View style={styles.informationContainer}>
-              <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
-                Specifications
+              <AppText style={[styles.title, { margin: 20 }]}>
+                {getVehicleApi.data.title}
               </AppText>
-              {getVehicleApi.data.make && (
-                <>
-                  <SpecificationItem
-                    icon="car-side"
-                    text="Make"
-                    value={getVehicleApi.data.make}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.model && (
-                <>
-                  <SpecificationItem
-                    icon="alpha-m"
-                    text="Model"
-                    value={getVehicleApi.data.model}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.registration && (
-                <>
-                  <SpecificationItem
-                    icon="card-text"
-                    text="Registration"
-                    value={formatingRegistration(
-                      getVehicleApi.data.registration
-                    )}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.mileage && (
-                <>
-                  <SpecificationItem
-                    icon="speedometer"
-                    text="Mileage"
-                    value={numberWithCommas(getVehicleApi.data.mileage)}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.colour && (
-                <>
-                  <SpecificationItem
-                    icon="format-color-fill"
-                    text="Color"
-                    value={getVehicleApi.data.colour}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.fuel && (
-                <>
-                  <SpecificationItem
-                    icon="fuel"
-                    text="Fuel"
-                    value={getVehicleApi.data.fuel}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.engine_capacity && (
-                <>
-                  <SpecificationItem
-                    icon="engine"
-                    text="Engine Capacity"
-                    value={getVehicleApi.data.engine_capacity}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.year && (
-                <>
-                  <SpecificationItem
-                    icon="calendar"
-                    text="Year"
-                    value={getVehicleApi.data.year}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.registration_date && (
-                <>
-                  <SpecificationItem
-                    icon="calendar-check"
-                    text="Registration Date"
-                    value={dayjs(getVehicleApi.data.registration_date).format(
-                      "DD/MM/YYYY"
-                    )}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.mot_expiry && (
-                <>
-                  <SpecificationItem
-                    icon="alert-outline"
-                    text="MOT Expiry"
-                    value={dayjs(getVehicleApi.data.mot_expiry).format(
-                      "DD/MM/YYYY"
-                    )}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.transmission && (
-                <>
-                  <SpecificationItem
-                    icon="settings"
-                    text="Transmission"
-                    value={getVehicleApi.data.transmission}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.seats && (
-                <>
-                  <SpecificationItem
-                    icon="car-seat"
-                    text="Seats"
-                    value={getVehicleApi.data.seats}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.doors && (
-                <>
-                  <SpecificationItem
-                    icon="car-door"
-                    text="Doors"
-                    value={getVehicleApi.data.doors}
-                  />
-                  <ListItemSeparator />
-                </>
-              )}
-              {getVehicleApi.data.body_style && (
-                <>
-                  <SpecificationItem
-                    icon="train-car"
-                    text="Body Style"
-                    value={getVehicleApi.data.body_style}
-                  />
-                </>
-              )}
-            </View>
-
-            {getMotHistoryApi.data.tests && (
-              <View style={styles.informationContainer}>
-                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
-                  MOT Histroy
-                </AppText>
-                {getMotHistoryApi.data.tests.map((item, index) => (
-                  <View style={styles.motEntryContainer} key={index}>
-                    <View style={styles.detailRow}>
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>Date</AppText>
-                        <AppText>
-                          {dayjs(
-                            item.completedDate,
-                            "YYYY.MM.DD HH:mm:ss"
-                          ).format("DD/MM/YYYY")}
-                        </AppText>
-                      </View>
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>Result</AppText>
-                        <AppText
-                          style={{
-                            color:
-                              item.testResult === "PASSED"
-                                ? colors.success
-                                : "red",
-                          }}
-                        >
-                          {item.testResult}
-                        </AppText>
-                      </View>
-                    </View>
-
-                    <View style={styles.detailRow}>
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>Expiry</AppText>
-                        <AppText>
-                          {item.expiryDate
-                            ? dayjs(item.expiryDate, "YYYY.MM.DD").format(
-                                "DD/MM/YYYY"
-                              )
-                            : "N/A"}
-                        </AppText>
-                      </View>
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>Odometer</AppText>
-                        <AppText>
-                          {item.odometerValue + " " + item.odometerUnit}
-                        </AppText>
-                      </View>
-                    </View>
-
-                    {item.rfrAndComments.length > 0 && (
-                      <View style={styles.motComments}>
-                        <AppText style={styles.detailTitle}>Comments</AppText>
-                        {item.rfrAndComments.map((comment, index) => (
-                          <View key={index}>
-                            <AppText>{comment.type}</AppText>
-                            <AppText style={{ marginBottom: 10 }}>
-                              {comment.text}
-                            </AppText>
-                          </View>
-                        ))}
-                      </View>
-                    )}
-                  </View>
-                ))}
-              </View>
-            )}
-          </View>
-        )}
-      </ScrollView>
-
-      <Modal
-        visible={optionModalVisible}
-        statusBarTranslucent
-        onRequestClose={() => setOptionModalVisible(false)}
-        transparent
-      >
-        <View style={{ backgroundColor: colors.mediumGrey + "aa", flex: 1 }}>
-          <Screen
-            style={{
-              marginHorizontal: 20,
-              padding: 20,
-              backgroundColor: "white",
-              borderRadius: 20,
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <TouchableOpacity
-                style={styles.listItem}
-                onPress={() => {
-                  setOptionModalVisible(false);
-                  navigation.navigate(
-                    routes.VEHICLE_DETAIL,
-                    getVehicleApi.data
+              <FlatList
+                data={actions}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({ item, index }) => {
+                  const status = getVehicleApi.data.sales_status;
+                  const isActive = index == status;
+                  return (
+                    <TouchableOpacity
+                      onPress={() => {
+                        setActionModalVisible(false);
+                        if (index === 0 || index === 1) {
+                          return handlePatch(index);
+                        } else if (index === 2) {
+                          setDisclaimerVisible(true);
+                        } else {
+                          setAreYouSureModalVisible(true);
+                        }
+                      }}
+                      underlayColor={colors.lightGrey}
+                      style={[styles.actionItem, isActive && styles.activeItem]}
+                      key={index}
+                    >
+                      <AppText
+                        style={[
+                          isActive && styles.activeText,
+                          index === 3 && { color: "red" },
+                        ]}
+                      >
+                        {item}
+                      </AppText>
+                      {isActive && (
+                        <MaterialCommunityIcons
+                          name="check"
+                          color={colors.primary}
+                          size={24}
+                        />
+                      )}
+                    </TouchableOpacity>
                   );
                 }}
-              >
-                <AppText style={styles.options}>Edit Vehicle</AppText>
-              </TouchableOpacity>
-              <ListItemSeparator />
-              {getVehicleApi.data.sales_status != 0 && (
-                <TouchableOpacity
-                  style={styles.listItem}
-                  onPress={() => {
-                    setOptionModalVisible(false);
-                    setAction(actions.indexOf("In Stock"));
-                    setHandlePatchFlag(!handlePatchFlag);
-                  }}
-                >
-                  <AppText style={styles.options}>Mark as IN STOCK</AppText>
-                </TouchableOpacity>
-              )}
-              {getVehicleApi.data.sales_status != 1 && (
-                <TouchableOpacity
-                  style={styles.listItem}
-                  onPress={() => {
-                    setOptionModalVisible(false);
-                    setAction(actions.indexOf("Sold"));
-                    setHandlePatchFlag(!handlePatchFlag);
-                  }}
-                >
-                  <AppText style={styles.options}>Mark as SOLD</AppText>
-                </TouchableOpacity>
-              )}
-              {getVehicleApi.data.sales_status != 2 && (
-                <TouchableOpacity
-                  style={styles.listItem}
-                  onPress={() => {
-                    setOptionModalVisible(false);
-                    setAction(actions.indexOf("List On Trade To Trade"));
-                    setDisclaimerVisible(true);
-                  }}
-                >
-                  <AppText style={styles.options}>
-                    List on Trade to Trade
-                  </AppText>
-                </TouchableOpacity>
-              )}
-              <ListItemSeparator />
-              <TouchableOpacity
-                style={styles.listItem}
-                onPress={() => {
-                  setOptionModalVisible(false);
-                  setAreYouSureModalVisible(true);
-                }}
-              >
-                <AppText style={[styles.options, { color: "red" }]}>
-                  Delete Vehicle
-                </AppText>
-              </TouchableOpacity>
+                ItemSeparatorComponent={ListItemSeparator}
+                ListFooterComponent={
+                  <AppButton
+                    title="Back"
+                    backgroundColor={null}
+                    color={colors.success}
+                    onPress={() => setActionModalVisible(false)}
+                  />
+                }
+                style={{ padding: 20 }}
+              />
             </View>
-            <AppButton
-              icon="close"
-              title="CLOSE"
-              color={null}
-              onPress={() => setOptionModalVisible(false)}
-            />
           </Screen>
         </View>
       </Modal>
@@ -633,79 +592,10 @@ function InventoryDetailScreen({ navigation, route }) {
         setVisible={setDisclaimerVisible}
         onAcceptPress={() => {
           setDisclaimerVisible(false);
-          setHandlePatchFlag(!handlePatchFlag);
+          handlePatch(actions.indexOf("List On Trade To Trade"));
         }}
         onCancelPress={() => setDisclaimerVisible(false)}
       />
-
-      <Modal
-        visible={unlistVehicleModalVisible}
-        transparent
-        onRequestClose={() => setUnlistVehicleVisible(false)}
-      >
-        <View
-          style={{
-            paddingVertical: 50,
-            paddingHorizontal: 20,
-            backgroundColor: colors.mediumGrey + "aa",
-            justifyContent: "center",
-            flex: 1,
-          }}
-        >
-          <View
-            style={{
-              backgroundColor: colors.lightGrey,
-              borderRadius: 10,
-              padding: 20,
-              marginVertical: 10,
-            }}
-          >
-            <Info
-              name="alert-circle-outline"
-              size={30}
-              color={colors.primary}
-              text="Unlist Vehicle"
-            />
-            <View style={{ marginVertical: 30 }}>
-              <AppText style={{ fontWeight: "bold" }}>
-                Please select a reason for unlisting your vehicle
-              </AppText>
-              <Picker
-                items={[
-                  "Sold on Trade to Trade",
-                  "Sold to a customer",
-                  "I changed my mind",
-                ]}
-                onSelectItem={(item) => {
-                  setUnlistVehicleReason(item);
-                  item === "Sold on Trade to Trade"
-                    ? setAction(actions.indexOf("Sold on Trade to Trade"))
-                    : item === "Sold to a customer"
-                    ? setAction(actions.indexOf("Sold"))
-                    : setAction(actions.indexOf("In Stock"));
-                }}
-                selectedItem={unlistVehicleReason}
-                placeholder="Please select"
-              />
-            </View>
-            <AppButton
-              icon="playlist-remove"
-              title={"Submit & Unlist"}
-              color={colors.primary}
-              onPress={() => {
-                setUnlistVehicleVisible(false);
-                setHandlePatchFlag(!handlePatchFlag);
-              }}
-            />
-            <AppButton
-              icon="cancel"
-              title="Cancel"
-              color={colors.secondary}
-              onPress={() => setUnlistVehicleVisible(false)}
-            />
-          </View>
-        </View>
-      </Modal>
 
       <Modal
         visible={errorModalVisible}
@@ -757,13 +647,15 @@ function InventoryDetailScreen({ navigation, route }) {
               color={colors.danger}
               text="Are you sure?"
             />
-            <AppText style={{ marginVertical: 20, textAlign: "center" }}>
+            <AppText
+              style={{ marginVertical: 20, textAlign: "center", fontSize: 18 }}
+            >
               This action cannot be undone.
             </AppText>
             <AppButton
-              icon="trash-can"
               title="Delete"
-              color={colors.danger}
+              backgroundColor={colors.danger}
+              border={false}
               onPress={async () => {
                 setAreYouSureModalVisible(false);
                 const result = await deleteVehicleApi.request();
@@ -781,9 +673,9 @@ function InventoryDetailScreen({ navigation, route }) {
               }}
             />
             <AppButton
-              icon="cancel"
               title="Cancel"
-              color={colors.secondary}
+              backgroundColor={null}
+              color={colors.success}
               onPress={() => setAreYouSureModalVisible(false)}
             />
           </View>
@@ -796,6 +688,7 @@ function InventoryDetailScreen({ navigation, route }) {
 const styles = StyleSheet.create({
   errorMessage: {
     alignSelf: "center",
+    color: "white",
     fontWeight: "bold",
     fontSize: 24,
     marginVertical: 20,
@@ -806,11 +699,13 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 5,
     padding: 20,
-    overflow: "hidden",
+    ...defaultStyles.shadow,
   },
   imageContainer: {
     height: 300,
     width: "100%",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",
@@ -819,9 +714,9 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: "bold",
+    color: colors.secondary,
   },
   tagline: {
-    fontStyle: "italic",
     marginBottom: 20,
   },
   detailRow: {
@@ -836,36 +731,45 @@ const styles = StyleSheet.create({
   },
   detailTitle: {
     fontWeight: "bold",
-    textAlign: "center",
+    fontSize: 18,
+    color: colors.secondary,
   },
   detailValue: {
     fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
   },
-  motEntryContainer: {
-    borderColor: colors.lightGrey,
-    borderWidth: 2,
-    backgroundColor: colors.white,
+  modalBackground: {
+    flex: 1,
+    backgroundColor: colors.white + "aa",
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    margin: 10,
+    flex: 1,
     borderRadius: 10,
-    marginVertical: 10,
-    padding: 20,
-    shadowRadius: 5,
-    shadowColor: colors.black,
-    shadowOpacity: 0.2,
-    shadowOffset: { height: 5, width: 5 },
+    ...defaultStyles.shadow,
   },
-  motComments: {
-    borderTopWidth: 2,
-    borderTopColor: colors.lightGrey,
-    marginTop: 10,
-    paddingTop: 10,
-  },
-  listItem: {
+  actionItem: {
     padding: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  options: {
-    fontSize: 20,
+  activeItem: {
+    backgroundColor: colors.primary + "11",
+  },
+  activeText: {
+    fontWeight: "bold",
+    color: colors.primary,
+  },
+  bottomButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    padding: 10,
+    paddingBottom: Platform.OS === "ios" ? 30 : 10,
+    backgroundColor: "white",
+    ...defaultStyles.shadow,
   },
 });
 

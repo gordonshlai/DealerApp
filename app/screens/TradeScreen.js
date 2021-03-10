@@ -177,7 +177,7 @@ function HomeScreen({ navigation }) {
           )}
           <FlatList
             data={vehicles}
-            keyExtractor={(vehicle) => vehicle.id.toString()}
+            keyExtractor={(vehicle, index) => index.toString()}
             renderItem={({ item }) => (
               <View style={{ width: "48%" }}>
                 <Card

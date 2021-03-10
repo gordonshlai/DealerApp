@@ -10,8 +10,9 @@ import {
   Modal,
 } from "react-native";
 import ImageZoom from "react-native-image-pan-zoom";
+import Constants from "expo-constants";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 import AppText from "./AppText";
 import AppButton from "./AppButton";
 
@@ -122,56 +123,58 @@ function Slider({ images, height, width }) {
         statusBarTranslucent
         onRequestClose={() => setImageZoomVisible(false)}
       >
-        <View style={styles.modalContainer}>
-          {images && (
-            <ImageZoom
-              cropHeight={Dimensions.get("window").height}
-              cropWidth={Dimensions.get("window").width}
-              imageHeight={Dimensions.get("window").height}
-              imageWidth={Dimensions.get("window").width}
-              enableSwipeDown={true}
-              onSwipeDown={() => setImageZoomVisible(false)}
-              swipeDownThreshold={230}
-            >
-              <Image
-                style={{
-                  height: Dimensions.get("window").height,
-                  width: Dimensions.get("window").width,
-                  resizeMode: "contain",
-                }}
-                source={{
-                  uri: images[active].url,
-                }}
-              />
-            </ImageZoom>
-          )}
-          <AppText style={styles.imageZoomPagination}>
-            {active >= images.length
-              ? images.length + " / " + images.length
-              : active + 1 + " / " + images.length}
-          </AppText>
-          <AppButton
-            icon="chevron-left"
-            color={defaultStyles.colors.mediumGrey}
-            size={30}
-            style={styles.leftButton}
-            onPress={handleLeftPress}
-          />
-          <AppButton
-            icon="chevron-right"
-            color={defaultStyles.colors.mediumGrey}
-            size={30}
-            style={styles.rightButton}
-            onPress={handleRightPress}
-          />
-          <AppButton
-            icon="close"
-            title="CLOSE"
-            color={null}
-            onPress={() => setImageZoomVisible(false)}
-            style={styles.closeButton}
-          />
-        </View>
+        {images && (
+          <ImageZoom
+            cropHeight={Dimensions.get("window").height}
+            cropWidth={Dimensions.get("window").width}
+            imageHeight={Dimensions.get("window").height}
+            imageWidth={Dimensions.get("window").width}
+            enableSwipeDown={true}
+            onSwipeDown={() => setImageZoomVisible(false)}
+            swipeDownThreshold={230}
+          >
+            <Image
+              style={{
+                height: Dimensions.get("window").height,
+                width: Dimensions.get("window").width,
+                resizeMode: "contain",
+              }}
+              source={{
+                uri: images[active].url,
+              }}
+            />
+          </ImageZoom>
+        )}
+        <AppText style={styles.imageZoomPagination}>
+          {active >= images.length
+            ? images.length + " / " + images.length
+            : active + 1 + " / " + images.length}
+        </AppText>
+        <AppButton
+          icon="chevron-left"
+          backgroundColor={colors.mediumGrey}
+          border={false}
+          size={30}
+          style={styles.leftButton}
+          onPress={handleLeftPress}
+        />
+        <AppButton
+          icon="chevron-right"
+          backgroundColor={colors.mediumGrey}
+          border={false}
+          size={30}
+          style={styles.rightButton}
+          onPress={handleRightPress}
+        />
+        <AppButton
+          icon="close"
+          backgroundColor={null}
+          color={colors.primary}
+          border={false}
+          size={30}
+          onPress={() => setImageZoomVisible(false)}
+          style={styles.closeButton}
+        />
       </Modal>
     </>
   );
@@ -191,26 +194,18 @@ const styles = StyleSheet.create({
     right: 10,
     alignSelf: "center",
   },
-  modalContainer: {
-    backgroundColor: "black",
-  },
-  closeButton: {
-    position: "absolute",
-    bottom: 50,
-    alignSelf: "center",
-  },
   leftButton: {
     position: "absolute",
     opacity: 0.5,
     paddingVertical: 10,
-    top: 85,
+    bottom: 85,
   },
   rightButton: {
     position: "absolute",
     alignSelf: "flex-end",
     opacity: 0.5,
     paddingVertical: 10,
-    top: 85,
+    bottom: 85,
   },
   imageZoomPagination: {
     backgroundColor: "#aaaaaa88",
@@ -219,9 +214,15 @@ const styles = StyleSheet.create({
     fontSize: 18,
     padding: 5,
     borderRadius: 5,
-    top: 100,
+    bottom: 100,
     overflow: "hidden",
     position: "absolute",
+    alignSelf: "center",
+  },
+  closeButton: {
+    position: "absolute",
+    top: Constants.statusBarHeight,
+    right: 20,
     alignSelf: "center",
   },
 });

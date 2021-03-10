@@ -43,7 +43,13 @@ const TradeNavigator = () => (
       name={routes.TRADE_DETAIL}
       component={TradeDetailScreen}
       options={({ route }) => ({
-        headerTitle: route.params.title,
+        headerTitle:
+          route.params.make +
+          " " +
+          route.params.model +
+          " (" +
+          route.params.year +
+          ")",
       })}
     />
     <Stack.Screen
