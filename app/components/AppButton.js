@@ -56,7 +56,7 @@ function AppButton({
           name="check"
           style={[styles.badge, { backgroundColor: color }]}
           color={colors.white}
-          size={12}
+          size={10}
         />
       )}
     </TouchableOpacity>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 0,
     top: 0,
+    padding: 1,
     borderRadius: 6,
     overflow: "hidden",
   },

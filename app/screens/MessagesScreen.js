@@ -199,13 +199,14 @@ function MessagesScreen({ navigation }) {
               <AppTextInput
                 icon="magnify"
                 placeholder="Search"
-                style={{ backgroundColor: "white", borderRadius: 10, flex: 1 }}
+                style={{
+                  backgroundColor: "white",
+                  borderRadius: 10,
+                  flex: 1,
+                  marginRight: 10,
+                }}
                 onChangeText={handleSearch}
               />
-              {/* <ActivityIndicator
-                animating={getMessagesApi.loading}
-                color={colors.mediumGrey}
-              /> */}
               <OptionButton
                 title="Sort"
                 backgroundColor={null}
@@ -231,7 +232,7 @@ function MessagesScreen({ navigation }) {
             )}
             <FlatList
               data={messages}
-              keyExtractor={(message, index) => index.toString()}
+              keyExtractor={(message, index) => message.id.toString()}
               renderItem={({ item }) => (
                 <ListItem
                   title={displayParticipants(item)}

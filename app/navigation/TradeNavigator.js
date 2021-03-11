@@ -4,9 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TradeScreen from "../screens/TradeScreen";
 import TradeDetailScreen from "../screens/TradeDetailScreen";
-import NewCarScreen from "../screens/NewCarScreen";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
-import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import Menu from "../components/Menu";
 
 import routes from "./routes";
@@ -57,14 +55,10 @@ const TradeNavigator = () => (
       component={NewCarNavigator}
       options={{ headerShown: false }}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}
-    />
-    <Stack.Screen
-      name={routes.VEHICLE_DESCRIPTION}
-      component={VehicleDescriptionScreen}
-    />
+    /> */}
   </Stack.Navigator>
 );
 

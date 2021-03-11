@@ -463,7 +463,10 @@ function InventoryDetailScreen({ navigation, route }) {
                 color={colors.success}
                 style={{ width: "45%" }}
                 onPress={() =>
-                  navigation.navigate(routes.VEHICLE_DETAIL, getVehicleApi.data)
+                  navigation.navigate(routes.NEW_CAR, {
+                    screen: routes.VEHICLE_DETAIL,
+                    params: getVehicleApi.data,
+                  })
                 }
               />
               <AppButton

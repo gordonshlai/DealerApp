@@ -15,6 +15,7 @@ import Screen from "./Screen";
 import { ListItemSeparator } from "../components/lists";
 
 import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 
 function Picker({
   icon,
@@ -38,7 +39,9 @@ function Picker({
             styles.container,
             {
               width,
-              backgroundColor: disabled ? defaultStyles.colors.white : "white",
+              backgroundColor: disabled
+                ? defaultStyles.colors.lightGrey
+                : defaultStyles.colors.white,
             },
           ]}
         >
@@ -64,34 +67,42 @@ function Picker({
       </TouchableWithoutFeedback>
       <Modal visible={modalVisible} animationType="slide">
         <Screen>
+          <AppButton
+            icon="close"
+            backgroundColor={null}
+            color={colors.primary}
+            border={null}
+            size={24}
+            style={{ alignSelf: "flex-end", marginRight: 20 }}
+            onPress={() => setModalVisible(false)}
+          />
           <FlatList
             data={items}
             keyExtractor={(item) => item}
             ItemSeparatorComponent={ListItemSeparator}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.listItem}
-                onPress={() => {
-                  setModalVisible(false);
-                  onSelectItem(item);
-                }}
-              >
-                <AppText>{item}</AppText>
-                {selectedItem.toUpperCase() === item.toUpperCase() ? (
-                  <MaterialCommunityIcons
-                    name="check"
-                    color={defaultStyles.colors.primary}
-                    size={24}
-                  />
-                ) : null}
-              </TouchableOpacity>
-            )}
-          />
-          <AppButton
-            icon="close"
-            title="CLOSE"
-            color={null}
-            onPress={() => setModalVisible(false)}
+            renderItem={({ item }) => {
+              const isActive = item === selectedItem;
+              return (
+                <TouchableOpacity
+                  style={[styles.listItem, isActive && styles.activeItem]}
+                  onPress={() => {
+                    setModalVisible(false);
+                    onSelectItem(item);
+                  }}
+                >
+                  <AppText style={isActive && styles.activeText}>
+                    {item}
+                  </AppText>
+                  {selectedItem.toUpperCase() === item.toUpperCase() ? (
+                    <MaterialCommunityIcons
+                      name="check"
+                      color={defaultStyles.colors.primary}
+                      size={24}
+                    />
+                  ) : null}
+                </TouchableOpacity>
+              );
+            }}
           />
         </Screen>
       </Modal>
@@ -121,6 +132,13 @@ const styles = StyleSheet.create({
     padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  activeItem: {
+    backgroundColor: colors.primary + "11",
+  },
+  activeText: {
+    fontWeight: "bold",
+    color: colors.primary,
   },
 });
 

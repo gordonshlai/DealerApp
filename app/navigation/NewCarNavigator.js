@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import NewCarScreen from "../screens/NewCarScreen";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
-import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import Menu from "../components/Menu";
 
 import routes from "./routes";
@@ -38,10 +37,6 @@ const NewCarNavigator = () => (
     <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}
-    />
-    <Stack.Screen
-      name={routes.VEHICLE_DESCRIPTION}
-      component={VehicleDescriptionScreen}
     />
   </Stack.Navigator>
 );

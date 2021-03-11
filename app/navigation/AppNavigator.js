@@ -23,7 +23,11 @@ import colors from "../config/colors";
 import AuthContext from "../auth/context";
 
 const Tab = createBottomTabNavigator();
-const tabHiddenRoutes = [routes.TRADE_DETAIL, routes.INVENTORY_DETAIL];
+const tabHiddenRoutes = [
+  routes.TRADE_DETAIL,
+  routes.INVENTORY_DETAIL,
+  routes.NEW_CAR,
+];
 
 /**
  * The bottom tab navigator, including the following screens:

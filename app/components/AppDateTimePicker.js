@@ -41,7 +41,9 @@ function AppDateTimePicker({
             styles.container,
             {
               width,
-              backgroundColor: disabled ? defaultStyles.colors.white : "white",
+              backgroundColor: disabled
+                ? defaultStyles.colors.lightGrey
+                : defaultStyles.colors.white,
             },
           ]}
         >

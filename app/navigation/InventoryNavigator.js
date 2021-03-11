@@ -6,7 +6,6 @@ import InventoryDetailScreen from "../screens/InventoryDetailScreen";
 import routes from "./routes";
 import colors from "../config/colors";
 import VehicleDetailScreen from "../screens/VehicleDetailScreen";
-import VehicleDescriptionScreen from "../screens/VehicleDescriptionScreen";
 import Menu from "../components/Menu";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NewCarNavigator from "./NewCarNavigator";
@@ -55,14 +54,10 @@ const InventoryNavigator = () => (
       component={NewCarNavigator}
       options={{ headerShown: false }}
     />
-    <Stack.Screen
+    {/* <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}
-    />
-    <Stack.Screen
-      name={routes.VEHICLE_DESCRIPTION}
-      component={VehicleDescriptionScreen}
-    />
+    /> */}
   </Stack.Navigator>
 );
 
