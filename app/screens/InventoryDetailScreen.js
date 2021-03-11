@@ -38,10 +38,11 @@ const actions = [
   "Mark as IN STOCK",
   "Mark as SOLD",
   "List On Trade To Trade",
+  "Sold to a customer",
   "Delete Vehicle",
 ];
 
-const vehicleStatus = ["In Stock", "Sold", "Trade Listed"];
+const vehicleStatus = ["In Stock", "Sold", "Trade Listed", "Sold"];
 
 function InventoryDetailScreen({ navigation, route }) {
   const vehicle = route.params;
@@ -173,12 +174,13 @@ function InventoryDetailScreen({ navigation, route }) {
                         backgroundColor:
                           getVehicleApi.data.sales_status == 0
                             ? "orange"
-                            : getVehicleApi.data.sales_status == 1
-                            ? "crimson"
-                            : "green",
+                            : getVehicleApi.data.sales_status == 2
+                            ? "green"
+                            : "crimson",
                         top: 10,
                         right: 10,
-                        padding: 5,
+                        paddingHorizontal: 5,
+                        paddingVertical: 3,
                         color: "white",
                         fontWeight: "bold",
                         borderRadius: 10,
@@ -515,9 +517,9 @@ function InventoryDetailScreen({ navigation, route }) {
                       backgroundColor:
                         getVehicleApi.data.sales_status == 0
                           ? "orange"
-                          : getVehicleApi.data.sales_status == 1
-                          ? "crimson"
-                          : "green",
+                          : getVehicleApi.data.sales_status == 2
+                          ? "green"
+                          : "crimson",
                       top: 10,
                       right: 10,
                       padding: 5,
@@ -544,7 +546,7 @@ function InventoryDetailScreen({ navigation, route }) {
                     <TouchableOpacity
                       onPress={() => {
                         setActionModalVisible(false);
-                        if (index === 0 || index === 1) {
+                        if (index === 0 || index === 1 || index === 3) {
                           return handlePatch(index);
                         } else if (index === 2) {
                           setDisclaimerVisible(true);
@@ -559,7 +561,7 @@ function InventoryDetailScreen({ navigation, route }) {
                       <AppText
                         style={[
                           isActive && styles.activeText,
-                          index === 3 && { color: "red" },
+                          index === 4 && { color: "red" },
                         ]}
                       >
                         {item}

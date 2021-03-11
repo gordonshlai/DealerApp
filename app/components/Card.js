@@ -6,6 +6,8 @@ import colors from "../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Registration from "./Registration";
 
+const vehicleStatusArray = ["In Stock", "Sold", "Trade Listed", "Sold"];
+
 function Card({
   title,
   make,
@@ -15,6 +17,7 @@ function Card({
   engineCapacity,
   priceAsking,
   registration,
+  sales_status,
   onPress,
   imageUrl,
 }) {
@@ -39,12 +42,14 @@ function Card({
             <MaterialCommunityIcons name="car" size={90} color="white" />
           )}
         </View>
+
         <View style={styles.detailsContainer}>
           <View style={styles.firstLine}>
             <AppText style={styles.title} numberOfLines={1}>
               {title ? title : make + " " + model}
             </AppText>
           </View>
+
           <View style={styles.secondLine}>
             <AppText style={styles.info}>{year}</AppText>
             <AppText style={styles.info}>
@@ -52,6 +57,7 @@ function Card({
             </AppText>
             <AppText style={styles.info}>{engineCapacity + " cc"}</AppText>
           </View>
+
           <View style={styles.thirdLine}>
             <AppText style={styles.priceAsking} numberOfLines={1}>
               £{priceAsking === "0.00" ? " POA" : numberWithCommas(priceAsking)}
@@ -62,6 +68,24 @@ function Card({
             />
           </View>
         </View>
+
+        {sales_status && (
+          <AppText
+            style={[
+              styles.sales_status,
+              {
+                backgroundColor:
+                  sales_status == 0
+                    ? "orange"
+                    : sales_status == 2
+                    ? "green"
+                    : "crimson",
+              },
+            ]}
+          >
+            {vehicleStatusArray[sales_status]}
+          </AppText>
+        )}
       </TouchableOpacity>
     </View>
   );
@@ -126,6 +150,18 @@ const styles = StyleSheet.create({
   },
   registration: {
     fontSize: 12,
+  },
+  sales_status: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 3,
+    color: "white",
+    borderRadius: 10,
+    fontSize: 10,
+    fontWeight: "bold",
+    overflow: "hidden",
   },
 });
 

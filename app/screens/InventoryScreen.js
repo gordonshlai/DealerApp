@@ -22,8 +22,8 @@ import useDidMountEffect from "../hooks/useDidMountEffect";
 import OptionButton from "../components/OptionButton";
 import ButtonGroup from "../components/ButtonGroup";
 
-const statusArray = ["stock", "listed", "sold"];
-const statusDisplayArray = ["In Stock", "Trade Listed", "Sold"];
+const statusArray = ["", "stock", "listed", "sold"];
+const statusDisplayArray = ["All", "In Stock", "Trade Listed", "Sold"];
 
 function InventoryScreen({ navigation }) {
   const { loadInventoryFlag } = useContext(AuthContext);
@@ -223,6 +223,7 @@ function InventoryScreen({ navigation }) {
                     engineCapacity={item.engine_capacity}
                     priceAsking={item.price_asking}
                     registration={item.registration}
+                    sales_status={item.sales_status}
                     imageUrl={item.thumb ? item.thumb.url : ""}
                     onPress={() =>
                       navigation.navigate(routes.INVENTORY_DETAIL, item)
