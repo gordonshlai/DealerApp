@@ -534,7 +534,13 @@ function InventoryDetailScreen({ navigation, route }) {
                 </View>
               )}
               <AppText style={[styles.title, { margin: 20 }]}>
-                {getVehicleApi.data.title}
+                {getVehicleApi.data.title ||
+                  getVehicleApi.data.make +
+                    " " +
+                    getVehicleApi.data.model +
+                    " (" +
+                    getVehicleApi.data.year +
+                    ")"}
               </AppText>
               <FlatList
                 data={actions}
