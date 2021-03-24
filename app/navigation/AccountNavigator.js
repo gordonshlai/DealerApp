@@ -22,6 +22,7 @@ const AccountNavigator = () => (
       },
       headerTintColor: "white",
       title: null,
+      headerTitleAlign: "center",
       headerBackImage: () => (
         <MaterialCommunityIcons
           name="arrow-left"

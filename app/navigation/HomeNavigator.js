@@ -11,6 +11,8 @@ import colors from "../config/colors";
 import { Platform } from "react-native";
 import { Dimensions } from "react-native";
 import TradeDetailScreen from "../screens/TradeDetailScreen";
+import WarrantywiseNoEye from "../components/logos/WarrantywiseNoEye";
+import { View } from "react-native";
 
 const Stack = createStackNavigator();
 
@@ -25,7 +27,7 @@ const HomeNavigator = () => (
         elevation: 0,
       },
       headerTintColor: "white",
-
+      headerTitleAlign: "center",
       headerBackImage: () => (
         <MaterialCommunityIcons
           name="chevron-left"
@@ -41,20 +43,7 @@ const HomeNavigator = () => (
       name={routes.HOME}
       component={HomeScreen}
       options={{
-        headerTitle: () => (
-          <Image
-            source={require("../assets/logo.png")}
-            style={{
-              width: 120,
-              height: 60,
-              resizeMode: "contain",
-              marginLeft:
-                Platform.OS === "android"
-                  ? Dimensions.get("window").width / 2 - 60 - 20
-                  : 0,
-            }}
-          />
-        ),
+        headerTitle: () => <WarrantywiseNoEye />,
       }}
     />
   </Stack.Navigator>

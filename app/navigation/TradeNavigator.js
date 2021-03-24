@@ -18,13 +18,14 @@ const TradeNavigator = () => (
     screenOptions={{
       headerBackTitleVisible: false,
       headerBackTitle: "",
-      headerTitleStyle: { marginHorizontal: 10 },
+      headerTitleStyle: { marginHorizontal: 10, fontWeight: "bold" },
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
         elevation: 0,
       },
       headerTintColor: "white",
+      headerTitleAlign: "center",
       headerBackImage: () => (
         <MaterialCommunityIcons
           name="chevron-left"
