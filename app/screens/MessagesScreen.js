@@ -174,18 +174,21 @@ function MessagesScreen({ navigation }) {
   };
 
   return (
-    <>
+    <Screen>
       <Background />
       {getMessagesApi.error ? (
-        <Screen style={styles.screen}>
-          <AppText style={styles.errorMessage}>
-            Couldn't retrieve the messages.
-          </AppText>
-          <AppErrorMessage error={error} visible={error} />
-          <AppButton title="RETRY" onPress={handleRefresh} />
-        </Screen>
+        <>
+          <ActivityIndicator visible={getMessagesApi.loading} />
+          <View style={styles.errorContainer}>
+            <AppText style={styles.errorMessage}>
+              Couldn't retrieve the messages.
+            </AppText>
+            <AppErrorMessage error={error} visible={error} />
+            <AppButton title="RETRY" onPress={handleRefresh} />
+          </View>
+        </>
       ) : (
-        <Screen>
+        <>
           <ButtonGroup
             buttons={filterArray.map((item) => item.toUpperCase())}
             selectedIndex={filterArray.indexOf(filter)}
@@ -299,15 +302,15 @@ function MessagesScreen({ navigation }) {
               <AppButton title="Message" style={styles.contactButton} />
             </View>
           </View>
-        </Screen>
+        </>
       )}
-    </>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 20,
+  errorContainer: {
+    padding: 20,
   },
   errorMessage: {
     fontSize: 24,

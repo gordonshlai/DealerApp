@@ -14,11 +14,19 @@ function ButtonGroup({
   containerStyle,
   buttonContainerStyle = [
     styles.buttonContainerStyle,
-    { width: Dimensions.get("screen").width / buttons.length },
+    {
+      width:
+        Dimensions.get("screen").width /
+        (buttons.length <= 3 ? buttons.length : 3.5),
+    },
   ],
   selectedButtonStyle = [
     styles.buttonContainerStyle,
-    { width: Dimensions.get("screen").width / buttons.length },
+    {
+      width:
+        Dimensions.get("screen").width /
+        (buttons.length <= 3 ? buttons.length : 3.5),
+    },
     styles.selectedButtonStyle,
   ],
   selectedIndex,
@@ -27,7 +35,7 @@ function ButtonGroup({
   onPress,
 }) {
   return (
-    <View style={containerStyle}>
+    <View style={[styles.containerStyle, containerStyle]}>
       <FlatList
         horizontal
         data={buttons}
@@ -54,6 +62,9 @@ function ButtonGroup({
 }
 
 const styles = StyleSheet.create({
+  containerStyle: {
+    backgroundColor: colors.secondary,
+  },
   buttonContainerStyle: {
     backgroundColor: colors.secondary,
   },

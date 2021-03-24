@@ -20,8 +20,7 @@ function OptionButton({
   value,
   queryArray,
   displayArray,
-  setValue,
-  handleRefresh,
+  onSelect,
 }) {
   const [modalVisible, setModalVisible] = useState(false);
   return (
@@ -64,8 +63,7 @@ function OptionButton({
                   onPress={() => {
                     setModalVisible(false);
                     if (isActive) return;
-                    setValue(query);
-                    handleRefresh();
+                    onSelect(query);
                   }}
                 >
                   <AppText style={isActive && styles.activeText}>

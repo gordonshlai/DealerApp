@@ -37,7 +37,7 @@ export default function App() {
   }, []);
 
   const firstLaunch = () => {
-    // AsyncStorage.clear();
+    // AsyncStorage.removeItem("alreadyLaunched");
 
     AsyncStorage.getItem("alreadyLaunched").then((value) => {
       if (value == null) {
@@ -85,10 +85,7 @@ export default function App() {
 
   if (!isReady)
     return (
-      <AppLoading
-        startAsync={restoreToken && firstLaunch}
-        onFinish={() => setIsReady(true)}
-      />
+      <AppLoading startAsync={restoreToken} onFinish={() => setIsReady(true)} />
     );
   if (isFirstLaunch === null) {
     return null;

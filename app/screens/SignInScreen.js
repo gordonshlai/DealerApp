@@ -62,7 +62,6 @@ const SignInScreen = ({ navigation }) => {
 
   const handleSubmit = async ({ email, password }) => {
     const result = await loginApi.request({ email, password });
-    console.log(result);
     if (!result.ok) return setError(result.data.message);
     logIn(result.data.token);
   };

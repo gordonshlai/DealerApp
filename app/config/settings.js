@@ -8,7 +8,8 @@ import Constants from "expo-constants";
 
 const settings = {
   dev: {
-    apiUrl: "https://gsket.warrantywise.co.uk/app/",
+    // apiUrl: "https://gsket.warrantywise.co.uk/app/",
+    apiUrl: "https://dealer-dev.warrantywise.co.uk/app/",
   },
   staging: {
     apiUrl: "https://gsket.warrantywise.co.uk/app/",

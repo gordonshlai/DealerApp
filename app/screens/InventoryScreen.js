@@ -21,6 +21,8 @@ import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import OptionButton from "../components/OptionButton";
 import ButtonGroup from "../components/ButtonGroup";
+import ActivityIndicator from "../components/ActivityIndicator";
+import { AppErrorMessage } from "../components/forms";
 
 const statusArray = ["", "stock", "listed", "sold"];
 const statusDisplayArray = ["All", "In Stock", "Trade Listed", "Sold"];
@@ -28,6 +30,8 @@ const statusDisplayArray = ["All", "In Stock", "Trade Listed", "Sold"];
 function InventoryScreen({ navigation }) {
   const { loadInventoryFlag } = useContext(AuthContext);
   const tabBarHeight = useBottomTabBarHeight();
+
+  const [error, setError] = useState();
 
   const [makesArray, setMakesArray] = useState([]);
 
@@ -71,7 +75,8 @@ function InventoryScreen({ navigation }) {
   const getData = async () => {
     const result = await getVehiclesApi.request();
     console.log(endpoint);
-    if (!result.ok) return;
+    console.log(result.data);
+    if (!result.ok) return setError(result.data.message);
     const newVehicles = result.data.data;
     const newVehiclesArray = parseObjectToArray(newVehicles);
     setVehicles([...vehicles, ...newVehiclesArray]);
@@ -79,7 +84,7 @@ function InventoryScreen({ navigation }) {
 
   const getMakes = async () => {
     const result = await client.get("api/inventory/makes");
-    if (!result.ok) return;
+    if (!result.ok) return setError(result.data.message);
     const makes = result.data;
     const makesArray = parseObjectToArray(makes);
     setMakesArray(["all", ...makesArray]);
@@ -126,14 +131,18 @@ function InventoryScreen({ navigation }) {
   };
 
   return (
-    <>
+    <Screen>
       {getVehiclesApi.error ? (
-        <Screen style={styles.screen}>
-          <AppText style={styles.errorMessage}>
-            Couldn't retrieve the vehicles.
-          </AppText>
-          <AppButton title="RETRY" onPress={handleRefresh} />
-        </Screen>
+        <>
+          <ActivityIndicator visible={getVehiclesApi.loading} />
+          <View style={styles.errorContainer}>
+            <AppText style={styles.errorMessage}>
+              Couldn't retrieve the vehicles.
+            </AppText>
+            <AppErrorMessage visible={error} error={error} />
+            <AppButton title="RETRY" onPress={handleRefresh} />
+          </View>
+        </>
       ) : (
         <>
           <ButtonGroup
@@ -169,8 +178,10 @@ function InventoryScreen({ navigation }) {
                 value={make}
                 queryArray={makesArray}
                 displayArray={makesArray}
-                setValue={setMake}
-                handleRefresh={handleRefresh}
+                onSelect={(query) => {
+                  setMake(query);
+                  handleRefresh();
+                }}
               />
               <AppButton
                 icon={serachBarVisible ? "magnify-close" : "magnify"}
@@ -286,13 +297,17 @@ function InventoryScreen({ navigation }) {
           <AppButton icon="check" title="APPLY FILTER" onPress={applyFilter} />
         </Screen>
       </Modal> */}
-    </>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
+  errorContainer: {
+    padding: 20,
+  },
   errorMessage: {
     alignSelf: "center",
+    textAlign: "center",
     fontWeight: "bold",
     fontSize: 24,
   },

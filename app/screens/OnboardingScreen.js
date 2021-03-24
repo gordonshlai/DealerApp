@@ -5,29 +5,29 @@ import AuthContext from "../auth/context";
 import colors from "../config/colors";
 import routes from "../navigation/routes";
 
-const Dots = ({ selected }) => {
-  let backgroundColor;
+// const Dots = ({ selected }) => {
+//   let backgroundColor;
 
-  backgroundColor = selected ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.3)";
+//   backgroundColor = selected ? "rgba(0, 0, 0, 0.8)" : "rgba(0, 0, 0, 0.3)";
 
-  return (
-    <View
-      style={{ width: 5, height: 5, marginHorizontal: 3, backgroundColor }}
-    />
-  );
-};
-const Skip = ({ ...props }) => <Button title="Skip" color="black" {...props} />;
-const Next = ({ ...props }) => <Button title="Next" color="black" {...props} />;
-const Done = ({ ...props }) => <Button title="Done" color="black" {...props} />;
+//   return (
+//     <View
+//       style={{ width: 5, height: 5, marginHorizontal: 3, backgroundColor }}
+//     />
+//   );
+// };
+// const Skip = ({ ...props }) => <Button title="Skip" color="black" {...props} />;
+// const Next = ({ ...props }) => <Button title="Next" color="black" {...props} />;
+// const Done = ({ ...props }) => <Button title="Done" color="black" {...props} />;
 
 function OnboardingScreen() {
   const { setIsFirstLaunch } = useContext(AuthContext);
   return (
     <Onboarding
-      SkipButtonComponent={Skip}
-      NextButtonComponent={Next}
-      DoneButtonComponent={Done}
-      DotComponent={Dots}
+      // SkipButtonComponent={Skip}
+      // NextButtonComponent={Next}
+      // DoneButtonComponent={Done}
+      // DotComponent={Dots}
       onSkip={() => setIsFirstLaunch(false)}
       onDone={() => setIsFirstLaunch(false)}
       pages={[

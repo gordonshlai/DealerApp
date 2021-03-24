@@ -114,6 +114,7 @@ const ResetPasswordScreen = ({ navigation }) => {
                   name="email"
                   placeholder="Type Your Email"
                   textContentType="emailAddress"
+                  color="white"
                 />
               </View>
 
