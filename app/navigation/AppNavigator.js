@@ -1,5 +1,8 @@
 import React, { useContext, useState } from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  createBottomTabNavigator,
+  BottomTabBarHeightContext,
+} from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 
@@ -21,6 +24,7 @@ import routes from "./routes";
 import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 import AuthContext from "../auth/context";
+import { Platform } from "react-native";
 
 const Tab = createBottomTabNavigator();
 const tabHiddenRoutes = [
@@ -49,7 +53,7 @@ const AppNavigator = () => {
     <Tab.Navigator
       tabBarOptions={{
         activeTintColor: defaultStyles.colors.primary,
-        inactiveTintColor: defaultStyles.colors.mediumGrey,
+        inactiveTintColor: "#8B8BA1",
         style: {
           shadowColor: defaultStyles.colors.black,
           shadowRadius: 5,
@@ -60,6 +64,7 @@ const AppNavigator = () => {
           keyboardHidesTabBar: true,
           position: "absolute",
         },
+        safeAreaInsets: { bottom: Platform.OS === "android" ? 10 : null },
       }}
     >
       <Tab.Screen
@@ -89,7 +94,9 @@ const AppNavigator = () => {
       <Tab.Screen
         name={routes.INVENTORY}
         component={InventoryNavigator}
-        options={{ tabBarIcon: ({ color, size }) => <CarIcon color={color} /> }}
+        options={{
+          tabBarIcon: ({ color, size }) => <CarIcon color={color} />,
+        }}
         listeners={({ navigation, route }) => ({
           state: hideTabBar(navigation, route),
         })}
