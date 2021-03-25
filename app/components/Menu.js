@@ -4,7 +4,7 @@ import {
   View,
   StyleSheet,
   FlatList,
-  TouchableHighlight,
+  TouchableOpacity,
   Platform,
 } from "react-native";
 import Constants from "expo-constants";
@@ -17,6 +17,7 @@ import colors from "../config/colors";
 import defaultStyle from "../config/styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AppText from "./AppText";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const list = [
   routes.HOME,
@@ -64,25 +65,29 @@ function Menu() {
             <FlatList
               data={list}
               keyExtractor={(item) => item}
-              renderItem={({ item }) => (
-                <TouchableHighlight
-                  underlayColor={colors.mediumGrey}
-                  onPress={() => {
-                    navigation.navigate(item);
-                    setModalVisible(false);
-                  }}
-                >
-                  <AppText
-                    style={[
-                      styles.listItem,
-                      route.name == item ? styles.active : {},
-                    ]}
+              renderItem={({ item }) => {
+                const isActive = route.name == item;
+                return (
+                  <TouchableOpacity
+                    style={[styles.listItem, isActive && styles.activeItem]}
+                    onPress={() => {
+                      navigation.navigate(item);
+                      setModalVisible(false);
+                    }}
                   >
-                    {item.toUpperCase()}
-                  </AppText>
-                </TouchableHighlight>
-              )}
+                    <AppText style={styles.text}>{item.toUpperCase()}</AppText>
+                    {isActive && (
+                      <MaterialCommunityIcons
+                        name="check"
+                        color={colors.primary}
+                        size={20}
+                      />
+                    )}
+                  </TouchableOpacity>
+                );
+              }}
               ItemSeparatorComponent={ListItemSeparator}
+              style={styles.flatList}
             />
 
             <View style={styles.contactContainer}>
@@ -90,12 +95,17 @@ function Menu() {
                 Contact Your Account Manager
               </AppText>
               <AppButton title="Message" />
-              <AppButton
-                backgroundColor={null}
-                color={colors.success}
-                title="Call Now"
-              />
             </View>
+
+            <AppButton
+              backgroundColor={null}
+              color={colors.danger}
+              border={false}
+              size={30}
+              icon="close"
+              onPress={() => setModalVisible(false)}
+              style={styles.bottomCloseButton}
+            />
           </View>
         </View>
       </Modal>
@@ -129,12 +139,17 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
   },
   listItem: {
-    fontWeight: "bold",
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  active: {
-    color: colors.primary,
-    backgroundColor: colors.primary + "11",
+  activeItem: {
+    backgroundColor: colors.lightGrey + "77",
+  },
+  text: {
+    color: colors.secondary,
   },
   contactContainer: {
     padding: 20,
@@ -144,6 +159,14 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontWeight: "bold",
+  },
+  flatList: {
+    padding: 10,
+  },
+  bottomCloseButton: {
+    marginRight: 20,
+    marginBottom: Platform.OS === "ios" ? 40 : 20,
+    alignSelf: "flex-end",
   },
 });
 

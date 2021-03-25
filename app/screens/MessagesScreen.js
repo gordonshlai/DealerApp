@@ -292,15 +292,7 @@ function MessagesScreen({ navigation }) {
             <AppText style={styles.contactText}>
               Contact your Account Manager directly
             </AppText>
-            <View style={styles.contactButtonsContainer}>
-              <AppButton
-                backgroundColor={null}
-                color={colors.success}
-                title="Call Now"
-                style={styles.contactButton}
-              />
-              <AppButton title="Message" style={styles.contactButton} />
-            </View>
+            <AppButton title="Message" />
           </View>
         </>
       )}
@@ -348,14 +340,6 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontWeight: "bold",
-  },
-  contactButtonsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginTop: 10,
-  },
-  contactButton: {
-    width: "47%",
   },
 });
 

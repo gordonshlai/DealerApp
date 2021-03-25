@@ -1,8 +1,17 @@
 import React, { useState } from "react";
-import { Modal, TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Modal,
+  TouchableOpacity,
+  FlatList,
+  StyleSheet,
+  Platform,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import Constants from "expo-constants";
 
 import colors from "../config/colors";
+import defaultStyle from "../config/styles";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
@@ -37,71 +46,118 @@ function OptionButton({
       />
       <Modal
         visible={modalVisible}
-        animationType="slide"
-        statusBarTranslucent
+        animationType="fade"
+        transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <Screen style={styles.screen}>
-          <AppButton
-            backgroundColor={null}
-            color={colors.success}
-            icon="close"
-            title="CLOSE"
-            style={{ alignSelf: "flex-end" }}
-            onPress={() => setModalVisible(false)}
-          />
-          <FlatList
-            data={displayArray}
-            keyExtractor={(item, index) => index.toString()}
-            ItemSeparatorComponent={ListItemSeparator}
-            renderItem={({ item }) => {
-              const query = queryArray[displayArray.indexOf(item)];
-              const isActive = value === query;
-              return (
-                <TouchableOpacity
-                  style={[styles.listItem, isActive && styles.activeItem]}
-                  onPress={() => {
-                    setModalVisible(false);
-                    if (isActive) return;
-                    onSelect(query);
-                  }}
-                >
-                  <AppText style={isActive && styles.activeText}>
-                    {item.toUpperCase()}
-                  </AppText>
-                  {isActive && (
-                    <MaterialCommunityIcons
-                      name="check"
-                      color={colors.primary}
-                      size={24}
-                    />
-                  )}
-                </TouchableOpacity>
-              );
-            }}
-          />
-        </Screen>
+        <View style={styles.background}>
+          <View style={styles.container}>
+            <View style={styles.topBarContainer}>
+              <AppText style={styles.title}>Sort By</AppText>
+              <AppButton
+                backgroundColor={null}
+                border={false}
+                size={30}
+                icon="close"
+                onPress={() => setModalVisible(false)}
+                style={styles.closeButton}
+              />
+            </View>
+
+            <FlatList
+              data={displayArray}
+              keyExtractor={(item) => item}
+              renderItem={({ item }) => {
+                const query = queryArray[displayArray.indexOf(item)];
+                const isActive = value === query;
+                return (
+                  <TouchableOpacity
+                    style={[styles.listItem, isActive && styles.activeItem]}
+                    onPress={() => {
+                      setModalVisible(false);
+                      if (isActive) return;
+                      onSelect(query);
+                    }}
+                  >
+                    <AppText style={styles.text}>{item.toUpperCase()}</AppText>
+                    {isActive && (
+                      <MaterialCommunityIcons
+                        name="check"
+                        color={colors.primary}
+                        size={20}
+                      />
+                    )}
+                  </TouchableOpacity>
+                );
+              }}
+              ItemSeparatorComponent={ListItemSeparator}
+              style={styles.flatList}
+            />
+            <AppButton
+              backgroundColor={null}
+              color={colors.danger}
+              border={false}
+              size={30}
+              icon="close"
+              onPress={() => setModalVisible(false)}
+              style={styles.bottomCloseButton}
+            />
+          </View>
+        </View>
       </Modal>
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    paddingHorizontal: 20,
+  background: {
+    flex: 1,
+    backgroundColor: colors.white + "aa",
+  },
+  container: {
+    backgroundColor: "white",
+    marginRight: 50,
+    flex: 1,
+    ...defaultStyle.shadow,
+  },
+  topBarContainer: {
+    flexDirection: "row",
+    height: 80 + (Platform.OS === "ios" ? Constants.statusBarHeight : 0),
+    backgroundColor: colors.secondary,
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  title: {
+    marginLeft: 20,
+    marginTop: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
+    color: colors.primary,
+    fontWeight: "bold",
+    fontSize: 24,
+  },
+  closeButton: {
+    marginRight: 20,
+    marginTop: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
   },
   listItem: {
-    padding: 15,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   activeItem: {
-    backgroundColor: colors.primary + "11",
+    backgroundColor: colors.lightGrey + "77",
   },
-  activeText: {
-    fontWeight: "bold",
-    color: colors.primary,
+  text: {
+    color: colors.secondary,
+  },
+  flatList: {
+    padding: 10,
+  },
+  bottomCloseButton: {
+    marginRight: 20,
+    marginBottom: Platform.OS === "ios" ? 40 : 20,
+    alignSelf: "flex-end",
   },
 });
 
