@@ -85,7 +85,7 @@ function HomeScreen({ navigation }) {
 
   const [pageCurrent, setPageCurrent] = useState(1);
   const [seller, setSeller] = useState("");
-  const [env, setEnv] = useState("1");
+  const [env, setEnv] = useState("0");
   const [sortBy, setSortBy] = useState("listed-desc");
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -133,7 +133,6 @@ function HomeScreen({ navigation }) {
   const getMakes = async () => {
     let makeEndpoint = "api/trade/all/makes?seller=" + seller + "&env=" + env;
     const result = await client.get(makeEndpoint);
-    console.log(result);
     if (!result.ok) return setError(result.data.message);
     const makes = result.data;
     const makesArray = parseObjectToArray(makes);

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions, Platform } from "react-native";
+import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
 function WarrantywiseNoEye(props) {
@@ -41,12 +41,7 @@ c0-10.8-3.1-21.5-16-21.5c-12.1,0-17.8,11.3-18.2,21.5H799.8z"/>
 </svg>
   `;
   return (
-    <View
-      style={{
-        height: 100,
-        width: 200,
-      }}
-    >
+    <View style={{ height: 100, width: 200 }}>
       <SvgXml xml={xml} width="100%" height="100%" />
     </View>
   );

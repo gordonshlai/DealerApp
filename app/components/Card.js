@@ -51,7 +51,7 @@ function Card({
           </View>
 
           <View style={styles.secondLine}>
-            <AppText style={styles.info}>{year}</AppText>
+            {year && <AppText style={styles.info}>{year}</AppText>}
             <AppText style={styles.info}>
               {numberWithCommas(mileage) + " mi"}
             </AppText>
@@ -126,24 +126,25 @@ const styles = StyleSheet.create({
     marginBottom: 3,
   },
   title: {
+    color: colors.secondary,
     fontWeight: "bold",
     fontSize: 12,
   },
   secondLine: {
     flexDirection: "row",
     marginBottom: 9,
-    justifyContent: "space-between",
   },
   info: {
     fontSize: 10,
     fontWeight: "bold",
     color: colors.mediumGrey,
+    marginRight: 7,
   },
   thirdLine: {
     flexDirection: "row",
   },
   priceAsking: {
-    color: colors.success,
+    color: colors.primary,
     fontSize: 11,
     fontWeight: "bold",
     flex: 1,

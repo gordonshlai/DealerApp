@@ -5,9 +5,13 @@ import defaultStyles from "../config/styles";
 
 function Registration({ registration, style, ...otherProps }) {
   const formatingRegistration = (registration) => {
-    let firstPart = registration.substr(0, 4);
-    let secondPart = registration.substr(4);
-    return firstPart + " " + secondPart;
+    if (registration) {
+      let firstPart = registration.substr(0, 4);
+      let secondPart = registration.substr(4);
+      return firstPart + " " + secondPart;
+    } else {
+      return registration;
+    }
   };
 
   return (
