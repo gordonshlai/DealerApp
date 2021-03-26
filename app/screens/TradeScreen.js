@@ -85,7 +85,7 @@ function HomeScreen({ navigation }) {
 
   const [pageCurrent, setPageCurrent] = useState(1);
   const [seller, setSeller] = useState("");
-  const [env, setEnv] = useState("0");
+  const [env, setEnv] = useState("1");
   const [sortBy, setSortBy] = useState("listed-desc");
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -123,7 +123,7 @@ function HomeScreen({ navigation }) {
   const getData = async () => {
     const result = await getVehiclesApi.request();
     console.log(endpoint);
-    // console.log("status: " + result.status);
+    console.log("status: " + result.status);
     if (!result.ok) return setError(result.data.message);
     const newVehicles = result.data.data;
     const newVehiclesArray = parseObjectToArray(newVehicles);

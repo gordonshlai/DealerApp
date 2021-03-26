@@ -23,6 +23,7 @@ import AppButton from "../components/AppButton";
 import Screen from "../components/Screen";
 import AppText from "../components/AppText";
 import Background from "../components/Background";
+import { Platform } from "react-native";
 
 const validationSchema = Yup.object().shape({
   text: Yup.string().label("Text Message"),
@@ -134,7 +135,13 @@ function MessageDetailScreen({ navigation, route }) {
         />
       </View>
       <Screen
-        style={[styles.screen, { paddingBottom: (tabBarHeight * 2) / 3 }]}
+        style={[
+          styles.screen,
+          {
+            paddingBottom:
+              Platform.OS === "android" ? tabBarHeight : (tabBarHeight * 2) / 3,
+          },
+        ]}
       >
         <View style={{ flex: 1 }}>
           <FlatList

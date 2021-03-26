@@ -181,6 +181,9 @@ function TradeDetailScreen({ route, navigation }) {
                   </View>
                 )}
                 <View style={{ padding: 20 }}>
+                  <AppText style={styles.offerBadge}>
+                    {getVehicleApi.data.offers_count} offers
+                  </AppText>
                   <AppText style={styles.title} numberOfLines={2}>
                     {getVehicleApi.data.title ||
                       getVehicleApi.data.make +
@@ -193,29 +196,57 @@ function TradeDetailScreen({ route, navigation }) {
                   <AppText style={styles.tagline} numberOfLines={2}>
                     {getVehicleApi.data.tagline}
                   </AppText>
-                  <View style={[styles.detailRow, { marginBottom: 15 }]}>
-                    {getVehicleApi.data.registration && (
-                      <View style={styles.detailField}>
-                        <Registration
-                          registration={getVehicleApi.data.registration}
-                          style={{ fontSize: 24 }}
-                        />
-                      </View>
-                    )}
+
+                  <View style={[styles.detailRow, { marginBottom: 20 }]}>
                     {getVehicleApi.data.mileage && (
-                      <View style={styles.detailField}>
-                        <Info
-                          name="speedometer"
-                          text={
-                            numberWithCommas(getVehicleApi.data.mileage) + " mi"
-                          }
-                          textStyle={{ fontWeight: "bold" }}
-                          size={24}
-                        />
-                      </View>
+                      <AppText style={styles.detail}>
+                        {numberWithCommas(getVehicleApi.data.mileage) + " mi"}
+                      </AppText>
+                    )}
+                    {getVehicleApi.data.fuel && (
+                      <AppText style={styles.detail}>
+                        {getVehicleApi.data.fuel}
+                      </AppText>
+                    )}
+                    {getVehicleApi.data.transmission && (
+                      <AppText style={styles.detail}>
+                        {getVehicleApi.data.transmission}
+                      </AppText>
                     )}
                   </View>
 
+                  <View style={styles.detailRow}>
+                    {getVehicleApi.data.price_cap && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Guide Price
+                        </AppText>
+                        <AppText
+                          style={[
+                            styles.detailValue,
+                            { color: colors.success },
+                          ]}
+                        >
+                          {getVehicleApi.data.price_cap === "0.00"
+                            ? "N/A"
+                            : "£" +
+                              numberWithCommas(getVehicleApi.data.price_cap)}
+                        </AppText>
+                      </View>
+                    )}
+                    {getVehicleApi.data.listed_at && (
+                      <View style={styles.detailField}>
+                        <AppText style={[styles.detailTitle]}>
+                          Listed On
+                        </AppText>
+                        <AppText style={styles.detailValue}>
+                          {dayjs(getVehicleApi.data.listed_at).format(
+                            "DD/MM/YYYY"
+                          )}
+                        </AppText>
+                      </View>
+                    )}
+                  </View>
                   <View style={styles.detailRow}>
                     {getVehicleApi.data.price_asking && (
                       <View style={styles.detailField}>
@@ -235,45 +266,15 @@ function TradeDetailScreen({ route, navigation }) {
                         </AppText>
                       </View>
                     )}
-                    {getVehicleApi.data.price_cap && (
+                    {getVehicleApi.data.registration && (
                       <View style={styles.detailField}>
                         <AppText style={styles.detailTitle}>
-                          Guide Price
+                          Registration
                         </AppText>
-                        <AppText
-                          style={[
-                            styles.detailValue,
-                            { color: colors.success },
-                          ]}
-                        >
-                          {getVehicleApi.data.price_cap === "0.00"
-                            ? "N/A"
-                            : "£" +
-                              numberWithCommas(getVehicleApi.data.price_cap)}
-                        </AppText>
-                      </View>
-                    )}
-                  </View>
-
-                  <View style={styles.detailRow}>
-                    {getVehicleApi.data.listed_at && (
-                      <View style={styles.detailField}>
-                        <AppText style={[styles.detailTitle]}>
-                          Listed On
-                        </AppText>
-                        <AppText style={styles.detailValue}>
-                          {dayjs(getVehicleApi.data.listed_at).format(
-                            "DD/MM/YYYY"
-                          )}
-                        </AppText>
-                      </View>
-                    )}
-                    {getVehicleApi.data.offers_count && (
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>Offers</AppText>
-                        <AppText style={styles.detailValue}>
-                          {getVehicleApi.data.offers_count}
-                        </AppText>
+                        <Registration
+                          registration={getVehicleApi.data.registration}
+                          style={{ fontSize: 22, alignSelf: "flex-start" }}
+                        />
                       </View>
                     )}
                   </View>
@@ -716,20 +717,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "whitesmoke",
   },
+  offerBadge: {
+    backgroundColor: colors.primary,
+    color: "white",
+    padding: 5,
+    borderRadius: 10,
+    overflow: "hidden",
+    alignSelf: "flex-start",
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
   title: {
     fontSize: 22,
     fontWeight: "bold",
     color: colors.secondary,
   },
   tagline: {
+    color: colors.secondary,
     marginBottom: 20,
   },
   detailRow: {
     flexDirection: "row",
-    justifyContent: "space-around",
   },
   detailField: {
-    alignItems: "center",
     margin: 5,
     width: "50%",
   },
@@ -739,8 +749,15 @@ const styles = StyleSheet.create({
     color: colors.secondary,
   },
   detailValue: {
-    fontSize: 26,
+    fontSize: 22,
     fontWeight: "bold",
+    textAlign: "center",
+  },
+  detail: {
+    color: colors.mediumGrey,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 20,
   },
   address: {
     fontStyle: "italic",

@@ -10,7 +10,7 @@ const settings = {
   dev: {
     // apiUrl: "https://gsket.warrantywise.co.uk/app/",
     // apiUrl: "https://dealer-dev.warrantywise.co.uk/app/",
-    apiUrl: "http://551abbd76116.ngrok.io/app/",
+    apiUrl: "http://c972ce1ecbea.ngrok.io/app/",
   },
   staging: {
     apiUrl: "https://gsket.warrantywise.co.uk/app/",

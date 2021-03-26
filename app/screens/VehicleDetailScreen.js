@@ -168,7 +168,7 @@ function VehicleDetailScreen({ route, navigation }) {
     setProgress(1 / 3);
 
     if (vehicleDetail.images) {
-      for (originalImage of vehicleDetail.images) {
+      for (const originalImage of vehicleDetail.images) {
         let deleteImage = true;
         for (inputImage of vehicleInput.images) {
           if (originalImage.id === inputImage.id) {
@@ -473,12 +473,15 @@ function VehicleDetailScreen({ route, navigation }) {
                       Vehicle Description
                     </AppText>
                     <View style={styles.fieldContainer}>
-                      <AppText style={styles.fieldTitle}>Title</AppText>
+                      <AppText style={styles.fieldTitle}>
+                        Title (50 characters max)
+                      </AppText>
                       <AppFormField
                         name="title"
                         placeholder="Title"
                         multiline={true}
                         textAlignVertical="center"
+                        maxLength={50}
                         style={styles.appFormField}
                       />
                     </View>
@@ -493,12 +496,15 @@ function VehicleDetailScreen({ route, navigation }) {
                     </View>
 
                     <View style={styles.fieldContainer}>
-                      <AppText style={styles.fieldTitle}>Tagline</AppText>
+                      <AppText style={styles.fieldTitle}>
+                        Tagline (80 characters max)
+                      </AppText>
                       <AppFormField
                         name="tagline"
                         placeholder="Tagline"
                         multiline={true}
                         textAlignVertical="center"
+                        maxLength={80}
                         style={styles.appFormField}
                       />
                     </View>

@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -204,26 +204,22 @@ function InventoryDetailScreen({ navigation, route }) {
                   <AppText style={styles.tagline} numberOfLines={2}>
                     {getVehicleApi.data.tagline}
                   </AppText>
-                  <View style={[styles.detailRow, { marginBottom: 15 }]}>
-                    {getVehicleApi.data.registration && (
-                      <View style={styles.detailField}>
-                        <Registration
-                          registration={getVehicleApi.data.registration}
-                          style={{ fontSize: 24 }}
-                        />
-                      </View>
-                    )}
+
+                  <View style={[styles.detailRow, { marginBottom: 20 }]}>
                     {getVehicleApi.data.mileage && (
-                      <View style={styles.detailField}>
-                        <Info
-                          name="speedometer"
-                          text={
-                            numberWithCommas(getVehicleApi.data.mileage) + " mi"
-                          }
-                          textStyle={{ fontWeight: "bold" }}
-                          size={24}
-                        />
-                      </View>
+                      <AppText style={styles.detail}>
+                        {numberWithCommas(getVehicleApi.data.mileage) + " mi"}
+                      </AppText>
+                    )}
+                    {getVehicleApi.data.fuel && (
+                      <AppText style={styles.detail}>
+                        {getVehicleApi.data.fuel}
+                      </AppText>
+                    )}
+                    {getVehicleApi.data.transmission && (
+                      <AppText style={styles.detail}>
+                        {getVehicleApi.data.transmission}
+                      </AppText>
                     )}
                   </View>
 
@@ -291,6 +287,20 @@ function InventoryDetailScreen({ navigation, route }) {
                             : "£" +
                               numberWithCommas(getVehicleApi.data.price_cap)}
                         </AppText>
+                      </View>
+                    )}
+                  </View>
+
+                  <View style={styles.detailRow}>
+                    {getVehicleApi.data.registration && (
+                      <View style={styles.detailField}>
+                        <AppText style={styles.detailTitle}>
+                          Registration
+                        </AppText>
+                        <Registration
+                          registration={getVehicleApi.data.registration}
+                          style={{ fontSize: 24, alignSelf: "flex-start" }}
+                        />
                       </View>
                     )}
                   </View>
@@ -728,15 +738,13 @@ const styles = StyleSheet.create({
     color: colors.secondary,
   },
   tagline: {
+    color: colors.secondary,
     marginBottom: 20,
   },
   detailRow: {
     flexDirection: "row",
-    justifyContent: "space-around",
-    marginBottom: 5,
   },
   detailField: {
-    alignItems: "center",
     margin: 5,
     width: "50%",
   },
@@ -748,7 +756,12 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 22,
     fontWeight: "bold",
-    textAlign: "center",
+  },
+  detail: {
+    color: colors.mediumGrey,
+    fontSize: 16,
+    fontWeight: "bold",
+    marginRight: 20,
   },
   modalBackground: {
     flex: 1,
