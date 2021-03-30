@@ -182,7 +182,9 @@ function TradeDetailScreen({ route, navigation }) {
                 )}
                 <View style={{ padding: 20 }}>
                   <AppText style={styles.offerBadge}>
-                    {getVehicleApi.data.offers_count} offers
+                    {`${getVehicleApi.data.offers_count} offer${
+                      getVehicleApi.data.offers_count > 1 ? "s" : ""
+                    }`}
                   </AppText>
                   <AppText style={styles.title} numberOfLines={2}>
                     {getVehicleApi.data.title ||
@@ -260,7 +262,7 @@ function TradeDetailScreen({ route, navigation }) {
                           ]}
                         >
                           {getVehicleApi.data.price_asking === "0.00"
-                            ? " POA"
+                            ? "POA"
                             : "£" +
                               numberWithCommas(getVehicleApi.data.price_asking)}
                         </AppText>
@@ -751,7 +753,7 @@ const styles = StyleSheet.create({
   detailValue: {
     fontSize: 22,
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "left",
   },
   detail: {
     color: colors.mediumGrey,

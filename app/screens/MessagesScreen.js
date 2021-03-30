@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   messagesContainer: {
     flex: 1,
     justifyContent: "center",
-    paddingVertical: 20,
+    paddingVertical: 10,
     paddingHorizontal: 10,
     marginHorizontal: 10,
     backgroundColor: "white",

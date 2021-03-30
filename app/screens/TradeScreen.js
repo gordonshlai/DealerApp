@@ -71,6 +71,10 @@ const body_styleArray = [
   "Pickup",
 ];
 
+const fuelArray = ["Diesel", "Electric", "Hybrid", "Petrol"];
+const doorsArray = ["1", "2", "3", "4", "5", "6", "7"];
+const seatsArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+
 function HomeScreen({ navigation }) {
   const { loadTradeFlag } = useContext(AuthContext);
   const tabBarHeight = useBottomTabBarHeight();
@@ -89,12 +93,16 @@ function HomeScreen({ navigation }) {
   const [sortBy, setSortBy] = useState("listed-desc");
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
-  const [makes, setMakes] = useState([]);
   const [bodyType, setBodyType] = useState([]);
-  const [engineSize, setEngineSize] = useState();
-  const [fuelType, setFuelType] = useState();
-  const [doors, setDoors] = useState();
-  const [seats, setSeats] = useState();
+  const [makes, setMakes] = useState([]);
+  const [fuel, setFuel] = useState([]);
+  const [doors, setDoors] = useState([]);
+  const [seats, setSeats] = useState([]);
+
+  const [tempMakes, setTempMakes] = useState([]);
+  const [tempFuel, setTempFuel] = useState([]);
+  const [tempDoors, setTempDoors] = useState([]);
+  const [tempSeats, setTempSeats] = useState([]);
 
   let endpoint =
     "api/trade/all/vehicles?seller=" +
@@ -108,7 +116,13 @@ function HomeScreen({ navigation }) {
     pageCurrent;
 
   const getVehiclesApi = useApi(() =>
-    client.get(endpoint, { body_types: bodyType, makes: makes })
+    client.get(endpoint, {
+      body_types: bodyType,
+      makes: makes,
+      fuel_types: fuel,
+      doors: doors,
+      seats: seats,
+    })
   );
 
   useEffect(() => {
@@ -286,27 +300,98 @@ function HomeScreen({ navigation }) {
                 border={false}
                 size={30}
                 icon="close"
-                onPress={() => setFilterModalVisible(false)}
+                onPress={() => {
+                  setFilterModalVisible(false);
+                  setTempMakes(makes);
+                  setTempFuel(fuel);
+                  setTempDoors(doors);
+                  setTempSeats(seats);
+                }}
                 style={styles.modalCloseButton}
               />
             </View>
 
             <ScrollView contentContainerStyle={{ padding: 20 }}>
-              <AppText>Makes</AppText>
+              <AppText style={styles.modalSubtitle}>Makes</AppText>
               <MultiplePicker
                 items={makesArray}
-                selectedItems={makes.length > 0 ? makes : []}
+                selectedItems={tempMakes.length > 0 ? tempMakes : []}
                 placeholder="Select Makes"
                 onConfirm={(items) => {
-                  setMakes(items);
+                  setTempMakes(items);
                   // handleRefresh();
                 }}
               />
-              <AppText>Engine Size</AppText>
-              <AppText>Fuel Type</AppText>
-              <AppText>Doors</AppText>
-              <AppText>Seats</AppText>
+              <AppText style={styles.modalSubtitle}>Fuel Type</AppText>
+              <MultiplePicker
+                items={fuelArray}
+                selectedItems={tempFuel.length > 0 ? tempFuel : []}
+                placeholder="Select Fuel Type"
+                onConfirm={(items) => {
+                  setTempFuel(items);
+                  // handleRefresh();
+                }}
+              />
+              <AppText style={styles.modalSubtitle}>Doors</AppText>
+              <MultiplePicker
+                items={doorsArray}
+                selectedItems={tempDoors.length > 0 ? tempDoors : []}
+                placeholder="Select Number of Doors"
+                onConfirm={(items) => {
+                  setTempDoors(items);
+                  // handleRefresh();
+                }}
+              />
+              <AppText style={styles.modalSubtitle}>Seats</AppText>
+              <MultiplePicker
+                items={seatsArray}
+                selectedItems={tempSeats.length > 0 ? tempSeats : []}
+                placeholder="Select Number of Seats"
+                onConfirm={(items) => {
+                  setTempSeats(items);
+                  // handleRefresh();
+                }}
+              />
+              <AppButton
+                title="Clear Filters"
+                backgroundColor={null}
+                color={colors.success}
+                border={null}
+                style={{ alignSelf: "flex-end" }}
+                onPress={() => {
+                  setTempMakes([]);
+                  setTempFuel([]);
+                  setTempDoors([]);
+                  setTempSeats([]);
+                }}
+              />
+              <AppButton
+                title="Show Results"
+                onPress={() => {
+                  setFilterModalVisible(false);
+                  setMakes(tempMakes);
+                  setFuel(tempFuel);
+                  setDoors(tempDoors);
+                  setSeats(tempSeats);
+                  handleRefresh();
+                }}
+              />
             </ScrollView>
+            <AppButton
+              backgroundColor={null}
+              color={colors.danger}
+              border={false}
+              size={30}
+              icon="close"
+              onPress={() => {
+                setFilterModalVisible(false);
+                setTempMakes(makes);
+                setTempFuel(fuel);
+                setTempDoors(doors);
+                setTempSeats(seats);
+              }}
+              style={styles.modalBottomCloseButton}
+            />
           </View>
         </View>
       </Modal>
@@ -391,6 +476,16 @@ const styles = StyleSheet.create({
   modalCloseButton: {
     marginRight: 20,
     marginTop: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
+  },
+  modalSubtitle: {
+    fontWeight: "bold",
+    marginTop: 10,
+    color: colors.secondary,
+  },
+  modalBottomCloseButton: {
+    marginRight: 20,
+    marginBottom: Platform.OS === "ios" ? 40 : 20,
+    alignSelf: "flex-end",
   },
 });
 

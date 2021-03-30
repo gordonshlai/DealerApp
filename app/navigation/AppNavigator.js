@@ -1,10 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   createBottomTabNavigator,
   BottomTabBarHeightContext,
 } from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 
 import HomeNavigator from "./HomeNavigator";
 import TradeNavigator from "./TradeNavigator";
@@ -46,6 +48,22 @@ const AppNavigator = () => {
       navigation.setOptions({ tabBarVisible: false });
     } else {
       navigation.setOptions({ tabBarVisible: true });
+    }
+  };
+
+  useEffect(() => {
+    registerForPushNotification();
+  }, []);
+
+  const registerForPushNotification = async () => {
+    try {
+      const permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      if (!permission.granted) return;
+
+      const token = await Notifications.getExpoPushTokenAsync();
+      console.log(token);
+    } catch (error) {
+      console.log("Error getting a push token", error);
     }
   };
 
