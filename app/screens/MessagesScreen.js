@@ -30,6 +30,7 @@ import Background from "../components/Background";
 import { AppErrorMessage } from "../components/forms";
 import defaultStyles from "../config/styles";
 import ActivityIndicator from "../components/ActivityIndicator";
+import { Platform } from "react-native";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
@@ -287,7 +288,15 @@ function MessagesScreen({ navigation }) {
             />
           </View>
           <View
-            style={[styles.contactContainer, { marginBottom: tabBarHeight }]}
+            style={[
+              styles.contactContainer,
+              {
+                marginBottom:
+                  Platform.OS === "android"
+                    ? tabBarHeight
+                    : (tabBarHeight * 2) / 3,
+              },
+            ]}
           >
             <AppText style={styles.contactText}>
               Contact your Account Manager directly

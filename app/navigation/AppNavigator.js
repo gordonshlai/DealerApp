@@ -7,6 +7,7 @@ import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+import expoPushTokenApi from "../api/expoPushToken";
 
 import HomeNavigator from "./HomeNavigator";
 import TradeNavigator from "./TradeNavigator";
@@ -35,6 +36,14 @@ const tabHiddenRoutes = [
   routes.NEW_CAR,
 ];
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
+
 /**
  * The bottom tab navigator, including the following screens:
  * Home Screen, InventoryScreen, NewCarScreen, MessagesScreen, Account Screen.
@@ -53,6 +62,15 @@ const AppNavigator = () => {
 
   useEffect(() => {
     registerForPushNotification();
+    Notifications.addNotificationReceivedListener((notification) =>
+      console.log("addNotificationReceivedListener")
+    );
+    Notifications.addNotificationsDroppedListener((notification) =>
+      console.log("addNotificationsDroppedListener")
+    );
+    Notifications.addNotificationResponseReceivedListener((notification) =>
+      console.log("addNotificationResponseReceivedListener")
+    );
   }, []);
 
   const registerForPushNotification = async () => {
@@ -61,6 +79,7 @@ const AppNavigator = () => {
       if (!permission.granted) return;
 
       const token = await Notifications.getExpoPushTokenAsync();
+      expoPushTokenApi.register(token.data);
       console.log(token);
     } catch (error) {
       console.log("Error getting a push token", error);

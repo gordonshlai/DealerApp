@@ -22,6 +22,8 @@ apiClient.addAsyncRequestTransform(async (request) => {
   const authToken = await authStorage.getToken();
   if (!authToken) return;
   request.headers["Authorization"] = "Bearer " + authToken;
+  request.headers["Accept"] = "application/json";
+  request.headers["Content-Type"] = "application/json";
 });
 
 const get = apiClient.get;

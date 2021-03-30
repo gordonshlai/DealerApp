@@ -75,7 +75,6 @@ function InventoryScreen({ navigation }) {
   const getData = async () => {
     const result = await getVehiclesApi.request();
     console.log(endpoint);
-    console.log(result.data);
     if (!result.ok) return setError(result.data.message);
     const newVehicles = result.data.data;
     const newVehiclesArray = parseObjectToArray(newVehicles);
@@ -115,14 +114,6 @@ function InventoryScreen({ navigation }) {
     }, 500);
   };
 
-  // const applyFilter = () => {
-  //   setFilterModalVisible(false);
-  //   if (filter.status === status && filter.make === make) return;
-  //   setStatus(filter.status);
-  //   setMake(filter.make);
-  //   handleRefresh();
-  // };
-
   const handleLazyLoading = async () => {
     if (!getVehiclesApi.loading && getVehiclesApi.data.next_page_url) {
       setPageCurrent(pageCurrent + 1);
@@ -157,16 +148,6 @@ function InventoryScreen({ navigation }) {
             <NewCarButton onPress={() => navigation.navigate(routes.NEW_CAR)} />
 
             <View style={styles.optionBar}>
-              {/* <AppButton
-                title="Filter"
-                backgroundColor={null}
-                color={colors.primary}
-                border={false}
-                icon="filter-variant"
-                size={16}
-                badge={status !== statusArray[0] || make !== "all"}
-                onPress={() => setFilterModalVisible(true)}
-              /> */}
               <OptionButton
                 title={make.toUpperCase()}
                 backgroundColor={null}
@@ -257,46 +238,6 @@ function InventoryScreen({ navigation }) {
           </Screen>
         </>
       )}
-      {/* <Modal visible={filterModalVisible} animationType="slide">
-        <Screen style={styles.modal}>
-          <AppText style={styles.modalTitle}>Filter</AppText>
-          <AppText>Status</AppText>
-          <ButtonGroup
-            buttonStyle={{ paddingHorizontal: 10 }}
-            buttonContainerStyle={{}}
-            buttons={["In stock", "Trade Listed", "Sold"]}
-            containerStyle={{ height: 50, marginBottom: 30 }}
-            onPress={(statusIndex) =>
-              setFilter({
-                status: statusArray[statusIndex],
-                make: filter.make,
-              })
-            }
-            selectedButtonStyle={{
-              backgroundColor: colors.secondary,
-            }}
-            selectedIndex={statusArray.indexOf(filter.status)}
-            textStyle={{
-              fontSize: 16,
-              color: colors.secondary,
-              textAlign: "center",
-            }}
-          />
-          <AppText>Vehicle Make</AppText>
-          <Picker
-            icon="car-side"
-            items={makesArray}
-            onSelectItem={(make) => {
-              setFilter({
-                status: filter.status,
-                make: make.toLowerCase(),
-              });
-            }}
-            selectedItem={filter.make.toUpperCase()}
-          />
-          <AppButton icon="check" title="APPLY FILTER" onPress={applyFilter} />
-        </Screen>
-      </Modal> */}
     </Screen>
   );
 }
@@ -327,17 +268,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "space-between",
   },
-  // modal: {
-  //   padding: 20,
-  //   backgroundColor: colors.white,
-  // },
-  // modalTitle: {
-  //   alignSelf: "center",
-  //   color: colors.primary,
-  //   fontSize: 24,
-  //   fontWeight: "bold",
-  //   marginBottom: 20,
-  // },
 });
 
 export default InventoryScreen;

@@ -137,7 +137,6 @@ function HomeScreen({ navigation }) {
   const getData = async () => {
     const result = await getVehiclesApi.request();
     console.log(endpoint);
-    console.log("status: " + result.status);
     if (!result.ok) return setError(result.data.message);
     const newVehicles = result.data.data;
     const newVehiclesArray = parseObjectToArray(newVehicles);
