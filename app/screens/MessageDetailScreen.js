@@ -63,7 +63,7 @@ function MessageDetailScreen({ navigation, route }) {
   };
 
   const handleSubmit = async ({ text }, { resetForm }) => {
-    if (!text) return;
+    if (!text || sendMessageApi.loading) return;
     const result = await sendMessageApi.request({
       reply: "<p>" + text + "</p>",
     });
@@ -181,7 +181,13 @@ function MessageDetailScreen({ navigation, route }) {
                   name="text"
                   placeholder="Write message here"
                   multiline
-                  style={styles.textInput}
+                  editable={!sendMessageApi.loading}
+                  style={[
+                    styles.textInput,
+                    sendMessageApi.loading && {
+                      opacity: 0.5,
+                    },
+                  ]}
                   onContentSizeChange={() => setError(null)}
                 />
               </View>
