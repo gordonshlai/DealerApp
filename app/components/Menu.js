@@ -94,7 +94,13 @@ function Menu() {
               <AppText style={styles.contactText}>
                 Contact Your Account Manager
               </AppText>
-              <AppButton title="Message" />
+              <AppButton
+                title="Go to Messages"
+                onPress={() => {
+                  navigation.navigate(routes.MESSAGES);
+                  setModalVisible(false);
+                }}
+              />
             </View>
 
             <AppButton

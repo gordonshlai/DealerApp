@@ -356,9 +356,12 @@ function MessagesScreen({ navigation }) {
             ]}
           >
             <AppText style={styles.contactText}>
-              Contact your Account Manager directly
+              Contact your Account Manager
             </AppText>
-            <AppButton title="Message" onPress={() => setModalVisible(true)} />
+            <AppButton
+              title="Send a Message"
+              onPress={() => setModalVisible(true)}
+            />
           </View>
 
           <Modal
@@ -377,14 +380,7 @@ function MessagesScreen({ navigation }) {
                       behavior={Platform.OS == "ios" ? "padding" : ""}
                     >
                       <View style={{ padding: 20 }}>
-                        <AppText
-                          style={{
-                            fontWeight: "bold",
-                            fontSize: 18,
-                            color: colors.secondary,
-                            marginBottom: 20,
-                          }}
-                        >
+                        <AppText style={styles.modalTitle}>
                           Message your account manager
                         </AppText>
                         {getContactApi.data.staff && (
@@ -418,7 +414,7 @@ function MessagesScreen({ navigation }) {
                               onPress={() => setModalVisible(false)}
                             />
                             <SubmitButton
-                              title="Send Message"
+                              title="Send"
                               style={{ width: "45%" }}
                             />
                           </View>
@@ -486,6 +482,12 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 10,
     ...defaultStyles.shadow,
+  },
+  modalTitle: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: colors.secondary,
+    marginBottom: 20,
   },
   modalButtonsContainer: {
     flexDirection: "row",
