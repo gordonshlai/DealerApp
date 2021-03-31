@@ -1,13 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   createBottomTabNavigator,
   BottomTabBarHeightContext,
 } from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
-import * as Notifications from "expo-notifications";
-import * as Permissions from "expo-permissions";
-import expoPushTokenApi from "../api/expoPushToken";
 
 import HomeNavigator from "./HomeNavigator";
 import TradeNavigator from "./TradeNavigator";
@@ -28,6 +25,8 @@ import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 import AuthContext from "../auth/context";
 import { Platform } from "react-native";
+import navigation from "./rootNavigation";
+import useNotifications from "../hooks/useNotifications";
 
 const Tab = createBottomTabNavigator();
 const tabHiddenRoutes = [
@@ -36,14 +35,6 @@ const tabHiddenRoutes = [
   routes.NEW_CAR,
 ];
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
-  }),
-});
-
 /**
  * The bottom tab navigator, including the following screens:
  * Home Screen, InventoryScreen, NewCarScreen, MessagesScreen, Account Screen.
@@ -51,35 +42,16 @@ Notifications.setNotificationHandler({
  */
 const AppNavigator = () => {
   const { unread } = useContext(AuthContext);
+  useNotifications((notification) => {
+    navigation.navigate(routes.MESSAGES);
+    console.log(notification);
+  });
 
   const hideTabBar = (navigation, route) => {
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarVisible: false });
     } else {
       navigation.setOptions({ tabBarVisible: true });
-    }
-  };
-
-  useEffect(() => {
-    registerForPushNotification();
-    Notifications.addNotificationReceivedListener((notification) =>
-      console.log(notification)
-    );
-    Notifications.addNotificationResponseReceivedListener((notification) =>
-      console.log(notification)
-    );
-  }, []);
-
-  const registerForPushNotification = async () => {
-    try {
-      const permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      if (!permission.granted) return;
-
-      const token = await Notifications.getExpoPushTokenAsync();
-      expoPushTokenApi.register(token.data);
-      console.log(token);
-    } catch (error) {
-      console.log("Error getting a push token", error);
     }
   };
 

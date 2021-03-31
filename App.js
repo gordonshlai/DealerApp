@@ -9,13 +9,9 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
 import client from "./app/api/client";
 import { StatusBar } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import WelcomeScreen from "./app/screens/WelcomeScreen";
 import OnboardingScreen from "./app/screens/OnboardingScreen";
-import routes from "./app/navigation/routes";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const AppStack = createStackNavigator();
+import { navigationRef } from "./app/navigation/rootNavigation";
 
 export default function App() {
   const [isFirstLaunch, setIsFirstLaunch] = useState("null");
@@ -87,38 +83,34 @@ export default function App() {
     return (
       <AppLoading startAsync={restoreToken} onFinish={() => setIsReady(true)} />
     );
-  if (isFirstLaunch === null) {
-    return null;
-  } else {
-    return (
-      <AuthContext.Provider
-        value={{
-          setIsFirstLaunch,
-          authToken,
-          setAuthToken,
-          unread,
-          setUnread,
-          loadMessagesFlag,
-          setLoadMessagesFlag,
-          loadTradeFlag,
-          setLoadTradeFlag,
-          loadTradeDetailFlag,
-          setLoadTradeDetailFlag,
-          loadInventoryFlag,
-          setLoadInventoryFlag,
-          loadInventoryDetailFlag,
-          setLoadInventoryDetailFlag,
-        }}
-      >
-        <NavigationContainer theme={navigationTheme}>
-          <StatusBar barStyle="light-content" />
-          {isFirstLaunch ? (
-            <OnboardingScreen />
-          ) : (
-            <>{authToken ? <AppNavigator /> : <AuthNavigator />}</>
-          )}
-        </NavigationContainer>
-      </AuthContext.Provider>
-    );
-  }
+  return (
+    <AuthContext.Provider
+      value={{
+        setIsFirstLaunch,
+        authToken,
+        setAuthToken,
+        unread,
+        setUnread,
+        loadMessagesFlag,
+        setLoadMessagesFlag,
+        loadTradeFlag,
+        setLoadTradeFlag,
+        loadTradeDetailFlag,
+        setLoadTradeDetailFlag,
+        loadInventoryFlag,
+        setLoadInventoryFlag,
+        loadInventoryDetailFlag,
+        setLoadInventoryDetailFlag,
+      }}
+    >
+      <NavigationContainer ref={navigationRef} theme={navigationTheme}>
+        <StatusBar barStyle="light-content" />
+        {isFirstLaunch ? (
+          <OnboardingScreen />
+        ) : (
+          <>{authToken ? <AppNavigator /> : <AuthNavigator />}</>
+        )}
+      </NavigationContainer>
+    </AuthContext.Provider>
+  );
 }
