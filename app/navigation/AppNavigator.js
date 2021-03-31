@@ -63,13 +63,10 @@ const AppNavigator = () => {
   useEffect(() => {
     registerForPushNotification();
     Notifications.addNotificationReceivedListener((notification) =>
-      console.log("addNotificationReceivedListener")
-    );
-    Notifications.addNotificationsDroppedListener((notification) =>
-      console.log("addNotificationsDroppedListener")
+      console.log(notification)
     );
     Notifications.addNotificationResponseReceivedListener((notification) =>
-      console.log("addNotificationResponseReceivedListener")
+      console.log(notification)
     );
   }, []);
 

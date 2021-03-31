@@ -46,7 +46,7 @@ function MessageDetailScreen({ navigation, route }) {
 
   const endpoint = "api/inbox/" + messageId;
   const getThreadsApi = useApi(() => client.get(endpoint));
-  const sendThreadApi = useApi((payload) => client.post(endpoint, payload));
+  const sendMessageApi = useApi((payload) => client.post(endpoint, payload));
   const saveArchiveMessageApi = useApi((payload) =>
     client.patch("api/inbox/" + messageId, payload)
   );
@@ -64,7 +64,7 @@ function MessageDetailScreen({ navigation, route }) {
 
   const handleSubmit = async ({ text }, { resetForm }) => {
     if (!text) return;
-    const result = await sendThreadApi.request({
+    const result = await sendMessageApi.request({
       reply: "<p>" + text + "</p>",
     });
     if (!result.ok) return setError(result.data.message);

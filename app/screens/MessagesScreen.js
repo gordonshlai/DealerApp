@@ -3,10 +3,15 @@ import {
   View,
   StyleSheet,
   FlatList,
-  // ActivityIndicator,
   Dimensions,
+  Platform,
+  Modal,
+  ScrollView,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import * as Yup from "yup";
+
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 import {
@@ -27,15 +32,23 @@ import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
 import ButtonGroup from "../components/ButtonGroup";
 import Background from "../components/Background";
-import { AppErrorMessage } from "../components/forms";
+import {
+  AppErrorMessage,
+  AppForm,
+  AppFormField,
+  SubmitButton,
+} from "../components/forms";
 import defaultStyles from "../config/styles";
 import ActivityIndicator from "../components/ActivityIndicator";
-import { Platform } from "react-native";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
 
 const filterArray = ["all", "saved", "archived"];
+
+const validationSchema = Yup.object().shape({
+  message: Yup.string().min(0).label("Message"),
+});
 
 function MessagesScreen({ navigation }) {
   const { unread, loadMessagesFlag, setLoadMessagesFlag } = useContext(
@@ -53,6 +66,8 @@ function MessagesScreen({ navigation }) {
   const [search, setSearch] = useState("");
   const [pageCurrent, setPageCurrent] = useState(1);
 
+  const [modalVisible, setModalVisible] = useState(false);
+
   let endpoint =
     "api/inbox/" + filter + "/" + sortBy + search + "?page=" + pageCurrent;
 
@@ -60,10 +75,18 @@ function MessagesScreen({ navigation }) {
   const saveArchiveMessageApi = useApi((messageId, payload) =>
     client.patch("api/inbox/" + messageId, payload)
   );
+  const getContactApi = useApi(() => client.get("api/inbox/contacts"));
+  const sendMessageApi = useApi((payload) =>
+    client.post("api/inbox/new", payload)
+  );
 
   useEffect(() => {
     replaceMessages();
   }, [replace]);
+
+  useEffect(() => {
+    getContacts();
+  }, []);
 
   useDidMountEffect(() => {
     concatMessages();
@@ -82,14 +105,27 @@ function MessagesScreen({ navigation }) {
     return newMessagesArray;
   };
 
-  const concatMessages = async () => {
-    const newMessagesArray = await getMessages();
-    setMessages([...messages, ...newMessagesArray]);
-  };
-
   const replaceMessages = async () => {
     const newMessagesArray = await getMessages();
-    setMessages([...newMessagesArray]);
+    if (newMessagesArray) {
+      setMessages([...newMessagesArray]);
+    } else {
+      setMessages([]);
+    }
+  };
+
+  const concatMessages = async () => {
+    const newMessagesArray = await getMessages();
+    if (newMessagesArray) {
+      setMessages([...messages, ...newMessagesArray]);
+    } else {
+      setMessages([]);
+    }
+  };
+
+  const getContacts = async () => {
+    const result = await getContactApi.request();
+    if (!result.ok) return setError(result.data.message);
   };
 
   const parseObjectToArray = (obj) => {
@@ -119,7 +155,9 @@ function MessagesScreen({ navigation }) {
     const participant = item.participant;
     const participants = item.participants;
     let names = participants.map(
-      (participant) => participant.user && participant.user.account.name
+      (participant) =>
+        participant.user &&
+        (participant.user.name || participant.user.account.name)
     );
     let noRepeatNames = [];
     names.forEach((name) => {
@@ -172,6 +210,21 @@ function MessagesScreen({ navigation }) {
     const result = await saveArchiveMessageApi.request(message.id, payload);
     if (!result.ok) return setError(result.data.message);
     setLoadMessagesFlag(!loadMessagesFlag);
+  };
+
+  const handleSubmit = async ({ message }) => {
+    setModalVisible(false);
+    const result = await sendMessageApi.request({
+      message: "<p>" + message + "</p>",
+      staff: getContactApi.data.staff[0].staff,
+    });
+    if (!result.ok) return setError(result.data.message);
+    console.log(result.data.chain_id);
+    setLoadMessagesFlag(!loadMessagesFlag);
+    navigation.navigate(routes.MESSAGE_DETAIL, {
+      messageId: result.data.chain_id,
+      title: getContactApi.data.staff[0].staff[0].name,
+    });
   };
 
   return (
@@ -229,7 +282,11 @@ function MessagesScreen({ navigation }) {
           </View>
           <View style={styles.messagesContainer}>
             <ActivityIndicator
-              visible={saveArchiveMessageApi.loading || getMessagesApi.loading}
+              visible={
+                saveArchiveMessageApi.loading ||
+                getMessagesApi.loading ||
+                sendMessageApi.loading
+              }
             />
             {messages.length === 0 && !getMessagesApi.loading && (
               <AppText style={styles.errorMessage}>No messages found</AppText>
@@ -301,8 +358,78 @@ function MessagesScreen({ navigation }) {
             <AppText style={styles.contactText}>
               Contact your Account Manager directly
             </AppText>
-            <AppButton title="Message" />
+            <AppButton title="Message" onPress={() => setModalVisible(true)} />
           </View>
+
+          <Modal
+            visible={modalVisible}
+            transparent
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalBackground}>
+              <Screen style={{ justifyContent: "center" }}>
+                <View style={styles.modalContainer}>
+                  <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    centerContent
+                  >
+                    <KeyboardAvoidingView
+                      behavior={Platform.OS == "ios" ? "padding" : ""}
+                    >
+                      <View style={{ padding: 20 }}>
+                        <AppText
+                          style={{
+                            fontWeight: "bold",
+                            fontSize: 18,
+                            color: colors.secondary,
+                            marginBottom: 20,
+                          }}
+                        >
+                          Message your account manager
+                        </AppText>
+                        {getContactApi.data.staff && (
+                          <View style={{ flexDirection: "row" }}>
+                            <AppText>{"You are messaging: "}</AppText>
+                            <AppText style={{ fontWeight: "bold" }}>
+                              {getContactApi.data.staff[0].staff[0].name}
+                            </AppText>
+                          </View>
+                        )}
+                        <AppForm
+                          initialValues={{
+                            message: "",
+                          }}
+                          onSubmit={handleSubmit}
+                          validationSchema={validationSchema}
+                        >
+                          <AppFormField
+                            name="message"
+                            placeholder="Type a message"
+                            keyboardType="default"
+                            multiline
+                            autoFocus
+                          />
+                          <View style={styles.modalButtonsContainer}>
+                            <AppButton
+                              title="Cancel"
+                              backgroundColor={null}
+                              color={colors.success}
+                              style={{ width: "45%" }}
+                              onPress={() => setModalVisible(false)}
+                            />
+                            <SubmitButton
+                              title="Send Message"
+                              style={{ width: "45%" }}
+                            />
+                          </View>
+                        </AppForm>
+                      </View>
+                    </KeyboardAvoidingView>
+                  </ScrollView>
+                </View>
+              </Screen>
+            </View>
+          </Modal>
         </>
       )}
     </Screen>
@@ -349,6 +476,20 @@ const styles = StyleSheet.create({
   },
   contactText: {
     fontWeight: "bold",
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: colors.white + "aa",
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    margin: 10,
+    borderRadius: 10,
+    ...defaultStyles.shadow,
+  },
+  modalButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });
 
