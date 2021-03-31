@@ -51,6 +51,7 @@ function NewCarScreen({ navigation }) {
       <ScrollView>
         <KeyboardAvoidingView
           behavior={Platform.OS == "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
         >
           <Screen style={styles.screen}>
             <View style={styles.card}>

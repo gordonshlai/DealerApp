@@ -230,7 +230,10 @@ function VehicleDetailScreen({ route, navigation }) {
         progress={progress}
         visible={uploadVisible}
       />
-      <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : ""}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : ""}
+        keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+      >
         <ScrollView>
           <Screen>
             <View style={styles.informationContainer}>

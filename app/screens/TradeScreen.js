@@ -203,20 +203,6 @@ function HomeScreen({ navigation }) {
               }}
             />
             <View style={styles.optionBar}>
-              {/* <OptionButton
-              title={makes.toUpperCase()}
-              backgroundColor={null}
-              color={colors.primary}
-              border={false}
-              icon="car"
-              size={16}
-              initialValue="all"
-              value={makes}
-              queryArray={makesArray}
-              displayArray={makesArray}
-              setValue={setMakes}
-              handleRefresh={handleRefresh}
-            /> */}
               <AppButton
                 icon="filter-variant"
                 title="Filter"
@@ -318,7 +304,6 @@ function HomeScreen({ navigation }) {
                 placeholder="Select Makes"
                 onConfirm={(items) => {
                   setTempMakes(items);
-                  // handleRefresh();
                 }}
               />
               <AppText style={styles.modalSubtitle}>Fuel Type</AppText>
@@ -328,7 +313,6 @@ function HomeScreen({ navigation }) {
                 placeholder="Select Fuel Type"
                 onConfirm={(items) => {
                   setTempFuel(items);
-                  // handleRefresh();
                 }}
               />
               <AppText style={styles.modalSubtitle}>Doors</AppText>
@@ -338,7 +322,6 @@ function HomeScreen({ navigation }) {
                 placeholder="Select Number of Doors"
                 onConfirm={(items) => {
                   setTempDoors(items);
-                  // handleRefresh();
                 }}
               />
               <AppText style={styles.modalSubtitle}>Seats</AppText>
@@ -348,7 +331,6 @@ function HomeScreen({ navigation }) {
                 placeholder="Select Number of Seats"
                 onConfirm={(items) => {
                   setTempSeats(items);
-                  // handleRefresh();
                 }}
               />
               <AppButton
@@ -420,29 +402,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
   },
-  modal: {
-    paddingHorizontal: 20,
-    paddingVertical: 50,
-    backgroundColor: colors.lightGrey,
-    flex: 1,
-  },
-  modalCard: {
-    backgroundColor: colors.white,
-    borderRadius: 10,
-    padding: 20,
-    marginVertical: 10,
-  },
   modalTitle: {
     alignSelf: "center",
     color: colors.primary,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-  },
-  listItem: {
-    padding: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   columnWrapper: {
     paddingHorizontal: 20,

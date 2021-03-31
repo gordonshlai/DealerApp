@@ -499,60 +499,65 @@ function InventoryDetailScreen({ navigation, route }) {
         <View style={styles.modalBackground}>
           <Screen>
             <View style={styles.modalContainer}>
-              {getVehicleApi.data.images && (
-                <View
-                  style={[
-                    styles.imageContainer,
-                    {
-                      height: getVehicleApi.data.images.length > 1 ? 300 : 240,
-                    },
-                  ]}
-                >
-                  {getVehicleApi.data.images.length !== 0 ? (
-                    <Slider
-                      images={getVehicleApi.data.images}
-                      height={300}
-                      width={Dimensions.get("window").width - 20}
-                    />
-                  ) : (
-                    <MaterialCommunityIcons
-                      name="car"
-                      size={200}
-                      color="white"
-                    />
-                  )}
-                  <AppText
-                    style={{
-                      position: "absolute",
-                      backgroundColor:
-                        getVehicleApi.data.sales_status == 0
-                          ? "orange"
-                          : getVehicleApi.data.sales_status == 2
-                          ? "green"
-                          : "crimson",
-                      top: 10,
-                      right: 10,
-                      padding: 5,
-                      color: "white",
-                      fontWeight: "bold",
-                      borderRadius: 10,
-                      overflow: "hidden",
-                    }}
-                  >
-                    {vehicleStatus[getVehicleApi.data.sales_status]}
-                  </AppText>
-                </View>
-              )}
-              <AppText style={[styles.title, { margin: 20 }]}>
-                {getVehicleApi.data.title ||
-                  getVehicleApi.data.make +
-                    " " +
-                    getVehicleApi.data.model +
-                    " (" +
-                    getVehicleApi.data.year +
-                    ")"}
-              </AppText>
               <FlatList
+                ListHeaderComponent={
+                  <>
+                    {getVehicleApi.data.images && (
+                      <View
+                        style={[
+                          styles.imageContainer,
+                          {
+                            height:
+                              getVehicleApi.data.images.length > 1 ? 300 : 240,
+                          },
+                        ]}
+                      >
+                        {getVehicleApi.data.images.length !== 0 ? (
+                          <Slider
+                            images={getVehicleApi.data.images}
+                            height={300}
+                            width={Dimensions.get("window").width - 20}
+                          />
+                        ) : (
+                          <MaterialCommunityIcons
+                            name="car"
+                            size={200}
+                            color="white"
+                          />
+                        )}
+                        <AppText
+                          style={{
+                            position: "absolute",
+                            backgroundColor:
+                              getVehicleApi.data.sales_status == 0
+                                ? "orange"
+                                : getVehicleApi.data.sales_status == 2
+                                ? "green"
+                                : "crimson",
+                            top: 10,
+                            right: 10,
+                            padding: 5,
+                            color: "white",
+                            fontWeight: "bold",
+                            borderRadius: 10,
+                            overflow: "hidden",
+                          }}
+                        >
+                          {vehicleStatus[getVehicleApi.data.sales_status]}
+                        </AppText>
+                      </View>
+                    )}
+                    <AppText style={[styles.title, { margin: 20 }]}>
+                      {getVehicleApi.data.title ||
+                        getVehicleApi.data.make +
+                          " " +
+                          getVehicleApi.data.model +
+                          " (" +
+                          getVehicleApi.data.year +
+                          ")"}
+                    </AppText>
+                  </>
+                }
                 data={actions}
                 keyExtractor={(item, index) => index.toString()}
                 renderItem={({ item, index }) => {
@@ -599,9 +604,9 @@ function InventoryDetailScreen({ navigation, route }) {
                     backgroundColor={null}
                     color={colors.success}
                     onPress={() => setActionModalVisible(false)}
+                    style={{ margin: 20 }}
                   />
                 }
-                style={{ padding: 20 }}
               />
             </View>
           </Screen>

@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Image,
-  ImageBackground,
-  ScrollView,
-  StyleSheet,
-  View,
-  KeyboardAvoidingView,
-} from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";

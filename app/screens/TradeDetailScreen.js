@@ -505,6 +505,7 @@ function TradeDetailScreen({ route, navigation }) {
               >
                 <KeyboardAvoidingView
                   behavior={Platform.OS == "ios" ? "padding" : ""}
+                  keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
                 >
                   {getVehicleApi.data.images && (
                     <View
@@ -540,9 +541,11 @@ function TradeDetailScreen({ route, navigation }) {
                     </AppText>
                     <AppForm
                       initialValues={{
-                        price: getVehicleApi.data.price_asking
-                          ? getVehicleApi.data.price_asking
-                          : "",
+                        price:
+                          getVehicleApi.data.price_asking &&
+                          getVehicleApi.data.price_asking != "0.00"
+                            ? getVehicleApi.data.price_asking
+                            : "",
                       }}
                       onSubmit={handleOfferSubmit}
                       validationSchema={offerValidationSchema}
@@ -563,10 +566,7 @@ function TradeDetailScreen({ route, navigation }) {
                           style={{ width: "45%" }}
                           onPress={() => setMakeOfferModalVisible(false)}
                         />
-                        <SubmitButton
-                          title="Submit Offer"
-                          style={{ width: "45%" }}
-                        />
+                        <SubmitButton title="Submit" style={{ width: "45%" }} />
                       </View>
                     </AppForm>
                   </View>
@@ -592,6 +592,7 @@ function TradeDetailScreen({ route, navigation }) {
               >
                 <KeyboardAvoidingView
                   behavior={Platform.OS == "ios" ? "padding" : ""}
+                  keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
                 >
                   {getVehicleApi.data.images && (
                     <View
@@ -658,7 +659,6 @@ function TradeDetailScreen({ route, navigation }) {
                           keyboardType="default"
                           multiline
                           size={18}
-                          autoFocus
                         />
                         <View style={styles.modalButtonsContainer}>
                           <AppButton
@@ -669,7 +669,7 @@ function TradeDetailScreen({ route, navigation }) {
                             onPress={() => setEnquireModalVisible(false)}
                           />
                           <SubmitButton
-                            title="Submit Enquire"
+                            title="Submit"
                             style={{ width: "45%" }}
                           />
                         </View>

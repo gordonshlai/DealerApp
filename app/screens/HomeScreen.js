@@ -202,6 +202,11 @@ function HomeScreen({ navigation }) {
                     />
                   </View>
                 )}
+                ListEmptyComponent={
+                  <AppText style={[styles.text3, { margin: 30 }]}>
+                    No Vehicles
+                  </AppText>
+                }
               />
             </View>
           }

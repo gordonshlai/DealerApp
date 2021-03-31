@@ -113,6 +113,7 @@ function RegisterScreen1({ navigation }) {
         >
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : ""}
+            keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
           >
             <Image style={styles.logo} source={require("../assets/logo.png")} />
             <AppForm

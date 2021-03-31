@@ -22,7 +22,6 @@ function Slider({ images, height, width }) {
 
   const bigSlider = useRef();
   const thumbnail = useRef();
-  const imageZoom = useRef();
 
   useEffect(() => {}, [active]);
 

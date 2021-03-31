@@ -62,7 +62,6 @@ const SignInScreen = ({ navigation }) => {
 
   const handleSubmit = async ({ email, password }) => {
     const result = await loginApi.request({ email, password });
-    console.log(result);
     if (!result.ok) return setError(result.data.message);
     logIn(result.data.token);
   };
@@ -86,6 +85,7 @@ const SignInScreen = ({ navigation }) => {
         >
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : ""}
+            keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
           >
             <Image style={styles.logo} source={require("../assets/logo.png")} />
             <AppForm

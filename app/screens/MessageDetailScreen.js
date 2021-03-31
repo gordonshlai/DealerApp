@@ -9,6 +9,7 @@ import useApi from "../hooks/useApi";
 
 import Conversation from "../components/Conversation";
 import colors from "../config/colors";
+import defaultStyles from "../config/styles";
 import Loading from "../components/Loading";
 import {
   AppErrorMessage,
@@ -24,6 +25,7 @@ import Screen from "../components/Screen";
 import AppText from "../components/AppText";
 import Background from "../components/Background";
 import { Platform } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 
 const validationSchema = Yup.object().shape({
   text: Yup.string().label("Text Message"),
@@ -143,59 +145,70 @@ function MessageDetailScreen({ navigation, route }) {
           },
         ]}
       >
-        <View style={{ flex: 1 }}>
-          <FlatList
-            inverted
-            data={getThreadsApi.data.links}
-            keyExtractor={(thread) => thread.id.toString()}
-            renderItem={({ item }) => (
-              <View style={{ marginHorizontal: 20 }}>
-                <Conversation
-                  subTitle={cleanMessageParser(item.message)}
-                  time={dayjs(item.created_at).format("HH:mm - DD/MM/YYYY")}
-                  isYourself={
-                    item.created_by.user.account.id ===
-                    getThreadsApi.data.participant.user.account.id
-                  }
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : ""}
+          keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+          style={{ flex: 1 }}
+        >
+          <View style={{ flex: 1 }}>
+            <FlatList
+              inverted
+              data={getThreadsApi.data.links}
+              keyExtractor={(thread) => thread.id.toString()}
+              renderItem={({ item }) => (
+                <View style={{ marginHorizontal: 20 }}>
+                  <Conversation
+                    subTitle={cleanMessageParser(item.message)}
+                    time={dayjs(item.created_at).format("HH:mm - DD/MM/YYYY")}
+                    isYourself={
+                      item.created_by.user.account.id ===
+                      getThreadsApi.data.participant.user.account.id
+                    }
+                  />
+                </View>
+              )}
+              ListFooterComponent={
+                <Loading
+                  visible={getThreadsApi.loading}
+                  text="Loading Messages"
+                />
+              }
+            />
+          </View>
+          <View style={{ marginHorizontal: 20 }}>
+            <AppForm
+              initialValues={{ text: "" }}
+              onSubmit={handleSubmit}
+              validationSchema={validationSchema}
+            >
+              <AppErrorMessage error={error} visible={error} />
+              <View style={styles.sendMessageBar}>
+                <View style={{ flex: 1 }}>
+                  <AppFormField
+                    name="text"
+                    placeholder="Write message here"
+                    multiline
+                    editable={!sendMessageApi.loading}
+                    style={[
+                      styles.textInput,
+                      sendMessageApi.loading && {
+                        opacity: 0.5,
+                      },
+                    ]}
+                    onContentSizeChange={() => setError(null)}
+                  />
+                </View>
+                <SubmitButton
+                  icon="send"
+                  size={30}
+                  style={styles.submitButton}
                 />
               </View>
-            )}
-            ListFooterComponent={
-              <Loading
-                visible={getThreadsApi.loading}
-                text="Loading Messages"
-              />
-            }
-          />
-        </View>
-        <View style={{ marginHorizontal: 20 }}>
-          <AppForm
-            initialValues={{ text: "" }}
-            onSubmit={handleSubmit}
-            validationSchema={validationSchema}
-          >
-            <AppErrorMessage error={error} visible={error} />
-            <View style={styles.sendMessageBar}>
-              <View style={{ flex: 1 }}>
-                <AppFormField
-                  name="text"
-                  placeholder="Write message here"
-                  multiline
-                  editable={!sendMessageApi.loading}
-                  style={[
-                    styles.textInput,
-                    sendMessageApi.loading && {
-                      opacity: 0.5,
-                    },
-                  ]}
-                  onContentSizeChange={() => setError(null)}
-                />
-              </View>
-              <SubmitButton icon="send" size={30} style={styles.submitButton} />
-            </View>
-          </AppForm>
-        </View>
+            </AppForm>
+          </View>
+        </KeyboardAvoidingView>
       </Screen>
+
       <Modal
         visible={modalVisible}
         animationType="fade"
@@ -240,11 +253,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     flex: 1,
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
   sendMessageBar: {
     flexDirection: "row",
@@ -254,22 +263,14 @@ const styles = StyleSheet.create({
   textInput: {
     backgroundColor: colors.white,
     borderRadius: 50,
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
   submitButton: {
     backgroundColor: colors.primary,
     borderWidth: 0,
     marginLeft: 5,
     borderRadius: 50,
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
   modal: {
     paddingHorizontal: 20,

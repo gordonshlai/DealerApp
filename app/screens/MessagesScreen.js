@@ -293,7 +293,7 @@ function MessagesScreen({ navigation }) {
             )}
             <FlatList
               data={messages}
-              keyExtractor={(message, index) => message.id.toString()}
+              keyExtractor={(message) => message.id.toString()}
               renderItem={({ item }) => (
                 <ListItem
                   title={displayParticipants(item)}
@@ -372,12 +372,10 @@ function MessagesScreen({ navigation }) {
             <View style={styles.modalBackground}>
               <Screen style={{ justifyContent: "center" }}>
                 <View style={styles.modalContainer}>
-                  <ScrollView
-                    showsVerticalScrollIndicator={false}
-                    centerContent
-                  >
+                  <ScrollView showsVerticalScrollIndicator={false}>
                     <KeyboardAvoidingView
                       behavior={Platform.OS == "ios" ? "padding" : ""}
+                      keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
                     >
                       <View style={{ padding: 20 }}>
                         <AppText style={styles.modalTitle}>
@@ -481,6 +479,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     margin: 10,
     borderRadius: 10,
+    flex: 1,
     ...defaultStyles.shadow,
   },
   modalTitle: {

@@ -21,6 +21,9 @@ export default useApi = (apiFunc) => {
     if (response.status === 401 && !response.data.hasOwnProperty("message")) {
       return logOut();
     }
+    if (response.status === 429) {
+      console.log(429);
+    }
 
     setError(!response.ok);
     setData(response.data);
