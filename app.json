@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Dealer",
-    "slug": "Dealer",
+    "name": "WiseDealer",
+    "slug": "WiseDealer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
@@ -13,7 +13,9 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.warrantywise.dealer",
@@ -29,7 +31,7 @@
       "versionCode": 1
     },
     "web": {
-      "favicon": "./app/assets/favicon.png"
+      "favicon": "./app/assets/icon.png"
     },
     "description": "Cross platform e-commerce car retail app for car dealers. (v0.0.0)"
   }

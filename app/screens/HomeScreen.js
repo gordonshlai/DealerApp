@@ -125,7 +125,7 @@ function HomeScreen({ navigation }) {
               onPress={item.onPress}
             >
               <LinearGradient
-                colors={[colors.mediumGrey, "white"]}
+                colors={[colors.primary, "#F83600"]}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
                 style={styles.linearGradient}
@@ -265,7 +265,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 12,
     marginBottom: 10,
-    color: colors.primary,
+    marginHorizontal: 3,
+    color: "white",
     textAlign: "left",
   },
 });
