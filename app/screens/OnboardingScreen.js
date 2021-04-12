@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Image, Button } from "react-native";
+import { StyleSheet, Image } from "react-native";
 import Onboarding from "react-native-onboarding-swiper";
 import AuthContext from "../auth/context";
 import colors from "../config/colors";
@@ -33,7 +33,7 @@ function OnboardingScreen() {
       pages={[
         {
           backgroundColor: colors.secondary,
-          image: <Image source={require("../assets/favicon.png")} />,
+          image: <Image source={require("../assets/icon.png")} />,
           title: "Onboarding 1",
           subtitle: "Done with React Native Onboarding Swiper",
         },
