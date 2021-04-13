@@ -6,6 +6,7 @@ import {
   ScrollView,
   Modal,
   RefreshControl,
+  KeyboardAvoidingView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
@@ -27,7 +28,6 @@ import {
 import ActivityIndicator from "../components/ActivityIndicator";
 import Info from "../components/Info";
 import Screen from "../components/Screen";
-import Menu from "../components/Menu";
 
 const detailsValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -120,7 +120,10 @@ function AccountScreen(props) {
             <AppButton title="RETRY" onPress={getUser} />
           </>
         ) : (
-          <>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : ""}
+            keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+          >
             <ScrollView
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={getUser} />
@@ -348,7 +351,7 @@ function AccountScreen(props) {
                 />
               </View>
             )}
-          </>
+          </KeyboardAvoidingView>
         )}
       </Screen>
     </>
