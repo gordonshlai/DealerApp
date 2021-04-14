@@ -79,23 +79,23 @@ const ResetPasswordScreen = ({ navigation }) => {
 
   return (
     <>
-      <View style={styles.background}>
-        <LinearGradient
-          colors={["#143C4B", "#0E262F"]}
-          style={styles.linearGradient}
-        />
-      </View>
+      <LinearGradient
+        colors={["#143C4B", "#0E262F"]}
+        style={styles.background}
+      />
 
       <ActivityIndicator visible={resetPasswordApi.loading} />
 
       <Screen>
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          centerContent
-          contentContainerStyle={styles.scrollView}
+        <KeyboardAvoidingView
+          behavior={Platform.OS == "ios" ? "padding" : ""}
+          keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+          style={styles.keyboardAvoidingView}
         >
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : ""}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            centerContent
+            contentContainerStyle={styles.scrollView}
           >
             <Image style={styles.logo} source={require("../assets/logo.png")} />
             <AppForm
@@ -125,8 +125,8 @@ const ResetPasswordScreen = ({ navigation }) => {
                 onPress={() => navigation.goBack()}
               />
             </AppForm>
-          </KeyboardAvoidingView>
-        </ScrollView>
+          </ScrollView>
+        </KeyboardAvoidingView>
       </Screen>
     </>
   );
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
-  linearGradient: {
+  keyboardAvoidingView: {
     flex: 1,
   },
   scrollView: {

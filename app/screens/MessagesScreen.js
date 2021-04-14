@@ -372,11 +372,12 @@ function MessagesScreen({ navigation }) {
             <View style={styles.modalBackground}>
               <Screen style={{ justifyContent: "center" }}>
                 <View style={styles.modalContainer}>
-                  <ScrollView showsVerticalScrollIndicator={false}>
-                    <KeyboardAvoidingView
-                      behavior={Platform.OS == "ios" ? "padding" : ""}
-                      keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
-                    >
+                  <KeyboardAvoidingView
+                    behavior={Platform.OS == "ios" ? "padding" : ""}
+                    keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+                    style={styles.keyboardAvoidingView}
+                  >
+                    <ScrollView showsVerticalScrollIndicator={false}>
                       <View style={{ padding: 20 }}>
                         <AppText style={styles.modalTitle}>
                           Message your account manager
@@ -418,8 +419,8 @@ function MessagesScreen({ navigation }) {
                           </View>
                         </AppForm>
                       </View>
-                    </KeyboardAvoidingView>
-                  </ScrollView>
+                    </ScrollView>
+                  </KeyboardAvoidingView>
                 </View>
               </Screen>
             </View>
@@ -481,6 +482,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     flex: 1,
     ...defaultStyles.shadow,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
   modalTitle: {
     fontWeight: "bold",

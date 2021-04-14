@@ -48,11 +48,12 @@ function NewCarScreen({ navigation }) {
     <>
       <Background />
       <ActivityIndicator visible={registrationLookupApi.loading} />
-      <ScrollView>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
-        >
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : ""}
+        keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+        style={styles.keyboardAvoidingView}
+      >
+        <ScrollView>
           <Screen style={styles.screen}>
             <View style={styles.card}>
               <AppForm
@@ -84,8 +85,8 @@ function NewCarScreen({ navigation }) {
               />
             </View>
           </Screen>
-        </KeyboardAvoidingView>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 }
@@ -93,6 +94,9 @@ function NewCarScreen({ navigation }) {
 const styles = StyleSheet.create({
   screen: {
     paddingHorizontal: 20,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
   card: {
     backgroundColor: "white",

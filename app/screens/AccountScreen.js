@@ -122,7 +122,8 @@ function AccountScreen(props) {
         ) : (
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : ""}
-            keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+            keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+            style={styles.keyboardAvoidingView}
           >
             <ScrollView
               refreshControl={
@@ -372,6 +373,9 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 24,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
   logo: {
     height: 100,

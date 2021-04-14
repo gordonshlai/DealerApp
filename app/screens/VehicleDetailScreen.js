@@ -233,7 +233,8 @@ function VehicleDetailScreen({ route, navigation }) {
       />
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : ""}
-        keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+        keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+        style={styles.keyboardAvoidingView}
       >
         <ScrollView>
           <Screen>
@@ -615,6 +616,9 @@ function VehicleDetailScreen({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+  },
   informationContainer: {
     backgroundColor: "white",
     borderRadius: 10,

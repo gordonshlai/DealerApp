@@ -505,7 +505,8 @@ function TradeDetailScreen({ route, navigation }) {
               >
                 <KeyboardAvoidingView
                   behavior={Platform.OS == "ios" ? "padding" : ""}
-                  keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+                  keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+                  style={styles.keyboardAvoidingView}
                 >
                   {getVehicleApi.data.images && (
                     <View
@@ -585,14 +586,15 @@ function TradeDetailScreen({ route, navigation }) {
         <View style={styles.modalBackground}>
           <Screen>
             <View style={styles.modalContainer}>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                centerContent
-                contentContainerStyle={styles.scrollView}
+              <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : ""}
+                keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
+                style={styles.keyboardAvoidingView}
               >
-                <KeyboardAvoidingView
-                  behavior={Platform.OS == "ios" ? "padding" : ""}
-                  keyboardVerticalOffset={Platform.OS == "ios" ? 150 : 0}
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  centerContent
+                  contentContainerStyle={styles.scrollView}
                 >
                   {getVehicleApi.data.images && (
                     <View
@@ -676,8 +678,8 @@ function TradeDetailScreen({ route, navigation }) {
                       </View>
                     </AppForm>
                   </View>
-                </KeyboardAvoidingView>
-              </ScrollView>
+                </ScrollView>
+              </KeyboardAvoidingView>
             </View>
           </Screen>
         </View>
@@ -787,6 +789,9 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 10,
     ...defaultStyles.shadow,
+  },
+  keyboardAvoidingView: {
+    flex: 1,
   },
   scrollView: {
     flexGrow: 1,

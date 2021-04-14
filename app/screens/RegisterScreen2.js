@@ -20,12 +20,10 @@ import routes from "../navigation/routes";
 function RegisterScreen2({ navigation }) {
   return (
     <>
-      <View style={styles.background}>
-        <LinearGradient
-          colors={["#143C4B", "#0E262F"]}
-          style={styles.linearGradient}
-        />
-      </View>
+      <LinearGradient
+        colors={["#143C4B", "#0E262F"]}
+        style={styles.background}
+      />
 
       <Screen>
         <ScrollView
@@ -61,9 +59,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: "100%",
     height: "100%",
-  },
-  linearGradient: {
-    flex: 1,
   },
   scrollView: {
     flexGrow: 1,
