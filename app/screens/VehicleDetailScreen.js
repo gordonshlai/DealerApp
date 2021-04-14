@@ -164,13 +164,14 @@ function VehicleDetailScreen({ route, navigation }) {
       : await postInventoryApi.request(data, (progress) =>
           setProgress(progress / 3)
         );
+    console.log(result);
     if (!result.ok) return setError(result.data.message);
     setProgress(1 / 3);
 
     if (vehicleDetail.images) {
       for (const originalImage of vehicleDetail.images) {
         let deleteImage = true;
-        for (inputImage of vehicleInput.images) {
+        for (const inputImage of vehicleInput.images) {
           if (originalImage.id === inputImage.id) {
             deleteImage = false;
             break;
@@ -190,7 +191,7 @@ function VehicleDetailScreen({ route, navigation }) {
 
     let formData = new FormData();
     let newImages = false;
-    for (inputImage of vehicleInput.images) {
+    for (const inputImage of vehicleInput.images) {
       if (!inputImage.id) {
         inputImage.name = inputImage.uri;
         formData.append("files[]", inputImage);
@@ -522,6 +523,7 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppFormField
                         name="retail_price"
                         placeholder="Retail Sale Price"
+                        keyboardType="numeric"
                         style={styles.appFormField}
                       />
                     </View>
@@ -536,6 +538,7 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppFormField
                         name="price_asking"
                         placeholder="Trade Sale Price"
+                        keyboardType="numeric"
                         style={styles.appFormField}
                       />
                     </View>
@@ -550,6 +553,7 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppFormField
                         name="price_civ"
                         placeholder="Stand Sale Price"
+                        keyboardType="numeric"
                         style={styles.appFormField}
                       />
                     </View>
@@ -564,6 +568,7 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppFormField
                         name="price_cap"
                         placeholder="Guide Sale Price"
+                        keyboardType="numeric"
                         style={styles.appFormField}
                       />
                     </View>

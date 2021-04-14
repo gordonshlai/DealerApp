@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
 import colors from "../config/colors";
+import { Platform } from "react-native";
 
 function ImageInput({ image, onChangeImage }) {
   useEffect(() => {
@@ -38,6 +39,12 @@ function ImageInput({ image, onChangeImage }) {
       });
       if (!result.cancelled) {
         result.url = result.uri;
+        const uriParts = result.uri.split(".");
+        const fileType = uriParts[uriParts.length - 1];
+        result.type =
+          Platform.OS === "android"
+            ? result.type + "/" + fileType
+            : result.type;
         onChangeImage(result);
         console.log(result);
       }
