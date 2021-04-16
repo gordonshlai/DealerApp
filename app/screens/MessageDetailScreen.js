@@ -155,8 +155,13 @@ function MessageDetailScreen({ navigation, route }) {
               inverted
               data={getThreadsApi.data.links}
               keyExtractor={(thread) => thread.id.toString()}
-              renderItem={({ item }) => (
-                <View style={{ marginHorizontal: 20 }}>
+              renderItem={({ item, index }) => (
+                <View
+                  style={{
+                    marginHorizontal: 20,
+                    paddingBottom: index === 0 ? 20 : 0,
+                  }}
+                >
                   <Conversation
                     subTitle={cleanMessageParser(item.message)}
                     time={dayjs(item.created_at).format("HH:mm - DD/MM/YYYY")}
