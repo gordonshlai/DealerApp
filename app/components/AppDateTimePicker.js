@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import AppButton from "./AppButton";
 import AppText from "./AppText";
 
-import defaultStyles from "../config/styles";
+import colors from "../config/colors";
 
 function AppDateTimePicker({
   icon,
@@ -41,9 +41,7 @@ function AppDateTimePicker({
             styles.container,
             {
               width,
-              backgroundColor: disabled
-                ? defaultStyles.colors.lightGrey
-                : defaultStyles.colors.white,
+              backgroundColor: disabled ? colors.lightGrey : colors.white,
             },
           ]}
         >
@@ -51,7 +49,7 @@ function AppDateTimePicker({
             <MaterialCommunityIcons
               name={icon}
               size={24}
-              color={defaultStyles.colors.mediumGrey}
+              color={colors.mediumGrey}
               style={styles.icon}
             />
           )}
@@ -65,7 +63,7 @@ function AppDateTimePicker({
           <MaterialCommunityIcons
             name="calendar-edit"
             size={20}
-            color={disabled ? "#bbb" : defaultStyles.colors.mediumGrey}
+            color={disabled ? "#bbb" : colors.mediumGrey}
           />
         </View>
       </TouchableWithoutFeedback>
@@ -75,6 +73,7 @@ function AppDateTimePicker({
             <DateTimePicker
               value={value}
               mode="date"
+              display="spinner"
               onChange={(event, date) => {
                 setValue(date);
               }}
@@ -88,7 +87,8 @@ function AppDateTimePicker({
             />
             <AppButton
               icon="cancel"
-              color={null}
+              backgroundColor={null}
+              color={colors.success}
               title="CANCEL"
               onPress={() => setModalVisible(false)}
             />
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     padding: 20,
-    backgroundColor: defaultStyles.colors.lightGrey,
+    backgroundColor: colors.lightGrey,
     flex: 1,
     justifyContent: "center",
   },
