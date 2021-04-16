@@ -1,19 +1,13 @@
 import React, { useContext } from "react";
-import {
-  createBottomTabNavigator,
-  BottomTabBarHeightContext,
-} from "@react-navigation/bottom-tabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
-import { MaterialCommunityIcons, Fontisto } from "@expo/vector-icons";
 
 import HomeNavigator from "./HomeNavigator";
 import TradeNavigator from "./TradeNavigator";
 import InventoryNavigator from "./InventoryNavigator";
-import NewCarNavigator from "./NewCarNavigator";
 import MessageNavigator from "./MessageNavigator";
 import AccountNavigator from "./AccountNavigator";
 
-import NewCarButton from "./NewCarButton";
 import AccountIcon from "../components/icons/AccountIcon";
 import CarIcon from "../components/icons/CarIcon";
 import MessagesIcon from "../components/icons/MessagesIcon";

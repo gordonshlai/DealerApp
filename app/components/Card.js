@@ -1,9 +1,10 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppText from "./AppText";
 import colors from "../config/colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import defaultStyles from "../config/styles";
 import Registration from "./Registration";
 
 const vehicleStatusArray = ["In Stock", "Sold", "Trade Listed", "Sold"];
@@ -28,7 +29,7 @@ function Card({
   };
 
   return (
-    <View style={styles.card}>
+    <View style={styles.container}>
       <TouchableOpacity onPress={onPress}>
         <View style={styles.imageContainer}>
           {imageUrl ? (
@@ -92,16 +93,12 @@ function Card({
 }
 
 const styles = StyleSheet.create({
-  card: {
+  container: {
     borderRadius: 10,
     backgroundColor: "white",
     marginVertical: 10,
     width: "100%",
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
   detailsContainer: {
     padding: 10,

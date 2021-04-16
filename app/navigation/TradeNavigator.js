@@ -4,7 +4,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import TradeScreen from "../screens/TradeScreen";
 import TradeDetailScreen from "../screens/TradeDetailScreen";
-import VehicleDetailScreen from "../screens/VehicleDetailScreen";
 import Menu from "../components/Menu";
 
 import routes from "./routes";
@@ -18,7 +17,11 @@ const TradeNavigator = () => (
     screenOptions={{
       headerBackTitleVisible: false,
       headerBackTitle: "",
-      headerTitleStyle: { marginHorizontal: 10, fontWeight: "bold" },
+      headerTitleStyle: {
+        marginHorizontal: 10,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
@@ -56,10 +59,6 @@ const TradeNavigator = () => (
       component={NewCarNavigator}
       options={{ headerShown: false }}
     />
-    {/* <Stack.Screen
-      name={routes.VEHICLE_DETAIL}
-      component={VehicleDetailScreen}
-    /> */}
   </Stack.Navigator>
 );
 

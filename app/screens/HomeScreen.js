@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import {
+  View,
+  StyleSheet,
+  RefreshControl,
+  FlatList,
+  ScrollView,
+  Image,
+} from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import AppText from "../components/AppText";
@@ -8,58 +15,19 @@ import Screen from "../components/Screen";
 import { AppErrorMessage } from "../components/forms";
 import AppButton from "../components/AppButton";
 import ActivityIndicator from "../components/ActivityIndicator";
-
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
-import useApi from "../hooks/useApi";
-import client from "../api/client";
-import {
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native-gesture-handler";
 import TradeCarsIcon from "../components/icons/TradeCarsIcon";
-import routes from "../navigation/routes";
-import { Dimensions } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import CarIcon from "../components/icons/CarIcon";
 import MessagesIcon from "../components/icons/MessagesIcon";
 import Card from "../components/Card";
+import NavigationButton from "../components/NavigationButton";
+
+import colors from "../config/colors";
+import useApi from "../hooks/useApi";
+import client from "../api/client";
+import routes from "../navigation/routes";
+import defaultStyles from "../config/styles";
 
 function HomeScreen({ navigation }) {
-  const navigationButtons = [
-    {
-      title: routes.TRADE,
-      icon: <TradeCarsIcon color="white" size={30} />,
-      onPress: () => navigation.navigate(routes.TRADE),
-    },
-    {
-      title: routes.INVENTORY,
-      icon: <CarIcon color="white" size={30} />,
-      onPress: () => navigation.navigate(routes.INVENTORY),
-    },
-    {
-      title: routes.MESSAGES,
-      icon: <MessagesIcon color="white" size={30} />,
-      onPress: () => navigation.navigate(routes.MESSAGES),
-    },
-    {
-      title: routes.TRADE,
-      icon: <TradeCarsIcon color="white" size={30} />,
-      onPress: () => navigation.navigate(routes.TRADE),
-    },
-    {
-      title: routes.INVENTORY,
-      icon: <CarIcon color="white" size={30} />,
-      onPress: () => navigation.navigate(routes.INVENTORY),
-    },
-    {
-      title: routes.MESSAGES,
-      icon: <MessagesIcon color="white" size={30} />,
-      onPress: () => navigation.navigate(routes.MESSAGES),
-    },
-  ];
-
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
@@ -102,115 +70,108 @@ function HomeScreen({ navigation }) {
           <AppButton title="RETRY" onPress={getUser} />
         </View>
       ) : (
-        <FlatList
-          ListHeaderComponent={
-            <View style={styles.listHeaderComponent}>
-              {getUserApi.data.user && (
-                <AppText
-                  style={styles.text1}
-                >{`HELLO, ${getUserApi.data.user.name}`}</AppText>
-              )}
-              <View style={styles.textRow}>
-                <AppText style={styles.text2}>{"Welcome to the "}</AppText>
-                <AppText style={styles.text3}>WARRANTYWISE APP</AppText>
-              </View>
-            </View>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => {
+                getUser();
+                getVehicles();
+              }}
+            />
           }
-          data={navigationButtons}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={3}
-          renderItem={({ item }) => (
-            <TouchableOpacity
-              style={[styles.card, defaultStyles.shadow]}
-              onPress={item.onPress}
+        >
+          <View style={styles.listHeaderComponent}>
+            {getUserApi.data.user && (
+              <AppText
+                style={styles.text1}
+              >{`HELLO, ${getUserApi.data.user.name.toUpperCase()}`}</AppText>
+            )}
+            <View style={styles.textRow}>
+              <AppText style={styles.text2}>{"Welcome to the "}</AppText>
+              <AppText style={styles.text3}>WARRANTYWISE APP</AppText>
+            </View>
+          </View>
+          <View style={styles.bannerContainer}>
+            <Image
+              source={require("../assets/banner.jpg")}
+              style={styles.bannerImage}
+              resizeMode="cover"
+            />
+            <AppText style={styles.bannerText}>
+              It is an example banner, the real one is coming up soon!
+            </AppText>
+          </View>
+          <View style={styles.navigationContainer}>
+            <NavigationButton
+              onPress={() => navigation.navigate(routes.TRADE)}
+              icon={<TradeCarsIcon color="white" size={30} />}
+              title={routes.TRADE.toUpperCase()}
+            />
+            <NavigationButton
+              onPress={() => navigation.navigate(routes.INVENTORY)}
+              icon={<CarIcon color="white" size={30} />}
+              title={routes.INVENTORY.toUpperCase()}
+            />
+            <NavigationButton
+              onPress={() => navigation.navigate(routes.MESSAGES)}
+              icon={<MessagesIcon color="white" size={30} />}
+              title={routes.MESSAGES.toUpperCase()}
+            />
+          </View>
+          <View style={{ marginTop: 30, marginBottom: tabBarHeight }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginHorizontal: 20,
+              }}
             >
-              <LinearGradient
-                colors={[colors.primary, "#F83600"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-                style={styles.linearGradient}
-              />
-              <View
+              <AppText style={{ fontWeight: "bold" }}>Just Added</AppText>
+              <AppText
                 style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
+                  fontWeight: "bold",
+                  color: colors.success,
                 }}
+                onPress={() => navigation.navigate(routes.TRADE)}
               >
-                {item.icon}
-              </View>
-              <AppText style={styles.cardTitle}>
-                {item.title.toUpperCase()}
+                See All
               </AppText>
-            </TouchableOpacity>
-          )}
-          columnWrapperStyle={{
-            marginHorizontal: 20,
-            marginVertical: 10,
-            justifyContent: "space-between",
-          }}
-          refreshing={refreshing}
-          onRefresh={() => {
-            getUser();
-            getVehicles();
-          }}
-          ListFooterComponent={
-            <View style={{ marginTop: 30, marginBottom: tabBarHeight }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginHorizontal: 20,
-                }}
-              >
-                <AppText style={{ fontWeight: "bold" }}>Just Added</AppText>
-                <AppText
-                  style={{
-                    fontWeight: "bold",
-                    color: colors.success,
-                  }}
-                  onPress={() => navigation.navigate(routes.TRADE)}
-                >
-                  See All
-                </AppText>
-              </View>
-              <FlatList
-                horizontal
-                data={getVehiclesApi.data.data}
-                keyExtractor={(vehicle, index) => index.toString()}
-                renderItem={({ item }) => (
-                  <View
-                    style={{ marginBottom: 10, marginLeft: 20, width: 150 }}
-                  >
-                    <Card
-                      title={item.title}
-                      make={item.make}
-                      model={item.model}
-                      year={item.year}
-                      mileage={item.mileage}
-                      engineCapacity={item.engine_capacity}
-                      priceAsking={item.price_asking}
-                      registration={item.registration}
-                      imageUrl={item.thumb ? item.thumb.url : ""}
-                      onPress={() =>
-                        navigation.navigate(routes.TRADE, {
-                          screen: routes.TRADE_DETAIL,
-                          initial: false,
-                          params: item,
-                        })
-                      }
-                    />
-                  </View>
-                )}
-                ListEmptyComponent={
-                  <AppText style={[styles.text3, { margin: 30 }]}>
-                    No Vehicles
-                  </AppText>
-                }
-              />
             </View>
-          }
-        />
+            <FlatList
+              horizontal
+              data={getVehiclesApi.data.data}
+              keyExtractor={(vehicle, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View style={{ marginBottom: 10, marginLeft: 20, width: 150 }}>
+                  <Card
+                    title={item.title}
+                    make={item.make}
+                    model={item.model}
+                    year={item.year}
+                    mileage={item.mileage}
+                    engineCapacity={item.engine_capacity}
+                    priceAsking={item.price_asking}
+                    registration={item.registration}
+                    imageUrl={item.thumb ? item.thumb.url : ""}
+                    onPress={() =>
+                      navigation.navigate(routes.TRADE, {
+                        screen: routes.TRADE_DETAIL,
+                        initial: false,
+                        params: item,
+                      })
+                    }
+                  />
+                </View>
+              )}
+              ListEmptyComponent={
+                <AppText style={[styles.text3, { margin: 30 }]}>
+                  No Vehicles
+                </AppText>
+              }
+            />
+          </View>
+        </ScrollView>
       )}
     </Screen>
   );
@@ -249,25 +210,32 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
   },
-  card: {
-    height: 130,
-    width: Dimensions.get("screen").width * 0.27,
+  bannerContainer: {
+    marginHorizontal: 20,
+    marginVertical: 10,
+    justifyContent: "center",
     alignItems: "center",
-    zIndex: 1,
+    borderRadius: 10,
+    ...defaultStyles.shadow,
   },
-  linearGradient: {
-    height: "100%",
+  bannerImage: {
     width: "100%",
-    position: "absolute",
+    height: 150,
     borderRadius: 10,
   },
-  cardTitle: {
+  bannerText: {
+    position: "absolute",
+    color: colors.primary,
     fontWeight: "bold",
-    fontSize: 12,
-    marginBottom: 10,
-    marginHorizontal: 3,
-    color: "white",
-    textAlign: "left",
+    fontSize: 20,
+    paddingHorizontal: 20,
+    ...defaultStyles.shadow,
+  },
+  navigationContainer: {
+    flexDirection: "row",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    justifyContent: "space-between",
   },
 });
 

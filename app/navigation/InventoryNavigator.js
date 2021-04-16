@@ -5,7 +5,6 @@ import InventoryScreen from "../screens/InventoryScreen";
 import InventoryDetailScreen from "../screens/InventoryDetailScreen";
 import routes from "./routes";
 import colors from "../config/colors";
-import VehicleDetailScreen from "../screens/VehicleDetailScreen";
 import Menu from "../components/Menu";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NewCarNavigator from "./NewCarNavigator";
@@ -17,7 +16,12 @@ const InventoryNavigator = () => (
     screenOptions={{
       headerBackTitleVisible: false,
       headerBackTitle: "",
-      headerTitleStyle: { marginHorizontal: 10, fontWeight: "bold" },
+      textTransform: "uppercase",
+      headerTitleStyle: {
+        marginHorizontal: 10,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",

@@ -16,12 +16,17 @@ const NewCarNavigator = () => (
     screenOptions={{
       headerBackTitleVisible: false,
       headerBackTitle: "",
-      headerTitleStyle: { marginHorizontal: 10 },
+      headerTitleStyle: {
+        marginHorizontal: 10,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
       },
       headerTintColor: "white",
+      headerTitleAlign: "center",
       headerBackImage: () => (
         <MaterialCommunityIcons
           name="chevron-left"
