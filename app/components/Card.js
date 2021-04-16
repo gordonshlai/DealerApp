@@ -54,9 +54,9 @@ function Card({
           <View style={styles.secondLine}>
             {year && <AppText style={styles.info}>{year}</AppText>}
             <AppText style={styles.info}>
-              {numberWithCommas(mileage) + " mi"}
+              {`-  ${numberWithCommas(mileage)}mi`}
             </AppText>
-            <AppText style={styles.info}>{engineCapacity + " cc"}</AppText>
+            <AppText style={styles.info}>{`-  ${engineCapacity}cc`}</AppText>
           </View>
 
           <View style={styles.thirdLine}>
@@ -71,9 +71,9 @@ function Card({
         </View>
 
         {sales_status && (
-          <AppText
+          <View
             style={[
-              styles.sales_status,
+              styles.sales_statusContainer,
               {
                 backgroundColor:
                   sales_status == 0
@@ -84,8 +84,10 @@ function Card({
               },
             ]}
           >
-            {vehicleStatusArray[sales_status]}
-          </AppText>
+            <AppText style={styles.sales_statusText}>
+              {vehicleStatusArray[sales_status]}
+            </AppText>
+          </View>
         )}
       </TouchableOpacity>
     </View>
@@ -135,7 +137,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "bold",
     color: colors.mediumGrey,
-    marginRight: 7,
+    marginRight: 5,
   },
   thirdLine: {
     flexDirection: "row",
@@ -149,17 +151,18 @@ const styles = StyleSheet.create({
   registration: {
     fontSize: 12,
   },
-  sales_status: {
+  sales_statusContainer: {
     position: "absolute",
     top: 5,
     right: 5,
     paddingHorizontal: 5,
     paddingVertical: 3,
-    color: "white",
     borderRadius: 10,
-    fontSize: 10,
     fontWeight: "bold",
-    overflow: "hidden",
+  },
+  sales_statusText: {
+    color: "white",
+    fontSize: 10,
   },
 });
 
