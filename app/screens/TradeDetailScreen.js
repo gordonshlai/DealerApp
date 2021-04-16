@@ -207,12 +207,12 @@ function TradeDetailScreen({ route, navigation }) {
                     )}
                     {getVehicleApi.data.fuel && (
                       <AppText style={styles.detail}>
-                        {getVehicleApi.data.fuel}
+                        {`-  ${getVehicleApi.data.fuel}`}
                       </AppText>
                     )}
                     {getVehicleApi.data.transmission && (
                       <AppText style={styles.detail}>
-                        {getVehicleApi.data.transmission}
+                        {`-  ${getVehicleApi.data.transmission}`}
                       </AppText>
                     )}
                   </View>
@@ -744,7 +744,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   detailField: {
-    margin: 5,
+    marginVertical: 5,
     width: "50%",
   },
   detailTitle: {
@@ -761,7 +761,7 @@ const styles = StyleSheet.create({
     color: colors.mediumGrey,
     fontSize: 16,
     fontWeight: "bold",
-    marginRight: 20,
+    marginRight: 10,
   },
   address: {
     fontStyle: "italic",
