@@ -26,6 +26,8 @@ import useApi from "../hooks/useApi";
 import client from "../api/client";
 import routes from "../navigation/routes";
 import defaultStyles from "../config/styles";
+import Slider from "../components/Slider";
+import { Dimensions } from "react-native";
 
 function HomeScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -93,14 +95,24 @@ function HomeScreen({ navigation }) {
             </View>
           </View>
           <View style={styles.bannerContainer}>
-            <Image
+            <View style={styles.bannerInnerContainer}>
+              <Slider
+                images={[
+                  require("../assets/banner.jpg"),
+                  require("../assets/banner.jpg"),
+                  require("../assets/banner.jpg"),
+                ]}
+                height={Dimensions.get("window").height * 0.3}
+                width={Dimensions.get("window").width - 40}
+                hasThumbnail={false}
+              />
+              {/* <Image
               source={require("../assets/banner.jpg")}
               style={styles.bannerImage}
               resizeMode="cover"
             />
-            <AppText style={styles.bannerText}>
-              It is an example banner, the real one is coming up soon!
-            </AppText>
+            <AppText style={styles.bannerText}>DEALERS OFFER!</AppText> */}
+            </View>
           </View>
           <View style={styles.navigationContainer}>
             <NavigationButton
@@ -218,19 +230,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     ...defaultStyles.shadow,
   },
-  bannerImage: {
-    width: "100%",
-    height: 150,
+  bannerInnerContainer: {
     borderRadius: 10,
+    overflow: "hidden",
   },
-  bannerText: {
-    position: "absolute",
-    color: colors.primary,
-    fontWeight: "bold",
-    fontSize: 20,
-    paddingHorizontal: 20,
-    ...defaultStyles.shadow,
-  },
+  // bannerImage: {
+  //   width: "100%",
+  //   height: 150,
+  //   borderRadius: 10,
+  // },
+  // bannerText: {
+  //   position: "absolute",
+  //   color: colors.primary,
+  //   fontWeight: "bold",
+  //   fontSize: 20,
+  //   paddingHorizontal: 20,
+  //   ...defaultStyles.shadow,
+  // },
   navigationContainer: {
     flexDirection: "row",
     paddingHorizontal: 20,

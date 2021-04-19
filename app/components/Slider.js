@@ -16,14 +16,12 @@ import colors from "../config/colors";
 import AppText from "./AppText";
 import AppButton from "./AppButton";
 
-function Slider({ images, height, width }) {
+function Slider({ images, height, width, hasThumbnail = true }) {
   const [active, setActive] = useState(0);
   const [imageZoomVisible, setImageZoomVisible] = useState(false);
 
   const bigSlider = useRef();
   const thumbnail = useRef();
-
-  useEffect(() => {}, [active]);
 
   const change = ({ nativeEvent }) => {
     const slide = Math.ceil(
@@ -31,7 +29,9 @@ function Slider({ images, height, width }) {
     );
     if (slide != active) {
       setActive(slide);
-      thumbnail.current.scrollTo({ x: (slide - 2) * (width / 5) });
+      if (hasThumbnail) {
+        thumbnail.current.scrollTo({ x: (slide - 2) * (width / 5) });
+      }
     }
   };
 
@@ -65,7 +65,7 @@ function Slider({ images, height, width }) {
               key={index}
             >
               <Image
-                source={{ uri: image.url }}
+                source={image.url ? { uri: image.url } : image}
                 style={{ height: height * 0.8, width }}
               />
             </TouchableWithoutFeedback>
@@ -78,7 +78,7 @@ function Slider({ images, height, width }) {
         </Text>
       </View>
 
-      {images.length > 1 && (
+      {images.length > 1 && hasThumbnail && (
         <View
           style={{
             height: height / 5,
@@ -105,7 +105,7 @@ function Slider({ images, height, width }) {
                 key={index}
               >
                 <Image
-                  source={{ uri: image.url }}
+                  source={image.url ? { uri: image.url } : image}
                   style={{
                     height: "100%",
                     width: width / 5,
@@ -138,9 +138,13 @@ function Slider({ images, height, width }) {
                 width: Dimensions.get("window").width,
                 resizeMode: "contain",
               }}
-              source={{
-                uri: images[active].url,
-              }}
+              source={
+                images[active].url
+                  ? {
+                      uri: images[active].url,
+                    }
+                  : images[active]
+              }
             />
           </ImageZoom>
         )}
