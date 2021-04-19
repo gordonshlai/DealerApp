@@ -38,11 +38,11 @@ function WelcomeScreen({ navigation }) {
             onPress={() => navigation.navigate(routes.REGISTER_1)}
           />
           <AppText style={styles.text}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et elit
-            hendrerit, vulputate libero ut, blandit libero. Vestibulum quis
-            tincidunt dui, sollicitudin porttitor dui. Aliquam id augue eget dui
-            iaculis rhoncus quis vitae sem. Pellentesque vestibulum consectetur
-            nisl vel faucibus.
+            Warranty Wise and Warranty Wise Logo are trademarks of Warrantywise.
+            Warrantywise Limited is a company registered in England and Wales
+            No. 07963594 at The Rocket Centre, 3 Trident Way, Blackburn,
+            Lancashire, BB1 3NU and is part of Wise Group Holdings Limited,
+            Company No. 10613336. Terms and Conditions apply.
           </AppText>
         </View>
       </View>
