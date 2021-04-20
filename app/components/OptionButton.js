@@ -25,6 +25,7 @@ function OptionButton({
   border,
   icon = "sort-variant",
   size,
+  modalTitle,
   initialValue,
   value,
   queryArray,
@@ -53,7 +54,7 @@ function OptionButton({
         <View style={styles.background}>
           <View style={styles.container}>
             <View style={styles.topBarContainer}>
-              <AppText style={styles.title}>Sort By</AppText>
+              <AppText style={styles.title}>{modalTitle}</AppText>
               <AppButton
                 backgroundColor={null}
                 border={false}

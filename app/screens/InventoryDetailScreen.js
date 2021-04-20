@@ -9,20 +9,17 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  Platform,
 } from "react-native";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
-import client from "../api/client";
 import ActivityIndicator from "../components/ActivityIndicator";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 import Info from "../components/Info";
 import Registration from "../components/Registration";
 import Slider from "../components/Slider";
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
-import useApi from "../hooks/useApi";
 import SpecificationItem from "../components/SpecificationItem";
 import { ListItemSeparator } from "../components/lists";
 import Screen from "../components/Screen";
@@ -32,6 +29,12 @@ import Disclaimer from "../components/Disclaimer";
 import AuthContext from "../auth/context";
 import Background from "../components/Background";
 import MotHistory from "../components/MotHistory";
+
+import client from "../api/client";
+import colors from "../config/colors";
+import defaultStyles from "../config/styles";
+import useApi from "../hooks/useApi";
+
 dayjs.extend(customParseFormat);
 
 const actions = [
@@ -105,6 +108,45 @@ function InventoryDetailScreen({ navigation, route }) {
     setLoadTradeFlag(!loadTradeFlag);
   };
 
+  const secondRow = () => (
+    <>
+      {getVehicleApi.data.price_civ && (
+        <View style={styles.detailField}>
+          <AppText style={styles.detailTitle}>Stand In Value</AppText>
+          <AppText style={styles.detailValue}>
+            {getVehicleApi.data.price_civ === "0.00"
+              ? "N/A"
+              : "£" + numberWithCommas(getVehicleApi.data.price_civ)}
+          </AppText>
+        </View>
+      )}
+      {getVehicleApi.data.price_cap && (
+        <View style={styles.detailField}>
+          <AppText style={styles.detailTitle}>Guide Sale Price</AppText>
+          <AppText style={styles.detailValue}>
+            {getVehicleApi.data.price_cap === "0.00"
+              ? "N/A"
+              : "£" + numberWithCommas(getVehicleApi.data.price_cap)}
+          </AppText>
+        </View>
+      )}
+    </>
+  );
+
+  const thirdRow = () => (
+    <>
+      {getVehicleApi.data.registration && (
+        <View style={styles.detailField}>
+          <AppText style={styles.detailTitle}>Registration</AppText>
+          <Registration
+            registration={getVehicleApi.data.registration}
+            style={{ fontSize: 24, alignSelf: "flex-start" }}
+          />
+        </View>
+      )}
+    </>
+  );
+
   return (
     <>
       <Background />
@@ -151,14 +193,22 @@ function InventoryDetailScreen({ navigation, route }) {
                       styles.imageContainer,
                       {
                         height:
-                          getVehicleApi.data.images.length > 1 ? 300 : 240,
+                          getVehicleApi.data.images.length > 1
+                            ? Dimensions.get("window").height *
+                              (Platform.isPad ? 0.5 : 0.3)
+                            : Dimensions.get("window").height *
+                              (Platform.isPad ? 0.5 : 0.3) *
+                              0.8,
                       },
                     ]}
                   >
                     {getVehicleApi.data.images.length !== 0 ? (
                       <Slider
                         images={getVehicleApi.data.images}
-                        height={300}
+                        height={
+                          Dimensions.get("window").height *
+                          (Platform.isPad ? 0.5 : 0.3)
+                        }
                         width={Dimensions.get("window").width - 20}
                       />
                     ) : (
@@ -260,49 +310,18 @@ function InventoryDetailScreen({ navigation, route }) {
                         </AppText>
                       </View>
                     )}
+                    {Platform.isPad && secondRow()}
+                    {Platform.isPad && thirdRow()}
                   </View>
 
-                  <View style={[styles.detailRow, { marginBottom: 10 }]}>
-                    {getVehicleApi.data.price_civ && (
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>
-                          Stand In Value
-                        </AppText>
-                        <AppText style={styles.detailValue}>
-                          {getVehicleApi.data.price_civ === "0.00"
-                            ? "N/A"
-                            : "£" +
-                              numberWithCommas(getVehicleApi.data.price_civ)}
-                        </AppText>
-                      </View>
-                    )}
-                    {getVehicleApi.data.price_cap && (
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>
-                          Guide Sale Price
-                        </AppText>
-                        <AppText style={styles.detailValue}>
-                          {getVehicleApi.data.price_cap === "0.00"
-                            ? "N/A"
-                            : "£" +
-                              numberWithCommas(getVehicleApi.data.price_cap)}
-                        </AppText>
-                      </View>
-                    )}
-                  </View>
+                  {!Platform.isPad && (
+                    <View style={[styles.detailRow, { marginBottom: 10 }]}>
+                      {secondRow()}
+                    </View>
+                  )}
 
                   <View style={styles.detailRow}>
-                    {getVehicleApi.data.registration && (
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>
-                          Registration
-                        </AppText>
-                        <Registration
-                          registration={getVehicleApi.data.registration}
-                          style={{ fontSize: 24, alignSelf: "flex-start" }}
-                        />
-                      </View>
-                    )}
+                    {!Platform.isPad && thirdRow()}
                   </View>
                 </View>
               </View>
@@ -508,14 +527,22 @@ function InventoryDetailScreen({ navigation, route }) {
                           styles.imageContainer,
                           {
                             height:
-                              getVehicleApi.data.images.length > 1 ? 300 : 240,
+                              getVehicleApi.data.images.length > 1
+                                ? Dimensions.get("window").height *
+                                  (Platform.isPad ? 0.5 : 0.3)
+                                : Dimensions.get("window").height *
+                                  (Platform.isPad ? 0.5 : 0.3) *
+                                  0.8,
                           },
                         ]}
                       >
                         {getVehicleApi.data.images.length !== 0 ? (
                           <Slider
                             images={getVehicleApi.data.images}
-                            height={300}
+                            height={
+                              Dimensions.get("window").height *
+                              (Platform.isPad ? 0.5 : 0.3)
+                            }
                             width={Dimensions.get("window").width - 20}
                           />
                         ) : (
@@ -751,7 +778,7 @@ const styles = StyleSheet.create({
   },
   detailField: {
     marginVertical: 5,
-    width: "50%",
+    width: Platform.isPad ? "20%" : "50%",
   },
   detailTitle: {
     fontWeight: "bold",

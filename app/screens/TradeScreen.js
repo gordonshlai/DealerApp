@@ -21,15 +21,14 @@ import ActivityIndicator from "../components/ActivityIndicator";
 import OptionButton from "../components/OptionButton";
 import AuthContext from "../auth/context";
 import { AppErrorMessage } from "../components/forms";
-import colors from "../config/colors";
+import MultiplePicker from "../components/MultiplePicker";
 
+import colors from "../config/colors";
 import client from "../api/client";
 import useApi from "../hooks/useApi";
-
 import defaultStyle from "../config/styles";
 import routes from "../navigation/routes";
 import useDidMountEffect from "../hooks/useDidMountEffect";
-import MultiplePicker from "../components/MultiplePicker";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -205,7 +204,7 @@ function HomeScreen({ navigation }) {
             <View style={styles.optionBar}>
               <AppButton
                 icon="filter-variant"
-                title="Filter"
+                title="Filters"
                 backgroundColor={null}
                 color={colors.primary}
                 border={null}
@@ -219,6 +218,7 @@ function HomeScreen({ navigation }) {
                 border={false}
                 icon="sort-variant"
                 size={16}
+                modalTitle="Sort By"
                 initialValue="listed-desc"
                 value={sortBy}
                 queryArray={sortByQueryArray}
@@ -238,7 +238,7 @@ function HomeScreen({ navigation }) {
               data={vehicles}
               keyExtractor={(vehicle, index) => index.toString()}
               renderItem={({ item }) => (
-                <View style={{ width: "48%" }}>
+                <View style={{ width: Platform.isPad ? "23%" : "48%" }}>
                   <Card
                     title={item.title}
                     make={item.make}
@@ -255,7 +255,7 @@ function HomeScreen({ navigation }) {
                   />
                 </View>
               )}
-              numColumns={2}
+              numColumns={Platform.isPad ? 4 : 2}
               refreshing={refreshing}
               onRefresh={handleRefresh}
               onEndReached={handleLazyLoading}
@@ -411,7 +411,7 @@ const styles = StyleSheet.create({
   },
   columnWrapper: {
     paddingHorizontal: 20,
-    justifyContent: "space-between",
+    justifyContent: Platform.isPad ? "space-around" : "space-between",
   },
   filterModalBackground: {
     flex: 1,

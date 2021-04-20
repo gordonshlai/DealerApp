@@ -59,10 +59,6 @@ const InventoryNavigator = () => (
       component={NewCarNavigator}
       options={{ headerShown: false }}
     />
-    {/* <Stack.Screen
-      name={routes.VEHICLE_DETAIL}
-      component={VehicleDetailScreen}
-    /> */}
   </Stack.Navigator>
 );
 

@@ -1,11 +1,18 @@
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Platform,
+} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import Registration from "./Registration";
 
 import AppText from "./AppText";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
-import Registration from "./Registration";
 
 const vehicleStatusArray = ["In Stock", "Sold", "Trade Listed", "Sold"];
 
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   imageContainer: {
-    height: 90,
+    height: Platform.isPad ? 130 : 90,
     width: "100%",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
     backgroundColor: "whitesmoke",
   },
   image: {
-    height: 90,
+    height: Platform.isPad ? 130 : 90,
     width: "100%",
     resizeMode: "cover",
   },

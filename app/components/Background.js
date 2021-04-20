@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions } from "react-native";
+import { View, Dimensions, Platform } from "react-native";
 import colors from "../config/colors";
 
 function Background(props) {
@@ -8,11 +8,13 @@ function Background(props) {
       style={{
         position: "absolute",
         backgroundColor: colors.secondary,
-        width: Dimensions.get("screen").height,
-        height: Dimensions.get("screen").height,
+        width: Dimensions.get("screen").height * (Platform.isPad ? 2 : 1),
+        height: Dimensions.get("screen").height * (Platform.isPad ? 2 : 1),
         alignSelf: "center",
-        borderRadius: Dimensions.get("screen").height,
-        top: -Dimensions.get("screen").height * 0.65,
+        borderRadius:
+          Dimensions.get("screen").height * (Platform.isPad ? 2 : 1),
+        top:
+          -Dimensions.get("screen").height * 0.65 * (Platform.isPad ? 2.4 : 1),
       }}
     />
   );

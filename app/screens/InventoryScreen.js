@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, FlatList, View, Modal } from "react-native";
-// import { ButtonGroup } from "react-native-elements";
+import { StyleSheet, FlatList, View, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import AppButton from "../components/AppButton";
@@ -9,20 +8,18 @@ import AppText from "../components/AppText";
 import AppTextInput from "../components/AppTextInput";
 import Card from "../components/Card";
 import Screen from "../components/Screen";
-import Picker from "../components/Picker";
 import NewCarButton from "../navigation/NewCarButton";
-
-import client from "../api/client";
-import useApi from "../hooks/useApi";
-
-import colors from "../config/colors";
-import routes from "../navigation/routes";
-import AuthContext from "../auth/context";
-import useDidMountEffect from "../hooks/useDidMountEffect";
 import OptionButton from "../components/OptionButton";
 import ButtonGroup from "../components/ButtonGroup";
 import ActivityIndicator from "../components/ActivityIndicator";
 import { AppErrorMessage } from "../components/forms";
+
+import client from "../api/client";
+import useApi from "../hooks/useApi";
+import colors from "../config/colors";
+import routes from "../navigation/routes";
+import AuthContext from "../auth/context";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 const statusArray = ["", "stock", "listed", "sold"];
 const statusDisplayArray = ["All", "In Stock", "Trade Listed", "Sold"];
@@ -45,12 +42,6 @@ function InventoryScreen({ navigation }) {
   const [search, setSearch] = useState("");
 
   const [serachBarVisible, setSearchBarVisible] = useState(false);
-
-  // const [filterModalVisible, setFilterModalVisible] = useState(false);
-  // const [filter, setFilter] = useState({
-  //   status: status,
-  //   make: make,
-  // });
 
   let endpoint =
     "api/inventory/vehicles?make=" +
@@ -155,6 +146,7 @@ function InventoryScreen({ navigation }) {
                 border={false}
                 icon="car"
                 size={16}
+                modalTitle="Filter"
                 initialValue="all"
                 value={make}
                 queryArray={makesArray}
@@ -205,7 +197,7 @@ function InventoryScreen({ navigation }) {
               data={vehicles}
               keyExtractor={(vehicle, index) => index.toString()}
               renderItem={({ item }) => (
-                <View style={{ width: "48%" }}>
+                <View style={{ width: Platform.isPad ? "23%" : "48%" }}>
                   <Card
                     title={item.title}
                     make={item.make}
@@ -223,7 +215,7 @@ function InventoryScreen({ navigation }) {
                   />
                 </View>
               )}
-              numColumns={2}
+              numColumns={Platform.isPad ? 4 : 2}
               refreshing={refreshing}
               onRefresh={handleRefresh}
               onEndReached={handleLazyLoading}
@@ -266,7 +258,7 @@ const styles = StyleSheet.create({
   },
   columnWrapper: {
     paddingHorizontal: 20,
-    justifyContent: "space-between",
+    justifyContent: Platform.isPad ? "space-around" : "space-between",
   },
 });
 

@@ -31,13 +31,12 @@ import SpecificationItem from "../components/SpecificationItem";
 import { ListItemSeparator } from "../components/lists";
 import Slider from "../components/Slider";
 import Disclaimer from "../components/Disclaimer";
+import Screen from "../components/Screen";
 
 import client from "../api/client";
 import useApi from "../hooks/useApi";
-
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
-import Screen from "../components/Screen";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
 
@@ -128,6 +127,28 @@ function TradeDetailScreen({ route, navigation }) {
     setLoadMessagesFlag(!loadMessagesFlag);
   };
 
+  const secondRow = () => (
+    <>
+      {getVehicleApi.data.listed_at && (
+        <View style={styles.detailField}>
+          <AppText style={[styles.detailTitle]}>Listed On</AppText>
+          <AppText style={styles.detailValue}>
+            {dayjs(getVehicleApi.data.listed_at).format("DD/MM/YYYY")}
+          </AppText>
+        </View>
+      )}
+      {getVehicleApi.data.registration && (
+        <View style={styles.detailField}>
+          <AppText style={styles.detailTitle}>Registration</AppText>
+          <Registration
+            registration={getVehicleApi.data.registration}
+            style={{ fontSize: 22, alignSelf: "flex-start" }}
+          />
+        </View>
+      )}
+    </>
+  );
+
   return (
     <>
       <Background />
@@ -161,14 +182,22 @@ function TradeDetailScreen({ route, navigation }) {
                       styles.imageContainer,
                       {
                         height:
-                          getVehicleApi.data.images.length > 1 ? 300 : 240,
+                          getVehicleApi.data.images.length > 1
+                            ? Dimensions.get("window").height *
+                              (Platform.isPad ? 0.5 : 0.3)
+                            : Dimensions.get("window").height *
+                              (Platform.isPad ? 0.5 : 0.3) *
+                              0.8,
                       },
                     ]}
                   >
                     {getVehicleApi.data.images.length !== 0 ? (
                       <Slider
                         images={getVehicleApi.data.images}
-                        height={300}
+                        height={
+                          Dimensions.get("window").height *
+                          (Platform.isPad ? 0.5 : 0.3)
+                        }
                         width={Dimensions.get("window").width - 20}
                       />
                     ) : (
@@ -236,20 +265,6 @@ function TradeDetailScreen({ route, navigation }) {
                         </AppText>
                       </View>
                     )}
-                    {getVehicleApi.data.listed_at && (
-                      <View style={styles.detailField}>
-                        <AppText style={[styles.detailTitle]}>
-                          Listed On
-                        </AppText>
-                        <AppText style={styles.detailValue}>
-                          {dayjs(getVehicleApi.data.listed_at).format(
-                            "DD/MM/YYYY"
-                          )}
-                        </AppText>
-                      </View>
-                    )}
-                  </View>
-                  <View style={styles.detailRow}>
                     {getVehicleApi.data.price_asking && (
                       <View style={styles.detailField}>
                         <AppText style={styles.detailTitle}>
@@ -268,18 +283,11 @@ function TradeDetailScreen({ route, navigation }) {
                         </AppText>
                       </View>
                     )}
-                    {getVehicleApi.data.registration && (
-                      <View style={styles.detailField}>
-                        <AppText style={styles.detailTitle}>
-                          Registration
-                        </AppText>
-                        <Registration
-                          registration={getVehicleApi.data.registration}
-                          style={{ fontSize: 22, alignSelf: "flex-start" }}
-                        />
-                      </View>
-                    )}
+                    {Platform.isPad && secondRow()}
                   </View>
+                  {!Platform.isPad && (
+                    <View style={styles.detailRow}>{secondRow()}</View>
+                  )}
                 </View>
               </View>
 
@@ -514,14 +522,22 @@ function TradeDetailScreen({ route, navigation }) {
                         styles.imageContainer,
                         {
                           height:
-                            getVehicleApi.data.images.length > 1 ? 300 : 240,
+                            getVehicleApi.data.images.length > 1
+                              ? Dimensions.get("window").height *
+                                (Platform.isPad ? 0.5 : 0.3)
+                              : Dimensions.get("window").height *
+                                (Platform.isPad ? 0.5 : 0.3) *
+                                0.8,
                         },
                       ]}
                     >
                       {getVehicleApi.data.images.length !== 0 ? (
                         <Slider
                           images={getVehicleApi.data.images}
-                          height={300}
+                          height={
+                            Dimensions.get("window").height *
+                            (Platform.isPad ? 0.5 : 0.3)
+                          }
                           width={Dimensions.get("window").width - 20}
                         />
                       ) : (
@@ -602,14 +618,22 @@ function TradeDetailScreen({ route, navigation }) {
                         styles.imageContainer,
                         {
                           height:
-                            getVehicleApi.data.images.length > 1 ? 300 : 240,
+                            getVehicleApi.data.images.length > 1
+                              ? Dimensions.get("window").height *
+                                (Platform.isPad ? 0.5 : 0.3)
+                              : Dimensions.get("window").height *
+                                (Platform.isPad ? 0.5 : 0.3) *
+                                0.8,
                         },
                       ]}
                     >
                       {getVehicleApi.data.images.length !== 0 ? (
                         <Slider
                           images={getVehicleApi.data.images}
-                          height={300}
+                          height={
+                            Dimensions.get("window").height *
+                            (Platform.isPad ? 0.5 : 0.3)
+                          }
                           width={Dimensions.get("window").width - 20}
                         />
                       ) : (
@@ -745,7 +769,7 @@ const styles = StyleSheet.create({
   },
   detailField: {
     marginVertical: 5,
-    width: "50%",
+    width: Platform.isPad ? "25%" : "50%",
   },
   detailTitle: {
     fontWeight: "bold",

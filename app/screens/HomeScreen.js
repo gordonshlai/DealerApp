@@ -5,7 +5,8 @@ import {
   RefreshControl,
   FlatList,
   ScrollView,
-  Image,
+  Dimensions,
+  Platform,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
@@ -20,14 +21,13 @@ import CarIcon from "../components/icons/CarIcon";
 import MessagesIcon from "../components/icons/MessagesIcon";
 import Card from "../components/Card";
 import NavigationButton from "../components/NavigationButton";
+import Slider from "../components/Slider";
 
 import colors from "../config/colors";
 import useApi from "../hooks/useApi";
 import client from "../api/client";
 import routes from "../navigation/routes";
 import defaultStyles from "../config/styles";
-import Slider from "../components/Slider";
-import { Dimensions } from "react-native";
 
 function HomeScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -36,10 +36,13 @@ function HomeScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
 
   const getUserApi = useApi(() => client.get("api/user"));
-  const getVehiclesApi = useApi(() =>
+  const getTradeVehiclesApi = useApi(() =>
     client.get(
       "api/trade/all/inventory?make=all&seller=&env=1&sortBy=listed-desc&perPage=12&page=1"
     )
+  );
+  const getInventoryVehiclesApi = useApi(() =>
+    client.get("api/inventory/vehicles?make=all&page=1")
   );
 
   const getUser = async () => {
@@ -47,21 +50,27 @@ function HomeScreen({ navigation }) {
     if (!result.ok) return setError(result.data.message);
   };
 
-  const getVehicles = async () => {
-    const result = await getVehiclesApi.request();
+  const getTradeVehicles = async () => {
+    const result = await getTradeVehiclesApi.request();
+    if (!result.ok) return setError(result.data.message);
+  };
+
+  const getInventoryVehicles = async () => {
+    const result = await getInventoryVehiclesApi.request();
     if (!result.ok) return setError(result.data.message);
   };
 
   useEffect(() => {
     getUser();
-    getVehicles();
+    getTradeVehicles();
+    getInventoryVehicles();
   }, []);
 
   return (
     <Screen>
       <Background />
       <ActivityIndicator
-        visible={getUserApi.loading || getVehiclesApi.loading}
+        visible={getUserApi.loading || getTradeVehiclesApi.loading}
       />
       {getUserApi.error ? (
         <View style={styles.screen}>
@@ -78,7 +87,8 @@ function HomeScreen({ navigation }) {
               refreshing={refreshing}
               onRefresh={() => {
                 getUser();
-                getVehicles();
+                getTradeVehicles();
+                getInventoryVehicles();
               }}
             />
           }
@@ -91,7 +101,7 @@ function HomeScreen({ navigation }) {
             )}
             <View style={styles.textRow}>
               <AppText style={styles.text2}>{"Welcome to the "}</AppText>
-              <AppText style={styles.text3}>WARRANTYWISE APP</AppText>
+              <AppText style={styles.text3}>WiseDealer App</AppText>
             </View>
           </View>
           <View style={styles.bannerContainer}>
@@ -102,7 +112,9 @@ function HomeScreen({ navigation }) {
                   require("../assets/banner.jpg"),
                   require("../assets/banner.jpg"),
                 ]}
-                height={Dimensions.get("window").height * 0.3}
+                height={
+                  Dimensions.get("window").height * (Platform.isPad ? 0.4 : 0.3)
+                }
                 width={Dimensions.get("window").width - 40}
                 hasThumbnail={false}
               />
@@ -131,7 +143,7 @@ function HomeScreen({ navigation }) {
               title={routes.MESSAGES.toUpperCase()}
             />
           </View>
-          <View style={{ marginTop: 30, marginBottom: tabBarHeight }}>
+          <View style={{ marginTop: 30 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -152,10 +164,18 @@ function HomeScreen({ navigation }) {
             </View>
             <FlatList
               horizontal
-              data={getVehiclesApi.data.data}
+              data={getTradeVehiclesApi.data.data}
               keyExtractor={(vehicle, index) => index.toString()}
               renderItem={({ item }) => (
-                <View style={{ marginBottom: 10, marginLeft: 20, width: 150 }}>
+                <View
+                  style={{
+                    marginBottom: 10,
+                    marginLeft: 20,
+                    width: Platform.isPad
+                      ? Dimensions.get("window").width * 0.22
+                      : Dimensions.get("window").width * 0.4,
+                  }}
+                >
                   <Card
                     title={item.title}
                     make={item.make}
@@ -180,6 +200,81 @@ function HomeScreen({ navigation }) {
                 <AppText style={[styles.text3, { margin: 30 }]}>
                   No Vehicles
                 </AppText>
+              }
+            />
+          </View>
+          <View style={{ marginTop: 30, marginBottom: tabBarHeight }}>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginHorizontal: 20,
+              }}
+            >
+              <AppText style={{ fontWeight: "bold" }}>My Inventory</AppText>
+              <AppText
+                style={{
+                  fontWeight: "bold",
+                  color: colors.success,
+                }}
+                onPress={() => navigation.navigate(routes.INVENTORY)}
+              >
+                See All
+              </AppText>
+            </View>
+            <FlatList
+              horizontal
+              data={getInventoryVehiclesApi.data.data}
+              keyExtractor={(vehicle, index) => index.toString()}
+              renderItem={({ item }) => (
+                <View
+                  style={{
+                    marginBottom: 10,
+                    marginLeft: 20,
+                    width: Platform.isPad
+                      ? Dimensions.get("window").width * 0.22
+                      : Dimensions.get("window").width * 0.4,
+                  }}
+                >
+                  <Card
+                    title={item.title}
+                    make={item.make}
+                    model={item.model}
+                    year={item.year}
+                    mileage={item.mileage}
+                    engineCapacity={item.engine_capacity}
+                    priceAsking={item.price_asking}
+                    registration={item.registration}
+                    imageUrl={item.thumb ? item.thumb.url : ""}
+                    onPress={() =>
+                      navigation.navigate(routes.TRADE, {
+                        screen: routes.TRADE_DETAIL,
+                        initial: false,
+                        params: item,
+                      })
+                    }
+                  />
+                </View>
+              )}
+              ListEmptyComponent={
+                <>
+                  <AppText style={[styles.text3, { margin: 30 }]}>
+                    No Vehicles
+                  </AppText>
+                  <AppButton
+                    title="Add a New Car?"
+                    onPress={() =>
+                      navigation.navigate(routes.INVENTORY, {
+                        screen: routes.NEW_CAR,
+                        initial: false,
+                      })
+                    }
+                    style={{
+                      marginVertical: 20,
+                      ...defaultStyles.shadow,
+                    }}
+                  />
+                </>
               }
             />
           </View>
