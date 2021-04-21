@@ -1,6 +1,12 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
-import { View, StyleSheet, TouchableOpacity, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Platform,
+} from "react-native";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import AppText from "./AppText";
@@ -45,7 +51,7 @@ const styles = StyleSheet.create({
   },
   cardTitle: {
     fontWeight: "bold",
-    fontSize: 12,
+    fontSize: Platform.isPad ? 18 : 12,
     marginBottom: 10,
     marginHorizontal: 3,
     color: "white",

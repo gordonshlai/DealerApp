@@ -129,17 +129,21 @@ function HomeScreen({ navigation }) {
           <View style={styles.navigationContainer}>
             <NavigationButton
               onPress={() => navigation.navigate(routes.TRADE)}
-              icon={<TradeCarsIcon color="white" size={30} />}
+              icon={
+                <TradeCarsIcon color="white" size={Platform.isPad ? 40 : 30} />
+              }
               title={routes.TRADE.toUpperCase()}
             />
             <NavigationButton
               onPress={() => navigation.navigate(routes.INVENTORY)}
-              icon={<CarIcon color="white" size={30} />}
+              icon={<CarIcon color="white" size={Platform.isPad ? 40 : 30} />}
               title={routes.INVENTORY.toUpperCase()}
             />
             <NavigationButton
               onPress={() => navigation.navigate(routes.MESSAGES)}
-              icon={<MessagesIcon color="white" size={30} />}
+              icon={
+                <MessagesIcon color="white" size={Platform.isPad ? 40 : 30} />
+              }
               title={routes.MESSAGES.toUpperCase()}
             />
           </View>
@@ -151,12 +155,9 @@ function HomeScreen({ navigation }) {
                 marginHorizontal: 20,
               }}
             >
-              <AppText style={{ fontWeight: "bold" }}>Just Added</AppText>
+              <AppText style={styles.flatlistTitle}>Just Added</AppText>
               <AppText
-                style={{
-                  fontWeight: "bold",
-                  color: colors.success,
-                }}
+                style={styles.seeAll}
                 onPress={() => navigation.navigate(routes.TRADE)}
               >
                 See All
@@ -211,12 +212,9 @@ function HomeScreen({ navigation }) {
                 marginHorizontal: 20,
               }}
             >
-              <AppText style={{ fontWeight: "bold" }}>My Inventory</AppText>
+              <AppText style={styles.flatlistTitle}>My Inventory</AppText>
               <AppText
-                style={{
-                  fontWeight: "bold",
-                  color: colors.success,
-                }}
+                style={styles.seeAll}
                 onPress={() => navigation.navigate(routes.INVENTORY)}
               >
                 See All
@@ -302,7 +300,7 @@ const styles = StyleSheet.create({
   text1: {
     color: "white",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: Platform.isPad ? 30 : 18,
   },
   textRow: {
     flexDirection: "row",
@@ -310,12 +308,12 @@ const styles = StyleSheet.create({
   text2: {
     color: colors.primary,
     fontStyle: "italic",
-    fontSize: 18,
+    fontSize: Platform.isPad ? 30 : 18,
   },
   text3: {
     color: colors.primary,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: Platform.isPad ? 30 : 18,
   },
   bannerContainer: {
     marginHorizontal: 20,
@@ -347,6 +345,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     justifyContent: "space-between",
+  },
+  flatlistTitle: {
+    fontWeight: "bold",
+    fontSize: Platform.isPad ? 24 : 16,
+  },
+  seeAll: {
+    fontWeight: "bold",
+    color: colors.success,
+    fontSize: Platform.isPad ? 20 : 14,
   },
 });
 
