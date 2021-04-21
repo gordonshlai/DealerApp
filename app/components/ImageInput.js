@@ -1,29 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
   Alert,
+  Modal,
+  Platform,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { Camera } from "expo-camera";
+import * as ImageManipulator from "expo-image-manipulator";
+
+import AppCamera from "./AppCamera";
+import AppButton from "./AppButton";
 
 import colors from "../config/colors";
-import { Platform } from "react-native";
+import defaultStyles from "../config/styles";
+import AppText from "./AppText";
 
 function ImageInput({ image, onChangeImage }) {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [cameraVisible, setCameraVisible] = useState(false);
+
   useEffect(() => {
-    requestPermission();
+    requestLibraryPermission();
+    requestCameraPermission();
   }, []);
 
-  const requestPermission = async () => {
+  const requestLibraryPermission = async () => {
     const { granted } = await ImagePicker.requestCameraRollPermissionsAsync();
     if (!granted) alert("You need to enable permission to access the library.");
   };
 
+  const requestCameraPermission = async () => {
+    const { granted } = await Camera.requestPermissionsAsync();
+    if (!granted) alert("You need to enable permission to use the camera.");
+  };
+
   const handlePress = () => {
-    if (!image) selectImage();
+    if (!image) setModalVisible(true);
     else
       Alert.alert("Delete", "Are you sure you want to delete this image?", [
         { text: "Yes", onPress: () => onChangeImage(null) },
@@ -38,44 +55,114 @@ function ImageInput({ image, onChangeImage }) {
         quality: 0.5,
       });
       if (!result.cancelled) {
-        result.url = result.uri;
-        const uriParts = result.uri.split(".");
-        const fileType = uriParts[uriParts.length - 1];
-        result.type =
-          Platform.OS === "android"
-            ? result.type + "/" + fileType
-            : result.type;
-        onChangeImage(result);
-        console.log(result);
+        importImage(result);
+        setModalVisible(false);
       }
     } catch (error) {
       console.log("Error reading an image", error);
     }
   };
 
+  const importImage = async (image) => {
+    let tempImage = image;
+    if (tempImage.height > tempImage.width) {
+      tempImage = await ImageManipulator.manipulateAsync(
+        image.uri,
+        [{ rotate: -90 }],
+        { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+      );
+    }
+    tempImage.url = tempImage.uri;
+    const uriParts = tempImage.uri.split(".");
+    const fileType = uriParts[uriParts.length - 1];
+    tempImage.type = Platform.OS === "android" ? "image/" + fileType : "image";
+    onChangeImage(tempImage);
+    console.log(tempImage);
+  };
+
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
-      <View style={styles.container}>
-        {!image && (
-          <MaterialCommunityIcons
-            color={colors.mediumGrey}
-            name="camera"
-            size={40}
-          />
-        )}
-        {image && (
-          <>
+    <>
+      <TouchableWithoutFeedback onPress={handlePress}>
+        <View style={styles.container}>
+          {!image && (
             <MaterialCommunityIcons
               color={colors.mediumGrey}
-              name="close"
-              size={24}
-              style={styles.close}
+              name="camera"
+              size={40}
             />
-            <Image source={{ uri: image.url }} style={styles.image} />
-          </>
-        )}
-      </View>
-    </TouchableWithoutFeedback>
+          )}
+          {image && (
+            <>
+              <MaterialCommunityIcons
+                color={colors.mediumGrey}
+                name="close"
+                size={24}
+                style={styles.deleteImage}
+              />
+              <Image source={{ uri: image.url }} style={styles.image} />
+            </>
+          )}
+        </View>
+      </TouchableWithoutFeedback>
+
+      <AppCamera
+        visible={cameraVisible}
+        setVisible={setCameraVisible}
+        onAccept={importImage}
+      />
+
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        transparent
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <AppButton
+              icon="close"
+              backgroundColor={null}
+              color={colors.danger}
+              border={null}
+              size={30}
+              onPress={() => setModalVisible(false)}
+              style={styles.closeButton}
+            />
+            <View style={styles.buttonsContainer}>
+              <View style={{ width: "50%", alignItems: "center" }}>
+                <AppButton
+                  icon="camera"
+                  backgroundColor={null}
+                  color={colors.mediumGrey}
+                  size={60}
+                  border={null}
+                  onPress={() => {
+                    setCameraVisible(true);
+                    setModalVisible(false);
+                  }}
+                />
+                <AppText>Take a Picture</AppText>
+              </View>
+              <View style={{ width: "50%", alignItems: "center" }}>
+                <AppButton
+                  icon="image"
+                  backgroundColor={null}
+                  color={colors.secondary}
+                  size={60}
+                  border={null}
+                  onPress={() => {
+                    selectImage();
+                  }}
+                />
+                <AppText>Select From Gallery</AppText>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 }
 
@@ -90,7 +177,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     width: 150,
   },
-  close: {
+  deleteImage: {
     position: "absolute",
     top: 5,
     right: 5,
@@ -102,6 +189,28 @@ const styles = StyleSheet.create({
   image: {
     height: "100%",
     width: "100%",
+  },
+  modalBackground: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  modalContainer: {
+    height: "40%",
+    backgroundColor: "white",
+    marginHorizontal: 20,
+    marginTop: 20,
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    ...defaultStyles.shadow,
+  },
+  closeButton: {
+    alignSelf: "flex-end",
+  },
+  buttonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
 });
 

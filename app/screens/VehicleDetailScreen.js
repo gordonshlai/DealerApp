@@ -588,7 +588,7 @@ function VehicleDetailScreen({ route, navigation }) {
                     <View style={styles.fieldContainer}>
                       <AppText
                         style={styles.fieldTitle}
-                      >{`Images (${values["images"].length})`}</AppText>
+                      >{`Images (${values["images"].length}) (Must be in landscape orientation)`}</AppText>
                       <FormImagePicker name="images" />
                     </View>
 

@@ -65,7 +65,7 @@ function AppButton({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 20,
+    borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
