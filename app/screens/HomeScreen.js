@@ -247,8 +247,8 @@ function HomeScreen({ navigation }) {
                     registration={item.registration}
                     imageUrl={item.thumb ? item.thumb.url : ""}
                     onPress={() =>
-                      navigation.navigate(routes.TRADE, {
-                        screen: routes.TRADE_DETAIL,
+                      navigation.navigate(routes.INVENTORY, {
+                        screen: routes.INVENTORY_DETAIL,
                         initial: false,
                         params: item,
                       })
