@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { View, Modal, Dimensions, Platform, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import Constants from "expo-constants";
+import { useDeviceOrientation } from "@react-native-community/hooks";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
@@ -10,6 +11,8 @@ import ActivityIndicator from "./ActivityIndicator";
 import colors from "../config/colors";
 
 function AppCamera({ visible, setVisible, onAccept }) {
+  let { portrait } = useDeviceOrientation();
+
   const [picture, setPicture] = useState();
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [paused, setPaused] = useState(false);
@@ -97,7 +100,7 @@ function AppCamera({ visible, setVisible, onAccept }) {
               onPress={paused ? handleCancel : flipcamera}
               style={styles.flipButton}
             />
-            {Platform.OS === "ios" && !paused && (
+            {!paused && !portrait && (
               <AppText style={styles.portraitOrientation}>
                 Please turn on 'Portrait Orientation Lock'
               </AppText>
@@ -145,10 +148,12 @@ const styles = StyleSheet.create({
   },
   portraitOrientation: {
     position: "absolute",
-    bottom: 120,
     alignSelf: "center",
+    top: Dimensions.get("window").height / 2,
     color: "white",
     fontWeight: "bold",
+    fontSize: 20,
+    transform: [{ rotate: "90deg" }],
   },
   thisWayUp: {
     position: "absolute",
