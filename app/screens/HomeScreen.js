@@ -70,7 +70,11 @@ function HomeScreen({ navigation }) {
     <Screen>
       <Background />
       <ActivityIndicator
-        visible={getUserApi.loading || getTradeVehiclesApi.loading}
+        visible={
+          getUserApi.loading ||
+          getTradeVehiclesApi.loading ||
+          getInventoryVehiclesApi.loading
+        }
       />
       {getUserApi.error ? (
         <View style={styles.screen}>

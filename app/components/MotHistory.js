@@ -5,6 +5,9 @@ import dayjs from "dayjs";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import AppText from "./AppText";
+import Info from "./Info";
+import Icon from "./Icon";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function MotHistory({ item, index }) {
   return (
@@ -37,14 +40,26 @@ function MotHistory({ item, index }) {
 
         <View style={styles.detailField}>
           <AppText style={styles.detailTitle}>Result</AppText>
-          <AppText
-            style={{
-              fontWeight: "bold",
-              color: item.testResult === "PASSED" ? colors.primary : "red",
-            }}
-          >
-            {item.testResult}
-          </AppText>
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <AppText
+              style={{
+                fontWeight: "bold",
+                color: item.testResult === "PASSED" ? "green" : "red",
+              }}
+            >
+              {item.testResult}
+            </AppText>
+            <MaterialCommunityIcons
+              name={
+                item.testResult === "PASSED"
+                  ? "check-circle-outline"
+                  : "close-circle-outline"
+              }
+              size={18}
+              color={item.testResult === "PASSED" ? "green" : "red"}
+              style={{ marginLeft: 3 }}
+            />
+          </View>
         </View>
       </View>
       {item.rfrAndComments.length > 0 && (
@@ -62,14 +77,29 @@ function MotHistory({ item, index }) {
           ))}
         </View>
       )}
+      {/* <View
+        style={{
+          position: "absolute",
+          right: 10,
+          top: 10,
+        }}
+      >
+        <MaterialCommunityIcons
+          name={
+            item.testResult === "PASSED"
+              ? "check-circle-outline"
+              : "close-circle-outline"
+          }
+          size={30}
+          color={item.testResult === "PASSED" ? "green" : "red"}
+        />
+      </View> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    borderColor: colors.lightGrey,
-    borderWidth: 2,
     backgroundColor: colors.white,
     borderRadius: 10,
     marginVertical: 10,
