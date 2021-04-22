@@ -19,6 +19,7 @@ function AppCamera({ visible, setVisible, onAccept }) {
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [paused, setPaused] = useState(false);
   const [zoom, setZoom] = useState(0);
+  const [flash, setFlash] = useState("auto");
   const [loading, setLoading] = useState(false);
   const camera = useRef();
 
@@ -55,6 +56,16 @@ function AppCamera({ visible, setVisible, onAccept }) {
     );
   };
 
+  const handleFlash = () => {
+    if (flash === "auto") {
+      setFlash("on");
+    } else if (flash === "on") {
+      setFlash("off");
+    } else {
+      setFlash("auto");
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -73,6 +84,7 @@ function AppCamera({ visible, setVisible, onAccept }) {
             type={type}
             ratio="16:9"
             zoom={zoom}
+            flashMode={flash}
             style={styles.camera}
           >
             <AppButton
@@ -87,6 +99,23 @@ function AppCamera({ visible, setVisible, onAccept }) {
               }}
               style={styles.cameraCloseButton}
             />
+            {!paused && (
+              <AppButton
+                icon={
+                  flash === "auto"
+                    ? "flash-auto"
+                    : flash === "off"
+                    ? "flash-off"
+                    : "flash"
+                }
+                backgroundColor={
+                  flash === "off" ? colors.darkGrey : colors.mediumGrey
+                }
+                size={30}
+                onPress={handleFlash}
+                style={styles.flashButton}
+              />
+            )}
             <AppButton
               icon={paused ? "check" : "camera"}
               backgroundColor={paused ? colors.success : colors.mediumGrey}
@@ -96,8 +125,8 @@ function AppCamera({ visible, setVisible, onAccept }) {
             />
             <AppButton
               icon={paused ? "close" : "swap-horizontal"}
-              size={30}
               backgroundColor={paused ? colors.danger : colors.darkGrey}
+              size={30}
               onPress={paused ? handleCancel : flipcamera}
               style={styles.flipButton}
             />
@@ -164,6 +193,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 20,
     top: Platform.OS === "ios" ? Constants.statusBarHeight : 0,
+  },
+  flashButton: {
+    position: "absolute",
+    left: 40,
+    bottom: 40,
+    borderColor: "white",
+    opacity: 0.5,
   },
   cameraButton: {
     position: "absolute",
