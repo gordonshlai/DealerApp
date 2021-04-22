@@ -25,7 +25,7 @@ import { ListItemSeparator } from "../components/lists";
 import Screen from "../components/Screen";
 import routes from "../navigation/routes";
 import { AppErrorMessage } from "../components/forms";
-import Disclaimer from "../components/Disclaimer";
+import TermsAndConditions from "../components/TermsAndConditions";
 import AuthContext from "../auth/context";
 import Background from "../components/Background";
 import MotHistory from "../components/MotHistory";
@@ -640,7 +640,7 @@ function InventoryDetailScreen({ navigation, route }) {
         </View>
       </Modal>
 
-      <Disclaimer
+      <TermsAndConditions
         visible={disclaimerVisible}
         setVisible={setDisclaimerVisible}
         onAcceptPress={() => {

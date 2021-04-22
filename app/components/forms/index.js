@@ -6,4 +6,5 @@ export { default as AppFormDateTimePicker } from "./AppFormDateTimePicker";
 export { default as AppInfoMessage } from "./AppInfoMessage";
 export { default as FormImagePicker } from "./FormImagePicker";
 export { default as RegistrationPlateInput } from "./RegistrationPlateInput";
+export { default as AppFormCheckBox } from "./AppFormCheckBox";
 export { default as SubmitButton } from "./SubmitButton";

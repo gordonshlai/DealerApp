@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Image,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,15 +12,13 @@ import * as Yup from "yup";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 
-// import authApi from "../api/auth";
-// import userApi from "../api/users";
-// import useAuth from "../auth/useAuth";
 import ActivityIndicator from "../components/ActivityIndicator";
 import client from "../api/client";
 import {
   AppErrorMessage,
   AppForm,
   AppFormField,
+  AppFormCheckBox,
   SubmitButton,
 } from "../components/forms";
 import Screen from "../components/Screen";
@@ -54,16 +51,15 @@ const validationSchema = Yup.object().shape({
     [Yup.ref("password"), null],
     "Password must match"
   ),
+  checked: Yup.boolean()
+    .oneOf([true], "Field must be checked")
+    .label("Terms and Conditions"),
 });
 
 /**
  * The register screen functional component
  */
 function RegisterScreen1({ navigation }) {
-  // const registerApi = useApi(userApi.register);
-  // const loginApi = useApi(authApi.login);
-
-  // const {logIn} = useAuth();
   const [error, setError] = useState();
 
   /**
@@ -120,6 +116,7 @@ function RegisterScreen1({ navigation }) {
                 fullName: "",
                 password: "",
                 confirmPassword: "",
+                checked: false,
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
@@ -178,6 +175,7 @@ function RegisterScreen1({ navigation }) {
                   color="white"
                 />
               </View>
+              <AppFormCheckBox name="checked" />
               <AppErrorMessage error={error} visible={error} />
               <SubmitButton title="Register" backgroundColor={colors.success} />
             </AppForm>

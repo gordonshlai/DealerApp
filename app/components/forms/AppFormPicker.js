@@ -13,13 +13,7 @@ function AppFormPicker({
   onSelectItem,
   disabled,
 }) {
-  const {
-    errors,
-    setFieldValue,
-    touched,
-    values,
-    handleChange,
-  } = useFormikContext();
+  const { setFieldValue, errors, touched, values } = useFormikContext();
 
   return (
     <>

@@ -20,6 +20,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   AppErrorMessage,
   AppForm,
+  AppFormCheckBox,
   AppFormField,
   SubmitButton,
 } from "../components/forms";
@@ -30,7 +31,6 @@ import Info from "../components/Info";
 import SpecificationItem from "../components/SpecificationItem";
 import { ListItemSeparator } from "../components/lists";
 import Slider from "../components/Slider";
-import Disclaimer from "../components/Disclaimer";
 import Screen from "../components/Screen";
 
 import client from "../api/client";
@@ -42,10 +42,16 @@ import AuthContext from "../auth/context";
 
 const offerValidationSchema = Yup.object().shape({
   price: Yup.number().required().min(0).label("Price"),
+  checked: Yup.boolean()
+    .oneOf([true], "Field must be checked")
+    .label("Terms and Conditions"),
 });
 
 const enquireValidationSchema = Yup.object().shape({
   message: Yup.string().min(0).label("Message"),
+  checked: Yup.boolean()
+    .oneOf([true], "Field must be checked")
+    .label("Terms and Conditions"),
 });
 
 function TradeDetailScreen({ route, navigation }) {
@@ -84,11 +90,11 @@ function TradeDetailScreen({ route, navigation }) {
     return firstPart + " " + secondPart;
   };
 
-  const handleOfferSubmit = ({ price }) => {
+  const handleOfferSubmit = async ({ price }) => {
     setMakeOfferModalVisible(false);
-    setDisclaimerVisible(true);
-    setMessage(
-      "I am interested in the " +
+    const result = await enquiryApi.request({
+      message:
+        "I am interested in the " +
         getVehicleApi.data.year +
         " " +
         getVehicleApi.data.make +
@@ -97,34 +103,35 @@ function TradeDetailScreen({ route, navigation }) {
         " (" +
         formatingRegistration(getVehicleApi.data.registration) +
         "), would you accept £" +
-        price
-    );
+        price,
+    });
+    if (!result.ok) {
+      return setError(result.data.message);
+    }
+    navigateToMessageDetailScreen(result);
   };
 
-  const handleEnquireSubmit = ({ message }) => {
+  const handleEnquireSubmit = async ({ message }) => {
     setEnquireModalVisible(false);
-    setDisclaimerVisible(true);
-    setMessage(message);
-  };
-
-  const onAcceptPress = async () => {
-    setDisclaimerVisible(false);
     const result = await enquiryApi.request({
       message: message,
     });
     if (!result.ok) {
-      setDisclaimerVisible(false);
-      setError(result.data.message);
+      return setError(result.data.message);
     }
+    navigateToMessageDetailScreen(result);
+  };
+
+  const navigateToMessageDetailScreen = (result) => {
+    setLoadMessagesFlag(!loadMessagesFlag);
     navigation.navigate(routes.MESSAGES, {
       screen: routes.MESSAGE_DETAIL,
-      inital: false,
+      initial: false,
       params: {
         messageId: result.data.id,
         title: getVehicleApi.data.seller.name,
       },
     });
-    setLoadMessagesFlag(!loadMessagesFlag);
   };
 
   const secondRow = () => (
@@ -563,6 +570,7 @@ function TradeDetailScreen({ route, navigation }) {
                           getVehicleApi.data.price_asking != "0.00"
                             ? getVehicleApi.data.price_asking
                             : "",
+                        checked: false,
                       }}
                       onSubmit={handleOfferSubmit}
                       validationSchema={offerValidationSchema}
@@ -574,6 +582,11 @@ function TradeDetailScreen({ route, navigation }) {
                         keyboardType="numeric"
                         color={colors.primary}
                         size={24}
+                      />
+                      <AppFormCheckBox
+                        name="checked"
+                        textStyle={{ color: colors.darkGrey }}
+                        uncheckedColor={colors.darkGrey}
                       />
                       <View style={styles.modalButtonsContainer}>
                         <AppButton
@@ -671,6 +684,7 @@ function TradeDetailScreen({ route, navigation }) {
                               ) +
                               "), is this still available?"
                             : "",
+                        checked: false,
                       }}
                       onSubmit={handleEnquireSubmit}
                       validationSchema={enquireValidationSchema}
@@ -685,6 +699,11 @@ function TradeDetailScreen({ route, navigation }) {
                           keyboardType="default"
                           multiline
                           size={18}
+                        />
+                        <AppFormCheckBox
+                          name="checked"
+                          textStyle={{ color: colors.darkGrey }}
+                          uncheckedColor={colors.darkGrey}
                         />
                         <View style={styles.modalButtonsContainer}>
                           <AppButton
@@ -708,13 +727,6 @@ function TradeDetailScreen({ route, navigation }) {
           </Screen>
         </View>
       </Modal>
-
-      <Disclaimer
-        visible={disclaimerVisible}
-        setVisible={setDisclaimerVisible}
-        onAcceptPress={onAcceptPress}
-        onCancelPress={() => setDisclaimerVisible(false)}
-      />
     </>
   );
 }
