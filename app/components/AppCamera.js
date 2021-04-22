@@ -3,12 +3,14 @@ import { View, Modal, Dimensions, Platform, StyleSheet } from "react-native";
 import { Camera } from "expo-camera";
 import Constants from "expo-constants";
 import { useDeviceOrientation } from "@react-native-community/hooks";
+import { Slider } from "react-native-elements";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
 import ActivityIndicator from "./ActivityIndicator";
 
 import colors from "../config/colors";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 function AppCamera({ visible, setVisible, onAccept }) {
   let { portrait } = useDeviceOrientation();
@@ -16,6 +18,7 @@ function AppCamera({ visible, setVisible, onAccept }) {
   const [picture, setPicture] = useState();
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [paused, setPaused] = useState(false);
+  const [zoom, setZoom] = useState(0);
   const [loading, setLoading] = useState(false);
   const camera = useRef();
 
@@ -69,10 +72,8 @@ function AppCamera({ visible, setVisible, onAccept }) {
             ref={camera}
             type={type}
             ratio="16:9"
-            style={{
-              height: "100%",
-              width: "100%",
-            }}
+            zoom={zoom}
+            style={styles.camera}
           >
             <AppButton
               icon="close"
@@ -100,6 +101,34 @@ function AppCamera({ visible, setVisible, onAccept }) {
               onPress={paused ? handleCancel : flipcamera}
               style={styles.flipButton}
             />
+            {!paused && (
+              <Slider
+                animateTransitions
+                animationType="timing"
+                maximumTrackTintColor={colors.lightGrey + "77"}
+                maximumValue={1}
+                minimumTrackTintColor={colors.primary + "aa"}
+                minimumValue={0}
+                onValueChange={(value) => setZoom(value)}
+                orientation="horizontal"
+                step={0.01}
+                style={styles.slider}
+                thumbStyle={styles.sliderThumb}
+                thumbProps={{
+                  children: (
+                    <MaterialCommunityIcons
+                      name="magnify"
+                      color="white"
+                      size={24}
+                      style={{ transform: [{ rotate: "90deg" }] }}
+                    />
+                  ),
+                }}
+                thumbTintColor="green"
+                trackStyle={styles.sliderTrack}
+                value={zoom}
+              />
+            )}
             {!paused && !portrait && (
               <AppText style={styles.portraitOrientation}>
                 Please turn on 'Portrait Orientation Lock'
@@ -127,6 +156,10 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: (Dimensions.get("window").width * 16) / 9,
   },
+  camera: {
+    height: "100%",
+    width: "100%",
+  },
   cameraCloseButton: {
     position: "absolute",
     right: 20,
@@ -145,6 +178,24 @@ const styles = StyleSheet.create({
     bottom: 40,
     borderColor: "white",
     opacity: 0.5,
+  },
+  slider: {
+    position: "absolute",
+    width: "80%",
+    alignSelf: "center",
+    bottom: 120,
+    opacity: 0.5,
+  },
+  sliderThumb: {
+    backgroundColor: colors.mediumGrey,
+    height: 30,
+    width: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  sliderTrack: {
+    height: 10,
+    borderRadius: 20,
   },
   portraitOrientation: {
     position: "absolute",
