@@ -5,6 +5,7 @@ import Constants from "expo-constants";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
+import ActivityIndicator from "./ActivityIndicator";
 
 import colors from "../config/colors";
 
@@ -12,13 +13,16 @@ function AppCamera({ visible, setVisible, onAccept }) {
   const [picture, setPicture] = useState();
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [paused, setPaused] = useState(false);
+  const [loading, setLoading] = useState(false);
   const camera = useRef();
 
   const takePicture = async () => {
     try {
+      setLoading(true);
       const preview = await camera.current.takePictureAsync();
       setPicture(preview);
       console.log(preview);
+      setLoading(false);
       camera.current.pausePreview();
       setPaused(true);
     } catch (error) {
@@ -57,6 +61,7 @@ function AppCamera({ visible, setVisible, onAccept }) {
         <View
           style={Platform.OS === "android" ? styles.androidCameraContainer : {}}
         >
+          <ActivityIndicator visible={loading} />
           <Camera
             ref={camera}
             type={type}
