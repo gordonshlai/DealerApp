@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,9 +10,9 @@ import {
   Dimensions,
   Linking,
 } from "react-native";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import * as Yup from "yup";
+import { CheckBox } from "react-native-elements";
 
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
@@ -39,6 +39,7 @@ import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
+import { Formik } from "formik";
 
 const offerValidationSchema = Yup.object().shape({
   price: Yup.number().required().min(0).label("Price"),
@@ -59,13 +60,12 @@ function TradeDetailScreen({ route, navigation }) {
 
   const { loadMessagesFlag, setLoadMessagesFlag } = useContext(AuthContext);
 
-  const tabBarHeight = useBottomTabBarHeight();
   const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
   const [makeOfferModalVisible, setMakeOfferModalVisible] = useState(false);
   const [enquireModalVisible, setEnquireModalVisible] = useState(false);
-  const [disclaimerVisible, setDisclaimerVisible] = useState(false);
-  const [message, setMessage] = useState("");
+  const [serviceHistory, setServiceHistory] = useState(false);
+  const [owners, setOwners] = useState(false);
 
   const getVehicleApi = useApi(() =>
     client.get("api/trade/" + vehicle.type + "/inventory/" + vehicle.id)
@@ -560,8 +560,11 @@ function TradeDetailScreen({ route, navigation }) {
                     <AppText style={{ fontWeight: "bold", fontSize: 18 }}>
                       You are making an offer on...
                     </AppText>
-                    <AppText style={styles.title}>
+                    <AppText style={styles.title} numberOfLines={2}>
                       {getVehicleApi.data.title}
+                    </AppText>
+                    <AppText style={styles.tagline} numberOfLines={2}>
+                      {getVehicleApi.data.tagline}
                     </AppText>
                     <AppForm
                       initialValues={{
@@ -662,10 +665,13 @@ function TradeDetailScreen({ route, navigation }) {
                     <AppText style={{ fontWeight: "bold", fontSize: 18 }}>
                       You are enquiring about...
                     </AppText>
-                    <AppText style={styles.title}>
+                    <AppText style={styles.title} numberOfLines={2}>
                       {getVehicleApi.data.title}
                     </AppText>
-                    <AppForm
+                    <AppText style={styles.tagline} numberOfLines={2}>
+                      {getVehicleApi.data.tagline}
+                    </AppText>
+                    <Formik
                       initialValues={{
                         message:
                           getVehicleApi.data.year &&
@@ -682,44 +688,126 @@ function TradeDetailScreen({ route, navigation }) {
                               formatingRegistration(
                                 getVehicleApi.data.registration
                               ) +
-                              "), is this still available?"
+                              "), is this still available?" +
+                              (serviceHistory
+                                ? "\nCan you provide with service history please?"
+                                : "") +
+                              (owners
+                                ? "\nCan you provide with numbers of previous owners please?"
+                                : "")
                             : "",
                         checked: false,
                       }}
                       onSubmit={handleEnquireSubmit}
                       validationSchema={enquireValidationSchema}
                     >
-                      <View style={{ marginTop: 50 }}>
-                        <AppText style={{ fontWeight: "bold", fontSize: 18 }}>
-                          Message
-                        </AppText>
-                        <AppFormField
-                          name="message"
-                          placeholder="Type a message"
-                          keyboardType="default"
-                          multiline
-                          size={18}
-                        />
-                        <AppFormCheckBox
-                          name="checked"
-                          textStyle={{ color: colors.darkGrey }}
-                          uncheckedColor={colors.darkGrey}
-                        />
-                        <View style={styles.modalButtonsContainer}>
-                          <AppButton
-                            title="Cancel"
-                            backgroundColor={null}
-                            color={colors.success}
-                            style={{ width: "45%" }}
-                            onPress={() => setEnquireModalVisible(false)}
+                      {({ values, setFieldValue }) => (
+                        <>
+                          <CheckBox
+                            checked={serviceHistory}
+                            checkedColor={colors.primary}
+                            containerStyle={styles.checkBoxContainer}
+                            onPress={() => {
+                              setServiceHistory(!serviceHistory);
+
+                              const message =
+                                "\nCan you provide with service history please?";
+                              const patt = /\nCan you provide with service history please?/;
+
+                              if (serviceHistory) {
+                                if (patt.test(values["message"])) {
+                                  setFieldValue(
+                                    "message",
+                                    values["message"].replace(message, "")
+                                  );
+                                }
+                                return;
+                              } else {
+                                setFieldValue(
+                                  "message",
+                                  values["message"] + message
+                                );
+                              }
+                            }}
+                            size={20}
+                            textStyle={{
+                              color: serviceHistory
+                                ? colors.primary
+                                : colors.mediumGrey,
+                            }}
+                            title="Ask for service history"
+                            uncheckedColor={colors.mediumGrey}
                           />
-                          <SubmitButton
-                            title="Submit"
-                            style={{ width: "45%" }}
+                          <CheckBox
+                            checked={owners}
+                            checkedColor={colors.primary}
+                            containerStyle={styles.checkBoxContainer}
+                            onPress={() => {
+                              setOwners(!owners);
+
+                              const message =
+                                "\nCan you provide with numbers of previous owners please?";
+                              const patt = /\nCan you provide with numbers of previous owners please?/;
+
+                              if (owners) {
+                                if (patt.test(values["message"])) {
+                                  setFieldValue(
+                                    "message",
+                                    values["message"].replace(message, "")
+                                  );
+                                }
+                                return;
+                              } else {
+                                setFieldValue(
+                                  "message",
+                                  values["message"] + message
+                                );
+                              }
+                            }}
+                            size={20}
+                            textStyle={{
+                              color: owners
+                                ? colors.primary
+                                : colors.mediumGrey,
+                            }}
+                            title="Ask for numbers of previous owners"
+                            uncheckedColor={colors.mediumGrey}
                           />
-                        </View>
-                      </View>
-                    </AppForm>
+                          <View style={{ marginTop: 20 }}>
+                            <AppText
+                              style={{ fontWeight: "bold", fontSize: 18 }}
+                            >
+                              Message
+                            </AppText>
+                            <AppFormField
+                              name="message"
+                              placeholder="Type a message"
+                              keyboardType="default"
+                              multiline
+                              size={18}
+                            />
+                            <AppFormCheckBox
+                              name="checked"
+                              textStyle={{ color: colors.darkGrey }}
+                              uncheckedColor={colors.darkGrey}
+                            />
+                            <View style={styles.modalButtonsContainer}>
+                              <AppButton
+                                title="Cancel"
+                                backgroundColor={null}
+                                color={colors.success}
+                                style={{ width: "45%" }}
+                                onPress={() => setEnquireModalVisible(false)}
+                              />
+                              <SubmitButton
+                                title="Submit"
+                                style={{ width: "45%" }}
+                              />
+                            </View>
+                          </View>
+                        </>
+                      )}
+                    </Formik>
                   </View>
                 </ScrollView>
               </KeyboardAvoidingView>
@@ -835,6 +923,12 @@ const styles = StyleSheet.create({
   modalButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+  },
+  checkBoxContainer: {
+    backgroundColor: null,
+    borderWidth: 0,
+    margin: 0,
+    padding: 5,
   },
 });
 
