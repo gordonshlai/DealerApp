@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     color: colors.lightGrey,
     alignSelf: "center",
+    textAlign: "center",
     position: "absolute",
     bottom: 20,
   },

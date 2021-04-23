@@ -102,16 +102,6 @@ function Menu() {
                 }}
               />
             </View>
-
-            <AppButton
-              backgroundColor={null}
-              color={colors.danger}
-              border={false}
-              size={30}
-              icon="close"
-              onPress={() => setModalVisible(false)}
-              style={styles.bottomCloseButton}
-            />
           </View>
         </View>
       </Modal>
