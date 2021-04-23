@@ -21,10 +21,10 @@ function AppFormPicker({
         icon={icon}
         items={items}
         onSelectItem={(item) => {
-          setFieldValue(name, item);
           if (onSelectItem) {
             onSelectItem(item);
           }
+          setFieldValue(name, item);
         }}
         placeholder={placeholder}
         selectedItem={values[name]}

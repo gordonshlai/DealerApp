@@ -77,7 +77,12 @@ const body_styleArray = [
   "Minivan/Van",
   "Pickup",
 ];
-const sales_statusArray = ["In Stock", "Sold", "List For Trade"];
+const sales_statusArray = [
+  "In Stock",
+  "Sold",
+  "List on Trade to Trade",
+  "Sold to a Customer",
+];
 
 function VehicleDetailScreen({ route, navigation }) {
   const vehicleDetail = route.params;
@@ -165,7 +170,10 @@ function VehicleDetailScreen({ route, navigation }) {
           setProgress(progress / 3)
         );
     console.log(result);
-    if (!result.ok) return setError(result.data.message);
+    if (!result.ok) {
+      setUploadVisible(false);
+      return setError(result.data.message);
+    }
     setProgress(1 / 3);
 
     if (vehicleDetail.images) {
@@ -182,8 +190,10 @@ function VehicleDetailScreen({ route, navigation }) {
             originalImage.id
           );
           console.log(deleteImageResponse);
-          if (!deleteImageResponse.ok)
+          if (!deleteImageResponse.ok) {
+            setUploadVisible(false);
             return setError(deleteImageResponse.data.message);
+          }
         }
       }
     }
@@ -211,8 +221,10 @@ function VehicleDetailScreen({ route, navigation }) {
         }
       );
       console.log(postImagesResponse);
-      if (!postImagesResponse.ok)
+      if (!postImagesResponse.ok) {
+        setUploadVisible(false);
         return setError(postImagesResponse.data.message);
+      }
     }
     setProgress(1);
   };

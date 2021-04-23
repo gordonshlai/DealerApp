@@ -62,7 +62,9 @@ function InventoryDetailScreen({ navigation, route }) {
   const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [actionModalVisible, setActionModalVisible] = useState(false);
-  const [disclaimerVisible, setDisclaimerVisible] = useState(false);
+  const [termsAndConditionsVisible, setTermsAndConditionsVisible] = useState(
+    false
+  );
   const [areYouSureModalVisible, setAreYouSureModalVisible] = useState(false);
 
   const getVehicleApi = useApi(() =>
@@ -97,8 +99,9 @@ function InventoryDetailScreen({ navigation, route }) {
   };
 
   const handlePatch = async (index) => {
-    getVehicleApi.data.sales_status = index;
-    const result = await patchVehicleApi.request(getVehicleApi.data);
+    const payload = { ...getVehicleApi.data };
+    payload.sales_status = index;
+    const result = await patchVehicleApi.request(payload);
     if (!result.ok) {
       setError(result.data.message);
       setErrorModalVisible(true);
@@ -597,7 +600,7 @@ function InventoryDetailScreen({ navigation, route }) {
                         if (index === 0 || index === 1 || index === 3) {
                           return handlePatch(index);
                         } else if (index === 2) {
-                          setDisclaimerVisible(true);
+                          setTermsAndConditionsVisible(true);
                         } else {
                           setAreYouSureModalVisible(true);
                         }
@@ -641,13 +644,13 @@ function InventoryDetailScreen({ navigation, route }) {
       </Modal>
 
       <TermsAndConditions
-        visible={disclaimerVisible}
-        setVisible={setDisclaimerVisible}
+        visible={termsAndConditionsVisible}
+        setVisible={setTermsAndConditionsVisible}
         onAcceptPress={() => {
-          setDisclaimerVisible(false);
+          setTermsAndConditionsVisible(false);
           handlePatch(actions.indexOf("List On Trade To Trade"));
         }}
-        onCancelPress={() => setDisclaimerVisible(false)}
+        onCancelPress={() => setTermsAndConditionsVisible(false)}
       />
 
       <Modal
