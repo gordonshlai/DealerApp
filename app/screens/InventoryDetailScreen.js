@@ -197,10 +197,8 @@ function InventoryDetailScreen({ navigation, route }) {
                       {
                         height:
                           getVehicleApi.data.images.length > 1
-                            ? Dimensions.get("window").height *
-                              (Platform.isPad ? 0.5 : 0.3)
-                            : Dimensions.get("window").height *
-                              (Platform.isPad ? 0.5 : 0.3) *
+                            ? (Dimensions.get("window").width - 20) / 1.5
+                            : ((Dimensions.get("window").width - 20) / 1.5) *
                               0.8,
                       },
                     ]}
@@ -208,10 +206,7 @@ function InventoryDetailScreen({ navigation, route }) {
                     {getVehicleApi.data.images.length !== 0 ? (
                       <Slider
                         images={getVehicleApi.data.images}
-                        height={
-                          Dimensions.get("window").height *
-                          (Platform.isPad ? 0.5 : 0.3)
-                        }
+                        height={(Dimensions.get("window").width - 20) / 1.5}
                         width={Dimensions.get("window").width - 20}
                       />
                     ) : (
@@ -531,21 +526,15 @@ function InventoryDetailScreen({ navigation, route }) {
                           {
                             height:
                               getVehicleApi.data.images.length > 1
-                                ? Dimensions.get("window").height *
-                                  (Platform.isPad ? 0.5 : 0.3)
-                                : Dimensions.get("window").height *
-                                  (Platform.isPad ? 0.5 : 0.3) *
-                                  0.8,
+                                ? (Dimensions.get("window").width - 20) / 1.5
+                                : (Dimensions.get("window").width - 20) / 1.5,
                           },
                         ]}
                       >
                         {getVehicleApi.data.images.length !== 0 ? (
                           <Slider
                             images={getVehicleApi.data.images}
-                            height={
-                              Dimensions.get("window").height *
-                              (Platform.isPad ? 0.5 : 0.3)
-                            }
+                            height={(Dimensions.get("window").width - 20) / 1.5}
                             width={Dimensions.get("window").width - 20}
                           />
                         ) : (

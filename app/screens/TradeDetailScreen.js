@@ -190,10 +190,8 @@ function TradeDetailScreen({ route, navigation }) {
                       {
                         height:
                           getVehicleApi.data.images.length > 1
-                            ? Dimensions.get("window").height *
-                              (Platform.isPad ? 0.5 : 0.3)
-                            : Dimensions.get("window").height *
-                              (Platform.isPad ? 0.5 : 0.3) *
+                            ? (Dimensions.get("window").width - 20) / 1.5
+                            : ((Dimensions.get("window").width - 20) / 1.5) *
                               0.8,
                       },
                     ]}
@@ -201,10 +199,7 @@ function TradeDetailScreen({ route, navigation }) {
                     {getVehicleApi.data.images.length !== 0 ? (
                       <Slider
                         images={getVehicleApi.data.images}
-                        height={
-                          Dimensions.get("window").height *
-                          (Platform.isPad ? 0.5 : 0.3)
-                        }
+                        height={(Dimensions.get("window").width - 20) / 1.5}
                         width={Dimensions.get("window").width - 20}
                       />
                     ) : (
@@ -530,10 +525,8 @@ function TradeDetailScreen({ route, navigation }) {
                         {
                           height:
                             getVehicleApi.data.images.length > 1
-                              ? Dimensions.get("window").height *
-                                (Platform.isPad ? 0.5 : 0.3)
-                              : Dimensions.get("window").height *
-                                (Platform.isPad ? 0.5 : 0.3) *
+                              ? (Dimensions.get("window").width - 20) / 1.5
+                              : ((Dimensions.get("window").width - 20) / 1.5) *
                                 0.8,
                         },
                       ]}
@@ -541,10 +534,7 @@ function TradeDetailScreen({ route, navigation }) {
                       {getVehicleApi.data.images.length !== 0 ? (
                         <Slider
                           images={getVehicleApi.data.images}
-                          height={
-                            Dimensions.get("window").height *
-                            (Platform.isPad ? 0.5 : 0.3)
-                          }
+                          height={(Dimensions.get("window").width - 20) / 1.5}
                           width={Dimensions.get("window").width - 20}
                         />
                       ) : (
@@ -635,10 +625,8 @@ function TradeDetailScreen({ route, navigation }) {
                         {
                           height:
                             getVehicleApi.data.images.length > 1
-                              ? Dimensions.get("window").height *
-                                (Platform.isPad ? 0.5 : 0.3)
-                              : Dimensions.get("window").height *
-                                (Platform.isPad ? 0.5 : 0.3) *
+                              ? (Dimensions.get("window").width - 20) / 1.5
+                              : ((Dimensions.get("window").width - 20) / 1.5) *
                                 0.8,
                         },
                       ]}
@@ -646,10 +634,7 @@ function TradeDetailScreen({ route, navigation }) {
                       {getVehicleApi.data.images.length !== 0 ? (
                         <Slider
                           images={getVehicleApi.data.images}
-                          height={
-                            Dimensions.get("window").height *
-                            (Platform.isPad ? 0.5 : 0.3)
-                          }
+                          height={(Dimensions.get("window").width - 20) / 1.5}
                           width={Dimensions.get("window").width - 20}
                         />
                       ) : (

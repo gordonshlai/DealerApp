@@ -113,7 +113,7 @@ function HomeScreen({ navigation }) {
               <Slider
                 images={[require("../assets/Generic-Home-Banner.jpg")]}
                 height={
-                  Dimensions.get("window").height * (Platform.isPad ? 0.4 : 0.3)
+                  ((Dimensions.get("window").width - 40) * (1 / 1.5)) / 0.8
                 }
                 width={Dimensions.get("window").width - 40}
                 hasThumbnail={false}
