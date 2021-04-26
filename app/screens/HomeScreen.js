@@ -111,11 +111,7 @@ function HomeScreen({ navigation }) {
           <View style={styles.bannerContainer}>
             <View style={styles.bannerInnerContainer}>
               <Slider
-                images={[
-                  require("../assets/banner.jpg"),
-                  require("../assets/banner.jpg"),
-                  require("../assets/banner.jpg"),
-                ]}
+                images={[require("../assets/Generic-Home-Banner.jpg")]}
                 height={
                   Dimensions.get("window").height * (Platform.isPad ? 0.4 : 0.3)
                 }
@@ -351,6 +347,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   flatlistTitle: {
+    color: colors.primary,
     fontWeight: "bold",
     fontSize: Platform.isPad ? 24 : 16,
   },

@@ -257,7 +257,7 @@ function TradeDetailScreen({ route, navigation }) {
                     {getVehicleApi.data.price_cap && (
                       <View style={styles.detailField}>
                         <AppText style={styles.detailTitle}>
-                          Guide Price
+                          Retail Price
                         </AppText>
                         <AppText
                           style={[
