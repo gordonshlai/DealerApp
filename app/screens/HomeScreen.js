@@ -243,6 +243,7 @@ function HomeScreen({ navigation }) {
                     engineCapacity={item.engine_capacity}
                     priceAsking={item.price_asking}
                     registration={item.registration}
+                    sales_status={item.sales_status}
                     imageUrl={item.thumb ? item.thumb.url : ""}
                     onPress={() =>
                       navigation.navigate(routes.INVENTORY, {

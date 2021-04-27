@@ -52,6 +52,7 @@ function InventoryDetailScreen({ navigation, route }) {
 
   const {
     loadInventoryDetailFlag,
+    setLoadInventoryDetailFlag,
     loadInventoryFlag,
     setLoadInventoryFlag,
     loadTradeFlag,
@@ -107,6 +108,7 @@ function InventoryDetailScreen({ navigation, route }) {
       setErrorModalVisible(true);
       return;
     }
+    setLoadInventoryDetailFlag(!loadInventoryDetailFlag);
     setLoadInventoryFlag(!loadInventoryFlag);
     setLoadTradeFlag(!loadTradeFlag);
   };
