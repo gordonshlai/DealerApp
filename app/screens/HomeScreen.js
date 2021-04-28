@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   Platform,
+  Image,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
@@ -110,20 +111,18 @@ function HomeScreen({ navigation }) {
           </View>
           <View style={styles.bannerContainer}>
             <View style={styles.bannerInnerContainer}>
-              <Slider
+              {/* <Slider
                 images={[require("../assets/Generic-Home-Banner.jpg")]}
-                height={
-                  ((Dimensions.get("window").width - 40) * (1 / 1.5)) / 0.8
-                }
+                height={(Dimensions.get("window").width - 40) / 1.5 / 0.8}
                 width={Dimensions.get("window").width - 40}
                 hasThumbnail={false}
+              /> */}
+              <Image
+                source={require("../assets/Generic-Home-Banner.jpg")}
+                style={styles.bannerImage}
+                resizeMode="cover"
               />
-              {/* <Image
-              source={require("../assets/banner.jpg")}
-              style={styles.bannerImage}
-              resizeMode="cover"
-            />
-            <AppText style={styles.bannerText}>DEALERS OFFER!</AppText> */}
+              {/* <AppText style={styles.bannerText}>DEALERS OFFER!</AppText> */}
             </View>
           </View>
           <View style={styles.navigationContainer}>
@@ -328,11 +327,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: "hidden",
   },
-  // bannerImage: {
-  //   width: "100%",
-  //   height: 150,
-  //   borderRadius: 10,
-  // },
+  bannerImage: {
+    height: (Dimensions.get("window").width - 40) / 1.5,
+    width: Dimensions.get("window").width - 40,
+    borderRadius: 10,
+  },
   // bannerText: {
   //   position: "absolute",
   //   color: colors.primary,
