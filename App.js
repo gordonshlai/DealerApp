@@ -9,12 +9,12 @@ import AuthNavigator from "./app/navigation/AuthNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
 import client from "./app/api/client";
 import { StatusBar } from "react-native";
-import OnboardingScreen from "./app/screens/OnboardingScreen";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+// import OnboardingScreen from "./app/screens/OnboardingScreen";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import { navigationRef } from "./app/navigation/rootNavigation";
 
 export default function App() {
-  const [isFirstLaunch, setIsFirstLaunch] = useState("null");
+  // const [isFirstLaunch, setIsFirstLaunch] = useState("null");
   const [authToken, setAuthToken] = useState();
   const [isReady, setIsReady] = useState(false);
   const [unread, setUnread] = useState(null);
@@ -28,22 +28,22 @@ export default function App() {
     repeatRequest();
   }, [authToken]);
 
-  useEffect(() => {
-    firstLaunch();
-  }, []);
+  // useEffect(() => {
+  //   firstLaunch();
+  // }, []);
 
-  const firstLaunch = () => {
-    // AsyncStorage.removeItem("alreadyLaunched");
+  // const firstLaunch = () => {
+  //   // AsyncStorage.removeItem("alreadyLaunched");
 
-    AsyncStorage.getItem("alreadyLaunched").then((value) => {
-      if (value == null) {
-        AsyncStorage.setItem("alreadyLaunched", "true");
-        setIsFirstLaunch(true);
-      } else {
-        setIsFirstLaunch(false);
-      }
-    });
-  };
+  //   AsyncStorage.getItem("alreadyLaunched").then((value) => {
+  //     if (value == null) {
+  //       AsyncStorage.setItem("alreadyLaunched", "true");
+  //       setIsFirstLaunch(true);
+  //     } else {
+  //       setIsFirstLaunch(false);
+  //     }
+  //   });
+  // };
 
   const repeatRequest = async () => {
     if (!authToken) return;
@@ -86,7 +86,7 @@ export default function App() {
   return (
     <AuthContext.Provider
       value={{
-        setIsFirstLaunch,
+        // setIsFirstLaunch,
         authToken,
         setAuthToken,
         unread,
@@ -105,11 +105,12 @@ export default function App() {
     >
       <NavigationContainer ref={navigationRef} theme={navigationTheme}>
         <StatusBar barStyle="light-content" />
-        {isFirstLaunch ? (
+        {/* {isFirstLaunch ? (
           <OnboardingScreen />
         ) : (
           <>{authToken ? <AppNavigator /> : <AuthNavigator />}</>
-        )}
+        )} */}
+        {authToken ? <AppNavigator /> : <AuthNavigator />}
       </NavigationContainer>
     </AuthContext.Provider>
   );
