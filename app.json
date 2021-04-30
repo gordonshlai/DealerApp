@@ -20,13 +20,14 @@
       "buildNumber": "1.0.4"
     },
     "android": {
+      "permissions": ["CAMERA"],
       "adaptiveIcon": {
         "foregroundImage": "./app/assets/icon.png",
         "backgroundColor": "#FFFFFF"
       },
       "useNextNotificationsApi": true,
       "package": "com.warrantywise.dealer",
-      "versionCode": 4
+      "versionCode": 5
     },
     "web": {
       "favicon": "./app/assets/icon.png"
