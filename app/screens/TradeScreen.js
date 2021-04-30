@@ -29,6 +29,7 @@ import useApi from "../hooks/useApi";
 import defaultStyle from "../config/styles";
 import routes from "../navigation/routes";
 import useDidMountEffect from "../hooks/useDidMountEffect";
+import settings from "../config/settings";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -88,7 +89,7 @@ function HomeScreen({ navigation }) {
 
   const [pageCurrent, setPageCurrent] = useState(1);
   const [seller, setSeller] = useState("");
-  const [env, setEnv] = useState("1");
+  const [env, setEnv] = useState(settings.tradeEnv);
   const [sortBy, setSortBy] = useState("listed-desc");
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
