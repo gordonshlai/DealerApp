@@ -29,17 +29,19 @@ import useApi from "../hooks/useApi";
 import client from "../api/client";
 import routes from "../navigation/routes";
 import defaultStyles from "../config/styles";
+import settings from "../config/settings";
 
 function HomeScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
+  const [env, setEnv] = useState(settings.tradeEnv);
 
   const getUserApi = useApi(() => client.get("api/user"));
   const getTradeVehiclesApi = useApi(() =>
     client.get(
-      "api/trade/all/inventory?make=all&seller=&env=1&sortBy=listed-desc&perPage=12&page=1"
+      `api/trade/all/inventory?make=all&seller=&env=${env}&sortBy=listed-desc&perPage=12&page=1`
     )
   );
   const getInventoryVehiclesApi = useApi(() =>
