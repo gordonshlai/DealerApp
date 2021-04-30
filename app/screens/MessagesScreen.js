@@ -47,7 +47,7 @@ const sortByDisplayArray = ["Newest First", "Oldest First"];
 const filterArray = ["all", "saved", "archived"];
 
 const validationSchema = Yup.object().shape({
-  message: Yup.string().min(0).label("Message"),
+  message: Yup.string().required().min(1).label("Message"),
 });
 
 function MessagesScreen({ navigation }) {
@@ -275,8 +275,10 @@ function MessagesScreen({ navigation }) {
                 size={16}
                 queryArray={sortByQueryArray}
                 displayArray={sortByDisplayArray}
-                setValue={setSortBy}
-                handleRefresh={handleRefresh}
+                onSelect={(query) => {
+                  setSortBy(query);
+                  handleRefresh();
+                }}
               />
             </View>
           </View>
