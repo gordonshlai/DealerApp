@@ -22,7 +22,6 @@ import CarIcon from "../components/icons/CarIcon";
 import MessagesIcon from "../components/icons/MessagesIcon";
 import Card from "../components/Card";
 import NavigationButton from "../components/NavigationButton";
-import Slider from "../components/Slider";
 
 import colors from "../config/colors";
 import useApi from "../hooks/useApi";

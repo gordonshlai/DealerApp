@@ -367,7 +367,7 @@ function VehicleDetailScreen({ route, navigation }) {
                         name="model"
                         placeholder="Please select"
                         items={modelsApi.data}
-                        disabled={values["make"] === "" ? true : false}
+                        disabled={!values["make"]}
                       />
                     </View>
 

@@ -21,6 +21,8 @@ import AuthContext from "../auth/context";
 import { Platform } from "react-native";
 import navigation from "./rootNavigation";
 import useNotifications from "../hooks/useNotifications";
+import WarrantyNavigator from "./WarrantyNavigator";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Tab = createBottomTabNavigator();
 const tabHiddenRoutes = [
@@ -100,6 +102,20 @@ const AppNavigator = () => {
         listeners={({ navigation, route }) => ({
           state: hideTabBar(navigation, route),
         })}
+      />
+
+      <Tab.Screen
+        name={routes.WARRANTY}
+        component={WarrantyNavigator}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons
+              name="shield-car"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
       />
 
       <Tab.Screen

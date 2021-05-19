@@ -20,6 +20,7 @@ import {
 } from "../components/forms";
 
 import colors from "../config/colors";
+import defaultStyles from "../config/styles";
 import useApi from "../hooks/useApi";
 import routes from "../navigation/routes";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -103,11 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     padding: 20,
     marginVertical: 10,
-    shadowColor: colors.black,
-    shadowRadius: 10,
-    shadowOpacity: 0.3,
-    shadowOffset: { height: 5 },
-    elevation: 10,
+    ...defaultStyles.shadow,
   },
 });
 

@@ -14,7 +14,7 @@ import { ListItemSeparator } from "./lists";
 
 import routes from "../navigation/routes";
 import colors from "../config/colors";
-import defaultStyle from "../config/styles";
+import defaultStyles from "../config/styles";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AppText from "./AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -23,6 +23,7 @@ const list = [
   routes.HOME,
   routes.TRADE,
   routes.INVENTORY,
+  routes.WARRANTY,
   routes.MESSAGES,
   routes.ACCOUNT,
 ];
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     marginRight: 50,
     flex: 1,
-    ...defaultStyle.shadow,
+    ...defaultStyles.shadow,
   },
   topBarContainer: {
     height: 80 + (Platform.OS === "ios" ? Constants.statusBarHeight : 0),
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     padding: 20,
     marginBottom: 30,
     backgroundColor: "white",
-    ...defaultStyle.shadow,
+    ...defaultStyles.shadow,
   },
   contactText: {
     fontWeight: "bold",
