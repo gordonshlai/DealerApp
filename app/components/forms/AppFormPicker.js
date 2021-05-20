@@ -8,7 +8,7 @@ function AppFormPicker({
   icon,
   items,
   name,
-  placeholder,
+  placeholder = "Please Select",
   width,
   onSelectItem,
   disabled,

@@ -7,7 +7,7 @@ import AppDateTimePicker from "../AppDateTimePicker";
 function AppFormDateTimePicker({
   icon,
   name,
-  placeholder,
+  placeholder = "Please Select",
   width,
   onSelectDate,
   disabled,

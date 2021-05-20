@@ -34,7 +34,7 @@ import routes from "../../navigation/routes";
 
 const withRegValidationSchema = Yup.object().shape({
   registration: Yup.string().required().label("Registration"),
-  mileage: Yup.number().required().label("Mileage"),
+  mileage: Yup.string().required().label("Mileage"),
 });
 
 const withoutRegValidationSchema = Yup.object().shape({
@@ -155,7 +155,6 @@ function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
                           <AppText style={styles.fieldTitle}>Make</AppText>
                           <AppFormPicker
                             name="make"
-                            placeholder="Please select"
                             items={makesApi.data}
                             onSelectItem={(item) => {
                               modelsApi.request("api/car/models/" + item);
@@ -169,7 +168,6 @@ function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
                           <AppText style={styles.fieldTitle}>Model</AppText>
                           <AppFormPicker
                             name="model"
-                            placeholder="Please select"
                             items={modelsApi.data}
                             disabled={!values["make"]}
                           />

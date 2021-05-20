@@ -350,7 +350,6 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppText style={styles.fieldTitle}>Make</AppText>
                       <AppFormPicker
                         name="make"
-                        placeholder="Please select"
                         items={makesApi.data}
                         onSelectItem={(item) => {
                           modelsApi.request("api/car/models/" + item);
@@ -365,7 +364,6 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppText style={styles.fieldTitle}>Model</AppText>
                       <AppFormPicker
                         name="model"
-                        placeholder="Please select"
                         items={modelsApi.data}
                         disabled={!values["make"]}
                       />
@@ -401,11 +399,7 @@ function VehicleDetailScreen({ route, navigation }) {
 
                     <View style={styles.fieldContainer}>
                       <AppText style={styles.fieldTitle}>Fuel</AppText>
-                      <AppFormPicker
-                        name="fuel"
-                        placeholder="Please select"
-                        items={fuelArray}
-                      />
+                      <AppFormPicker name="fuel" items={fuelArray} />
                     </View>
 
                     <View style={styles.fieldContainer}>
@@ -434,25 +428,18 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppText style={styles.fieldTitle}>
                         Registration Date
                       </AppText>
-                      <AppFormDateTimePicker
-                        name="registration_date"
-                        placeholder="Please select"
-                      />
+                      <AppFormDateTimePicker name="registration_date" />
                     </View>
 
                     <View style={styles.fieldContainer}>
                       <AppText style={styles.fieldTitle}>MOT Expiry</AppText>
-                      <AppFormDateTimePicker
-                        name="mot_expiry"
-                        placeholder="Please select"
-                      />
+                      <AppFormDateTimePicker name="mot_expiry" />
                     </View>
 
                     <View style={styles.fieldContainer}>
                       <AppText style={styles.fieldTitle}>Transmission</AppText>
                       <AppFormPicker
                         name="transmission"
-                        placeholder="Please select"
                         items={transmissionArray}
                       />
                     </View>
@@ -481,7 +468,6 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppText style={styles.fieldTitle}>Body Style</AppText>
                       <AppFormPicker
                         name="body_style"
-                        placeholder="Please select"
                         items={body_styleArray}
                       />
                     </View>
@@ -507,7 +493,6 @@ function VehicleDetailScreen({ route, navigation }) {
                       <AppText style={styles.fieldTitle}>Sale Status</AppText>
                       <AppFormPicker
                         name="sales_status"
-                        placeholder="Please select"
                         items={sales_statusArray}
                       />
                     </View>
@@ -534,6 +519,7 @@ function VehicleDetailScreen({ route, navigation }) {
                         <ToolTip message="The forecourt sale price of the vehicle" />
                       </View>
                       <AppFormField
+                        icon="currency-gbp"
                         name="retail_price"
                         placeholder="Retail Sale Price"
                         keyboardType="numeric"
@@ -549,6 +535,7 @@ function VehicleDetailScreen({ route, navigation }) {
                         <ToolTip message="The price you would like to sell the vehicle for directly to trade (if applicable)" />
                       </View>
                       <AppFormField
+                        icon="currency-gbp"
                         name="price_asking"
                         placeholder="Trade Sale Price"
                         keyboardType="numeric"
@@ -564,6 +551,7 @@ function VehicleDetailScreen({ route, navigation }) {
                         <ToolTip message="The lowest price you would sell the vehicle for without losing money" />
                       </View>
                       <AppFormField
+                        icon="currency-gbp"
                         name="price_civ"
                         placeholder="Stand Sale Price"
                         keyboardType="numeric"
@@ -579,6 +567,7 @@ function VehicleDetailScreen({ route, navigation }) {
                         <ToolTip message="The expected value of the vehicle (fill when selling directly to trade)" />
                       </View>
                       <AppFormField
+                        icon="currency-gbp"
                         name="price_cap"
                         placeholder="Guide Sale Price"
                         keyboardType="numeric"

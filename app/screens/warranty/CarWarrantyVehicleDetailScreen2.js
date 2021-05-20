@@ -1,6 +1,4 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
-import { TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -8,8 +6,8 @@ import {
   ScrollView,
 } from "react-native";
 import * as Yup from "yup";
-import { Formik } from "formik";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import dayjs from "dayjs";
 
 import AppButton from "../../components/AppButton";
 import AppText from "../../components/AppText";
@@ -17,9 +15,9 @@ import Background from "../../components/Background";
 import {
   AppErrorMessage,
   AppForm,
+  AppFormDateTimePicker,
   AppFormField,
   AppFormPicker,
-  RegistrationPlateInput,
   SubmitButton,
 } from "../../components/forms";
 import Screen from "../../components/Screen";
@@ -30,157 +28,192 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
+import ProgressBar from "./components/ProgressBar";
 
-const withRegValidationSchema = Yup.object().shape({
-  registration: Yup.string().label("Registration"),
-  mileage: Yup.number().label("Mileage"),
+const fuelArray = ["DIESEL", "ELECTRIC", "HYBRID", "PETROL"];
+const vehicleOriginArray = [
+  "UK",
+  "Imported from EU",
+  "Imported from Japan",
+  "Other",
+];
+
+const validationSchema = Yup.object().shape({
+  model: Yup.string().required().label("Registration"),
+  mileage: Yup.number().required().label("Mileage"),
+  engine_cc: Yup.number()
+    .required()
+    .max(7000, "Engine CC cannot be more than 7000cc")
+    .label("Engine CC"),
+  fuel_type: Yup.string().required().label("Fuel Type"),
+  manufacture_date: Yup.date()
+    .required()
+    .max(dayjs(), "Manufacture Date cannot be in the future")
+    .label("Manufacture Date"),
+  retail_value: Yup.number()
+    .min(1000, "Retail Value cannot be less than £1,000")
+    .required()
+    .label("Retail Value"),
+  vehicle_origin: Yup.string()
+    .required()
+    .matches(
+      /UK|Imported from EU|Imported from Japan/,
+      "We currently only cover vehicles within the UK, EU and Japan. Please speak to your account manager for further information."
+    )
+    .label("Vehicle Origin"),
 });
 
-const withoutRegValidationSchema = Yup.object().shape({
-  make: Yup.string().label("Make"),
-  model: Yup.string().label("Model"),
-});
-
-function CarWarrantyVehicleDetailScreen2({ navigation }) {
+function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
+  const {
+    engine_cc,
+    fuel_type,
+    make,
+    manufacture_date,
+    mileage,
+    model,
+    owned,
+    registration,
+    retail_value,
+    service_history,
+    tax_due_date,
+    tax_status,
+    token,
+    transmission,
+  } = route.params;
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
-  const [withReg, setWithReg] = useState(true);
 
-  const makesApi = useApi(() => client.get("api/car/makes"));
-  const modelsApi = useApi((endpoint) => client.get(endpoint));
+  const modelsApi = useApi(() => client.get("api/car/models/" + make));
+  const comparisonApi = useApi((data) =>
+    client.post("api/car/warranty/comparison", data)
+  );
+  const userApi = useApi(() => client.get("api/user"));
 
-  const handleWithRegSubmit = async ({ registration, mileage }) => {
-    console.log(registration + mileage);
-    navigation.navigate(routes.CAR_WARRANTY_COVER_LEVEL);
+  const getModels = async () => {
+    modelsApi.request();
   };
 
-  const handleWithoutRegSubmit = async ({ make, model }) => {
-    console.log(make + model);
-    navigation.navigate(routes.CAR_WARRANTY_COVER_LEVEL);
-  };
+  useEffect(() => {
+    getModels();
+  }, []);
 
-  const WithRegButton = ({ text, onPress, icon, selected }) => {
-    return (
-      <TouchableOpacity
-        style={[styles.withRegButton, selected && styles.withRegButtonSelected]}
-        onPress={onPress}
-      >
-        <MaterialCommunityIcons
-          name={icon}
-          size={40}
-          color={selected ? colors.primary : colors.mediumGrey}
-        />
-        <AppText
-          style={[styles.withRegText, selected && styles.withRegTextSelected]}
-        >
-          {text}
-        </AppText>
-      </TouchableOpacity>
+  const handleSubmit = async (data) => {
+    const computedData = { ...data };
+    computedData.vehicle_origin = vehicleOriginArray.indexOf(
+      computedData.vehicle_origin
     );
-  };
 
-  const WithRegForm = () => {
-    return (
-      <AppForm
-        initialValues={{ registration: "", mileage: "" }}
-        onSubmit={handleWithRegSubmit}
-        validationSchema={withRegValidationSchema}
-      >
-        <View style={styles.fieldContainer}>
-          <RegistrationPlateInput
-            name="registration"
-            placeholder="ENTER REGISTRATION"
-            onContentSizeChange={() => setError("")}
-          />
-        </View>
-        <View style={styles.fieldContainer}>
-          <AppText style={styles.fieldTitle}>Mileage</AppText>
-          <AppFormField
-            name="mileage"
-            placeholder="Mileage"
-            keyboardType="numeric"
-            style={styles.appFormField}
-          />
-        </View>
-        <AppErrorMessage error={error} visible={error} />
-        <SubmitButton title="Next" />
-      </AppForm>
-    );
-  };
+    const user = await userApi.request();
+    if (!user.ok) return setError(user.data.message);
 
-  const WithoutRegForm = () => {
-    return (
-      <Formik
-        initialValues={{ make: "", model: "" }}
-        onSubmit={handleWithoutRegSubmit}
-        validationSchema={withoutRegValidationSchema}
-      >
-        {({ values, setFieldValue }) => (
-          <>
-            <View style={styles.fieldContainer}>
-              <AppText style={styles.fieldTitle}>Make</AppText>
-              <AppFormPicker
-                name="make"
-                placeholder="Please select"
-                items={makesApi.data}
-                onSelectItem={(item) => {
-                  modelsApi.request("api/car/models/" + item);
-                  if (values["make"] !== item) {
-                    setFieldValue("model", "");
-                  }
-                }}
-              />
-            </View>
-            <View style={styles.fieldContainer}>
-              <AppText style={styles.fieldTitle}>Model</AppText>
-              <AppFormPicker
-                name="model"
-                placeholder="Please select"
-                items={modelsApi.data}
-                disabled={!values["make"]}
-              />
-            </View>
-            <AppErrorMessage error={error} visible={error} />
-            <SubmitButton title="Next" />
-          </>
-        )}
-      </Formik>
-    );
+    const payload = {
+      dealer_id: user.data.user.dealer_id,
+      make,
+      registration,
+      ...computedData,
+    };
+    const comparison = await comparisonApi.request(payload);
+    if (!comparison.ok) return setError(comparison.data.message);
+
+    navigation.navigate(routes.CAR_WARRANTY_COVER_LEVEL, comparison.data);
   };
 
   return (
     <>
       <Background />
-      <ActivityIndicator visible={makesApi.loading || modelsApi.loading} />
+      <ActivityIndicator
+        visible={modelsApi.loading || userApi.loading || comparisonApi.loading}
+      />
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : ""}
         keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
         style={styles.keyboardAvoidingView}
       >
+        <ProgressBar route={route} />
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
               <AppText style={styles.sectionTitle}>
                 Vehicle Detail (2/2)
               </AppText>
-              <WithRegButton
-                text="With Registration"
-                icon="check-circle"
-                onPress={() => setWithReg(true)}
-                selected={withReg}
-              />
-              <WithRegButton
-                text="Without Registration"
-                icon="close-circle"
-                onPress={async () => {
-                  setWithReg(false);
-                  await makesApi.request();
-                }}
-                selected={!withReg}
-              />
               <View style={styles.formContainer}>
-                {withReg ? <WithRegForm /> : <WithoutRegForm />}
+                <AppForm
+                  initialValues={{
+                    model: model || "",
+                    mileage: mileage ? mileage.toString() : "",
+                    engine_cc: engine_cc || "",
+                    fuel_type: fuel_type || "",
+                    manufacture_date: manufacture_date || "",
+                    retail_value: retail_value || "",
+                    vehicle_origin: vehicleOriginArray[0],
+                  }}
+                  onSubmit={handleSubmit}
+                  validationSchema={validationSchema}
+                >
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Model</AppText>
+                    <AppFormPicker
+                      name="model"
+                      placeholder="Please select"
+                      items={modelsApi.data}
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Mileage</AppText>
+                    <AppFormField
+                      name="mileage"
+                      placeholder="Mileage"
+                      keyboardType="numeric"
+                      style={styles.appFormField}
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Engine CC</AppText>
+                    <AppFormField
+                      name="engine_cc"
+                      placeholder="Engine CC"
+                      keyboardType="numeric"
+                      style={styles.appFormField}
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Fuel Type</AppText>
+                    <AppFormPicker
+                      name="fuel_type"
+                      placeholder="Please select"
+                      items={fuelArray}
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>
+                      Manufacture Date
+                    </AppText>
+                    <AppFormDateTimePicker
+                      name="manufacture_date"
+                      placeholder="Please select"
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Retail Value</AppText>
+                    <AppFormField
+                      icon="currency-gbp"
+                      name="retail_value"
+                      placeholder="Retail Value"
+                      keyboardType="numeric"
+                      style={styles.appFormField}
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Vehicle Origin</AppText>
+                    <AppFormPicker
+                      name="vehicle_origin"
+                      items={vehicleOriginArray}
+                    />
+                  </View>
+                  <AppErrorMessage error={error} visible={error} />
+                  <SubmitButton title="Next" />
+                </AppForm>
                 <AppButton
                   backgroundColor={null}
                   color={colors.success}
@@ -215,29 +248,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: colors.secondary,
     marginBottom: 10,
-  },
-  withRegButton: {
-    marginVertical: 10,
-    padding: 20,
-    borderRadius: 20,
-    borderColor: colors.mediumGrey,
-    borderWidth: 2,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  withRegButtonSelected: {
-    borderColor: colors.primary,
-    borderWidth: 2,
-    backgroundColor: "white",
-    ...defaultStyles.shadow,
-  },
-  withRegText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: colors.mediumGrey,
-  },
-  withRegTextSelected: {
-    color: colors.darkGrey,
   },
   formContainer: {
     marginTop: 30,

@@ -11,14 +11,9 @@ import AppErrorMessage from "./AppErrorMessage";
  * @param {string|number} style - the style of the component container
  * @param {} otherProps - other properties to add to the text input component
  */
-const AppFormField = ({ name, style, color, size, ...otherProps }) => {
-  const {
-    setFieldTouched,
-    setFieldValue,
-    errors,
-    touched,
-    values,
-  } = useFormikContext();
+const AppFormField = ({ icon, name, style, color, size, ...otherProps }) => {
+  const { setFieldTouched, setFieldValue, errors, touched, values } =
+    useFormikContext();
   return (
     <>
       <AppTextInput
@@ -28,6 +23,7 @@ const AppFormField = ({ name, style, color, size, ...otherProps }) => {
         style={style}
         color={color}
         size={size}
+        icon={icon}
         {...otherProps}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />
