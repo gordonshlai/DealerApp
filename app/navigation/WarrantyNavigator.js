@@ -6,7 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 import CarWarrantyVehicleDetailScreen1 from "../screens/warranty/CarWarrantyVehicleDetailScreen1";
 import CarWarrantyVehicleDetailScreen2 from "../screens/warranty/CarWarrantyVehicleDetailScreen2";
-import CarWarrantyCoverLevelScreen from "../screens/warranty/CarWarrantyCoverLevelScreen";
+import CarWarrantyCoverOptionsScreen from "../screens/warranty/CarWarrantyCoverOptionsScreen";
 import CarWarrantyCustomiseCoverScreen from "../screens/warranty/CarWarrantyCustomiseCoverScreen";
 import CarWarrantyDetailScreen from "../screens/warranty/CarWarrantyDetailScreen";
 import CarWarrantyCustomerDetailScreen from "../screens/warranty/CarWarrantyCustomerDetailScreen";
@@ -47,8 +47,8 @@ const WarrantyNavigator = () => (
       component={CarWarrantyVehicleDetailScreen2}
     />
     <Stack.Screen
-      name={routes.CAR_WARRANTY_COVER_LEVEL}
-      component={CarWarrantyCoverLevelScreen}
+      name={routes.CAR_WARRANTY_COVER_OPTIONS}
+      component={CarWarrantyCoverOptionsScreen}
     />
     <Stack.Screen
       name={routes.CAR_WARRANTY_CUSTOMISE_COVER}

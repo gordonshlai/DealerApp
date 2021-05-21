@@ -16,7 +16,7 @@ const progress = [
   },
   {
     icon: "book-open",
-    route: routes.CAR_WARRANTY_COVER_LEVEL,
+    route: routes.CAR_WARRANTY_COVER_OPTIONS,
   },
   {
     icon: "screwdriver",

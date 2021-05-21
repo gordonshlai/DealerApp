@@ -116,7 +116,11 @@ function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
     const comparison = await comparisonApi.request(payload);
     if (!comparison.ok) return setError(comparison.data.message);
 
-    navigation.navigate(routes.CAR_WARRANTY_COVER_LEVEL, comparison.data);
+    navigation.navigate(routes.CAR_WARRANTY_COVER_OPTIONS, {
+      payload,
+      comparison: comparison.data,
+      user: user.data.user,
+    });
   };
 
   return (
@@ -153,11 +157,7 @@ function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
                 >
                   <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>Model</AppText>
-                    <AppFormPicker
-                      name="model"
-                      placeholder="Please select"
-                      items={modelsApi.data}
-                    />
+                    <AppFormPicker name="model" items={modelsApi.data} />
                   </View>
                   <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>Mileage</AppText>
@@ -179,20 +179,13 @@ function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
                   </View>
                   <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>Fuel Type</AppText>
-                    <AppFormPicker
-                      name="fuel_type"
-                      placeholder="Please select"
-                      items={fuelArray}
-                    />
+                    <AppFormPicker name="fuel_type" items={fuelArray} />
                   </View>
                   <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>
                       Manufacture Date
                     </AppText>
-                    <AppFormDateTimePicker
-                      name="manufacture_date"
-                      placeholder="Please select"
-                    />
+                    <AppFormDateTimePicker name="manufacture_date" />
                   </View>
                   <View style={styles.fieldContainer}>
                     <AppText style={styles.fieldTitle}>Retail Value</AppText>
