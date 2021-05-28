@@ -25,7 +25,7 @@ export default function App() {
   const [loadInventoryDetailFlag, setLoadInventoryDetailFlag] = useState(false);
 
   useEffect(() => {
-    repeatRequest();
+    // repeatRequest();
   }, [authToken]);
 
   // useEffect(() => {

@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
-  TouchableWithoutFeedback,
+  Pressable,
   TouchableOpacity,
   Linking,
 } from "react-native";
@@ -13,6 +13,8 @@ import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
 
 function CoverOption({ data, title, margin, vat, selected, onSelect }) {
+  const [pressing, setPressing] = useState(false);
+
   const price = () => {
     return margin
       ? (data.pricing.total.price12 * (vat === "1" ? 1.2 : 1)).toFixed(2)
@@ -36,43 +38,52 @@ function CoverOption({ data, title, margin, vat, selected, onSelect }) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => onSelect(title)}>
-      <View style={[styles.container, selected && styles.containerSelected]}>
-        <View
-          style={[
-            styles.titleContainer,
-            selected && styles.titleContainerSelected,
-          ]}
-        >
-          <AppText style={styles.title}>{title.toUpperCase()}</AppText>
-        </View>
-        <View style={styles.contentContainer}>
-          <CustomisedText style={styles.line1}>12 Months</CustomisedText>
-          <CustomisedText style={styles.line2}>£{price()}</CustomisedText>
-          {vat === "1" && (
-            <CustomisedText style={styles.line3}>
-              Incl. {vatValue()} VAT
-            </CustomisedText>
-          )}
-          <CustomisedText style={styles.line4}>
-            {data.limits.age} years old
-          </CustomisedText>
-          <CustomisedText>{data.limits.mileage} miles</CustomisedText>
-          <CustomisedText>Up to £{repairLimit()}k Repair Limit</CustomisedText>
-          <TouchableOpacity
-            onPress={() =>
-              Linking.openURL(
-                "https://plan-books.s3.us-east-2.amazonaws.com/Warrantywise+Dealer+Terms+v11.pdf"
-              )
-            }
-          >
-            <CustomisedText style={styles.termsAndConditions}>
-              {`Terms & Conditions   >`}
-            </CustomisedText>
-          </TouchableOpacity>
-        </View>
+    <Pressable
+      style={[
+        styles.container,
+        selected && styles.containerSelected,
+        !pressing && styles.shadow,
+        pressing && styles.pressing,
+      ]}
+      onPress={() => onSelect(title)}
+      onPressIn={() => setPressing(true)}
+      onPressOut={() => setPressing(false)}
+    >
+      <View
+        style={[
+          styles.titleContainer,
+          selected && styles.titleContainerSelected,
+          pressing && styles.titlePressing,
+        ]}
+      >
+        <AppText style={styles.title}>{title.toUpperCase()}</AppText>
       </View>
-    </TouchableWithoutFeedback>
+      <View style={styles.contentContainer}>
+        <CustomisedText style={styles.line1}>12 Months</CustomisedText>
+        <CustomisedText style={styles.line2}>£{price()}</CustomisedText>
+        {vat === "1" && (
+          <CustomisedText style={styles.line3}>
+            Incl. {vatValue()} VAT
+          </CustomisedText>
+        )}
+        <CustomisedText style={styles.line4}>
+          {data.limits.age} years old
+        </CustomisedText>
+        <CustomisedText>{data.limits.mileage} miles</CustomisedText>
+        <CustomisedText>Up to £{repairLimit()}k Repair Limit</CustomisedText>
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(
+              "https://plan-books.s3.us-east-2.amazonaws.com/Warrantywise+Dealer+Terms+v11.pdf"
+            )
+          }
+        >
+          <CustomisedText style={styles.termsAndConditions}>
+            {`Terms & Conditions   >`}
+          </CustomisedText>
+        </TouchableOpacity>
+      </View>
+    </Pressable>
   );
 }
 
@@ -81,19 +92,20 @@ const CustomisedText = ({ style, children }) => {
 };
 
 const styles = StyleSheet.create({
-  text: {
-    fontWeight: "bold",
-    paddingBottom: 5,
-  },
   container: {
     backgroundColor: colors.white,
     borderRadius: 10,
     marginBottom: 20,
-    opacity: 0.7,
-    ...defaultStyles.shadow,
+    opacity: 0.5,
   },
   containerSelected: {
     opacity: 1,
+  },
+  pressing: {
+    backgroundColor: colors.lightGrey,
+  },
+  shadow: {
+    ...defaultStyles.shadow,
   },
   titleContainer: {
     backgroundColor: colors.mediumGrey,
@@ -105,6 +117,9 @@ const styles = StyleSheet.create({
   },
   titleContainerSelected: {
     backgroundColor: colors.primary,
+  },
+  titlePressing: {
+    opacity: 0.9,
   },
   title: {
     fontSize: 18,
@@ -132,6 +147,10 @@ const styles = StyleSheet.create({
   termsAndConditions: {
     color: colors.primary,
     fontSize: 12,
+  },
+  text: {
+    fontWeight: "bold",
+    paddingBottom: 5,
   },
 });
 

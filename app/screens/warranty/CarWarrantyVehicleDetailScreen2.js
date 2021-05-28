@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -29,6 +29,7 @@ import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import ProgressBar from "./components/ProgressBar";
+import WarrantyContext from "../../warranty/context";
 
 const fuelArray = ["DIESEL", "ELECTRIC", "HYBRID", "PETROL"];
 const vehicleOriginArray = [
@@ -65,21 +66,27 @@ const validationSchema = Yup.object().shape({
 
 function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
   const {
-    engine_cc,
-    fuel_type,
-    make,
-    manufacture_date,
-    mileage,
-    model,
-    owned,
-    registration,
-    retail_value,
-    service_history,
-    tax_due_date,
-    tax_status,
-    token,
-    transmission,
-  } = route.params;
+    vehicle: {
+      engine_cc,
+      fuel_type,
+      make,
+      manufacture_date,
+      mileage,
+      model,
+      owned,
+      registration,
+      retail_value,
+      service_history,
+      tax_due_date,
+      tax_status,
+      token,
+      transmission,
+    },
+    setVehicle,
+    setUser,
+    setComparison,
+  } = useContext(WarrantyContext);
+
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
@@ -103,24 +110,25 @@ function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
     computedData.vehicle_origin = vehicleOriginArray.indexOf(
       computedData.vehicle_origin
     );
+    computedData.manufacture_date = dayjs(computedData.manufacture_date).format(
+      "YYYY-MM-DD"
+    );
+    setVehicle({ make, registration, ...computedData });
 
     const user = await userApi.request();
     if (!user.ok) return setError(user.data.message);
+    setUser(user.data.user);
 
     const payload = {
       dealer_id: user.data.user.dealer_id,
       make,
-      registration,
       ...computedData,
     };
     const comparison = await comparisonApi.request(payload);
     if (!comparison.ok) return setError(comparison.data.message);
+    setComparison(comparison.data);
 
-    navigation.navigate(routes.CAR_WARRANTY_COVER_OPTIONS, {
-      payload,
-      comparison: comparison.data,
-      user: user.data.user,
-    });
+    navigation.navigate(routes.CAR_WARRANTY_COVER_OPTIONS);
   };
 
   return (
@@ -135,85 +143,79 @@ function CarWarrantyVehicleDetailScreen2({ navigation, route }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
+        <AppText style={styles.sectionTitle}>Vehicle Detail (2/2)</AppText>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
-              <AppText style={styles.sectionTitle}>
-                Vehicle Detail (2/2)
-              </AppText>
-              <View style={styles.formContainer}>
-                <AppForm
-                  initialValues={{
-                    model: model || "",
-                    mileage: mileage ? mileage.toString() : "",
-                    engine_cc: engine_cc || "",
-                    fuel_type: fuel_type || "",
-                    manufacture_date: manufacture_date || "",
-                    retail_value: retail_value || "",
-                    vehicle_origin: vehicleOriginArray[0],
-                  }}
-                  onSubmit={handleSubmit}
-                  validationSchema={validationSchema}
-                >
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>Model</AppText>
-                    <AppFormPicker name="model" items={modelsApi.data} />
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>Mileage</AppText>
-                    <AppFormField
-                      name="mileage"
-                      placeholder="Mileage"
-                      keyboardType="numeric"
-                      style={styles.appFormField}
-                    />
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>Engine CC</AppText>
-                    <AppFormField
-                      name="engine_cc"
-                      placeholder="Engine CC"
-                      keyboardType="numeric"
-                      style={styles.appFormField}
-                    />
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>Fuel Type</AppText>
-                    <AppFormPicker name="fuel_type" items={fuelArray} />
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>
-                      Manufacture Date
-                    </AppText>
-                    <AppFormDateTimePicker name="manufacture_date" />
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>Retail Value</AppText>
-                    <AppFormField
-                      icon="currency-gbp"
-                      name="retail_value"
-                      placeholder="Retail Value"
-                      keyboardType="numeric"
-                      style={styles.appFormField}
-                    />
-                  </View>
-                  <View style={styles.fieldContainer}>
-                    <AppText style={styles.fieldTitle}>Vehicle Origin</AppText>
-                    <AppFormPicker
-                      name="vehicle_origin"
-                      items={vehicleOriginArray}
-                    />
-                  </View>
-                  <AppErrorMessage error={error} visible={error} />
-                  <SubmitButton title="Next" />
-                </AppForm>
-                <AppButton
-                  backgroundColor={null}
-                  color={colors.success}
-                  title="Back"
-                  onPress={() => navigation.goBack()}
-                />
-              </View>
+              <AppForm
+                initialValues={{
+                  model: model || "",
+                  mileage: mileage ? mileage.toString() : "",
+                  engine_cc: engine_cc || "",
+                  fuel_type: fuel_type || "",
+                  manufacture_date: manufacture_date || "",
+                  retail_value: retail_value || "",
+                  vehicle_origin: vehicleOriginArray[0],
+                }}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+              >
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Model</AppText>
+                  <AppFormPicker name="model" items={modelsApi.data} />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Mileage</AppText>
+                  <AppFormField
+                    name="mileage"
+                    placeholder="Mileage"
+                    keyboardType="numeric"
+                    style={styles.appFormField}
+                  />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Engine CC</AppText>
+                  <AppFormField
+                    name="engine_cc"
+                    placeholder="Engine CC"
+                    keyboardType="numeric"
+                    style={styles.appFormField}
+                  />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Fuel Type</AppText>
+                  <AppFormPicker name="fuel_type" items={fuelArray} />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Manufacture Date</AppText>
+                  <AppFormDateTimePicker name="manufacture_date" />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Retail Value</AppText>
+                  <AppFormField
+                    icon="currency-gbp"
+                    name="retail_value"
+                    placeholder="Retail Value"
+                    keyboardType="numeric"
+                    style={styles.appFormField}
+                  />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <AppText style={styles.fieldTitle}>Vehicle Origin</AppText>
+                  <AppFormPicker
+                    name="vehicle_origin"
+                    items={vehicleOriginArray}
+                  />
+                </View>
+                <AppErrorMessage error={error} visible={error} />
+                <SubmitButton title="Next" />
+              </AppForm>
+              <AppButton
+                backgroundColor={null}
+                color={colors.success}
+                title="Back"
+                onPress={() => navigation.goBack()}
+              />
             </View>
           </Screen>
         </ScrollView>
@@ -239,17 +241,16 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: colors.secondary,
-    marginBottom: 10,
-  },
-  formContainer: {
-    marginTop: 30,
+    color: "white",
+    marginLeft: 20,
+    marginVertical: 10,
   },
   fieldContainer: {
     marginBottom: 10,
   },
   fieldTitle: {
     color: defaultStyles.colors.mediumGrey,
+    fontWeight: "bold",
   },
   appFormField: {
     backgroundColor: colors.white,

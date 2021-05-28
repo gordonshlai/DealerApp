@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TouchableOpacity } from "react-native";
 import {
   View,
@@ -30,6 +30,7 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
+import WarrantyContext from "../../warranty/context";
 
 const withRegValidationSchema = Yup.object().shape({
   registration: Yup.string().label("Registration"),
@@ -42,6 +43,7 @@ const withoutRegValidationSchema = Yup.object().shape({
 });
 
 function CarWarrantyDetailScreen({ navigation }) {
+  const { booking } = useContext(WarrantyContext);
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
@@ -245,6 +247,7 @@ const styles = StyleSheet.create({
   },
   fieldTitle: {
     color: defaultStyles.colors.mediumGrey,
+    fontWeight: "bold",
   },
   appFormField: {
     backgroundColor: colors.white,

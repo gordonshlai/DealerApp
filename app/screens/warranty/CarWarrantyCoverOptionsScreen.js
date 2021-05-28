@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Switch } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -22,11 +21,13 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
+import ToggleMarginSwitch from "./components/ToggleMarginSwitch";
+import WarrantyContext from "../../warranty/context";
 
 function CarWarrantyCoverOptionsScreen({ navigation, route }) {
+  const { vehicle, user, comparison, setQuote } = useContext(WarrantyContext);
   const tabBarHeight = useBottomTabBarHeight();
-  const { comparison, user, payload: previousPayload } = route.params;
-  const keys = Object.keys(comparison);
+  const coverLevels = Object.keys(comparison);
 
   const [error, setError] = useState();
   const [margin, setMargin] = useState(true);
@@ -39,17 +40,14 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
   const handleSubmit = async () => {
     const payload = {
       cover: cover.toUpperCase(),
-      ...previousPayload,
+      dealer_id: user.dealer_id,
+      ...vehicle,
     };
     const quote = await quoteApi.request(payload);
-    console.log(quote);
     if (!quote.ok) return setError(quote.data.message);
+    setQuote(quote.data);
 
-    navigation.navigate(routes.CAR_WARRANTY_CUSTOMISE_COVER, {
-      payload,
-      quote: quote.data,
-      user: user,
-    });
+    navigation.navigate(routes.CAR_WARRANTY_CUSTOMISE_COVER);
   };
 
   useEffect(() => {
@@ -70,43 +68,37 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
+        <AppText style={styles.sectionTitle}>Cover Options</AppText>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
-              <AppText style={styles.sectionTitle}>Cover Options</AppText>
-              <View style={styles.toggleButtonContainer}>
-                <AppText style={{ fontWeight: "bold" }}>Toggle Margin</AppText>
-                <Switch
-                  trackColor={{ false: colors.white, true: colors.primary }}
-                  onValueChange={() => setMargin(!margin)}
-                  value={margin}
-                />
-              </View>
-              <View style={styles.formContainer}>
-                {keys.map((key) => {
-                  if (comparison[key].available) {
-                    return (
-                      <CoverOption
-                        data={comparison[key]}
-                        title={key}
-                        margin={margin}
-                        vat={user.account.vat}
-                        selected={cover == key}
-                        onSelect={(item) => setCover(item)}
-                        key={key}
-                      />
-                    );
-                  }
-                })}
-                <AppErrorMessage error={error} visible={error} />
-                <AppButton title="Next" onPress={handleSubmit} />
-                <AppButton
-                  backgroundColor={null}
-                  color={colors.success}
-                  title="Back"
-                  onPress={() => navigation.goBack()}
-                />
-              </View>
+              <ToggleMarginSwitch
+                margin={margin}
+                onValueChange={() => setMargin(!margin)}
+              />
+              {coverLevels.map((key) => {
+                if (comparison[key].available) {
+                  return (
+                    <CoverOption
+                      data={comparison[key]}
+                      title={key}
+                      margin={margin}
+                      vat={user.account.vat}
+                      selected={cover == key}
+                      onSelect={(item) => setCover(item)}
+                      key={key}
+                    />
+                  );
+                }
+              })}
+              <AppErrorMessage error={error} visible={error} />
+              <AppButton title="Next" onPress={handleSubmit} />
+              <AppButton
+                backgroundColor={null}
+                color={colors.success}
+                title="Back"
+                onPress={() => navigation.goBack()}
+              />
             </View>
           </Screen>
         </ScrollView>
@@ -132,16 +124,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: colors.secondary,
-    marginBottom: 10,
-  },
-  toggleButtonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  formContainer: {
-    marginTop: 30,
+    color: "white",
+    marginLeft: 20,
+    marginVertical: 10,
   },
   fieldContainer: {
     marginBottom: 10,

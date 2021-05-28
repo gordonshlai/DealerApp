@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -31,6 +31,7 @@ import defaultStyles from "../../config/styles";
 import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import routes from "../../navigation/routes";
+import WarrantyContext from "../../warranty/context";
 
 const withRegValidationSchema = Yup.object().shape({
   registration: Yup.string().required().label("Registration"),
@@ -43,6 +44,7 @@ const withoutRegValidationSchema = Yup.object().shape({
 });
 
 function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
+  const { setVehicle } = useContext(WarrantyContext);
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
@@ -56,12 +58,14 @@ function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
     const result = await lookupApi.request({ registration, mileage });
     console.log(result);
     if (!result.ok) return setError(result.data.message);
-    navigation.navigate(routes.CAR_WARRANTY_VEHICLE_DETAIL_2, result.data);
+    setVehicle(result.data);
+    navigation.navigate(routes.CAR_WARRANTY_VEHICLE_DETAIL_2);
   };
 
   const handleWithoutRegSubmit = ({ make, model }) => {
     console.log(make + model);
-    navigation.navigate(routes.CAR_WARRANTY_VEHICLE_DETAIL_2, { make, model });
+    setVehicle({ make, model });
+    navigation.navigate(routes.CAR_WARRANTY_VEHICLE_DETAIL_2);
   };
 
   const WithRegButton = ({ text, onPress, icon, selected }) => {
@@ -96,12 +100,10 @@ function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
+        <AppText style={styles.sectionTitle}>Vehicle Detail (1/2)</AppText>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
-              <AppText style={styles.sectionTitle}>
-                Vehicle Detail (1/2)
-              </AppText>
               <WithRegButton
                 text="With Registration"
                 icon="check-circle"
@@ -117,73 +119,71 @@ function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
                 }}
                 selected={!withReg}
               />
-              <View style={styles.formContainer}>
-                {withReg ? (
-                  <AppForm
-                    initialValues={{ registration: "", mileage: "" }}
-                    onSubmit={handleWithRegSubmit}
-                    validationSchema={withRegValidationSchema}
-                  >
-                    <View style={styles.fieldContainer}>
-                      <RegistrationPlateInput
-                        name="registration"
-                        placeholder="ENTER REGISTRATION"
-                        onContentSizeChange={() => setError("")}
-                      />
-                    </View>
-                    <View style={styles.fieldContainer}>
-                      <AppText style={styles.fieldTitle}>Mileage</AppText>
-                      <AppFormField
-                        name="mileage"
-                        placeholder="Mileage"
-                        keyboardType="numeric"
-                        style={styles.appFormField}
-                      />
-                    </View>
-                    <AppErrorMessage error={error} visible={error} />
-                    <SubmitButton title="Next" />
-                  </AppForm>
-                ) : (
-                  <Formik
-                    initialValues={{ make: "", model: "" }}
-                    onSubmit={handleWithoutRegSubmit}
-                    validationSchema={withoutRegValidationSchema}
-                  >
-                    {({ values, setFieldValue }) => (
-                      <>
-                        <View style={styles.fieldContainer}>
-                          <AppText style={styles.fieldTitle}>Make</AppText>
-                          <AppFormPicker
-                            name="make"
-                            items={makesApi.data}
-                            onSelectItem={(item) => {
-                              modelsApi.request("api/car/models/" + item);
-                              if (values["make"] !== item) {
-                                setFieldValue("model", "");
-                              }
-                            }}
-                          />
-                        </View>
-                        <View style={styles.fieldContainer}>
-                          <AppText style={styles.fieldTitle}>Model</AppText>
-                          <AppFormPicker
-                            name="model"
-                            items={modelsApi.data}
-                            disabled={!values["make"]}
-                          />
-                        </View>
-                        <SubmitButton title="Next" />
-                      </>
-                    )}
-                  </Formik>
-                )}
-                <AppButton
-                  backgroundColor={null}
-                  color={colors.success}
-                  title="Back"
-                  onPress={() => navigation.goBack()}
-                />
-              </View>
+              {withReg ? (
+                <AppForm
+                  initialValues={{ registration: "", mileage: "" }}
+                  onSubmit={handleWithRegSubmit}
+                  validationSchema={withRegValidationSchema}
+                >
+                  <View style={styles.fieldContainer}>
+                    <RegistrationPlateInput
+                      name="registration"
+                      placeholder="ENTER REGISTRATION"
+                      onContentSizeChange={() => setError("")}
+                    />
+                  </View>
+                  <View style={styles.fieldContainer}>
+                    <AppText style={styles.fieldTitle}>Mileage</AppText>
+                    <AppFormField
+                      name="mileage"
+                      placeholder="Mileage"
+                      keyboardType="numeric"
+                      style={styles.appFormField}
+                    />
+                  </View>
+                  <AppErrorMessage error={error} visible={error} />
+                  <SubmitButton title="Next" />
+                </AppForm>
+              ) : (
+                <Formik
+                  initialValues={{ make: "", model: "" }}
+                  onSubmit={handleWithoutRegSubmit}
+                  validationSchema={withoutRegValidationSchema}
+                >
+                  {({ values, setFieldValue }) => (
+                    <>
+                      <View style={styles.fieldContainer}>
+                        <AppText style={styles.fieldTitle}>Make</AppText>
+                        <AppFormPicker
+                          name="make"
+                          items={makesApi.data}
+                          onSelectItem={(item) => {
+                            modelsApi.request("api/car/models/" + item);
+                            if (values["make"] !== item) {
+                              setFieldValue("model", "");
+                            }
+                          }}
+                        />
+                      </View>
+                      <View style={styles.fieldContainer}>
+                        <AppText style={styles.fieldTitle}>Model</AppText>
+                        <AppFormPicker
+                          name="model"
+                          items={modelsApi.data}
+                          disabled={!values["make"]}
+                        />
+                      </View>
+                      <SubmitButton title="Next" />
+                    </>
+                  )}
+                </Formik>
+              )}
+              <AppButton
+                backgroundColor={null}
+                color={colors.success}
+                title="Back"
+                onPress={() => navigation.goBack()}
+              />
             </View>
           </Screen>
         </ScrollView>
@@ -209,8 +209,9 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: colors.secondary,
-    marginBottom: 10,
+    color: "white",
+    marginLeft: 20,
+    marginVertical: 10,
   },
   withRegButton: {
     marginVertical: 10,
@@ -235,14 +236,12 @@ const styles = StyleSheet.create({
   withRegTextSelected: {
     color: colors.darkGrey,
   },
-  formContainer: {
-    marginTop: 30,
-  },
   fieldContainer: {
     marginBottom: 10,
   },
   fieldTitle: {
     color: defaultStyles.colors.mediumGrey,
+    fontWeight: "bold",
   },
   appFormField: {
     backgroundColor: colors.white,

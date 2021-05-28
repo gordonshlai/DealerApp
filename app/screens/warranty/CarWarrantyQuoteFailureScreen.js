@@ -242,6 +242,7 @@ const styles = StyleSheet.create({
   },
   fieldTitle: {
     color: defaultStyles.colors.mediumGrey,
+    fontWeight: "bold",
   },
   appFormField: {
     backgroundColor: colors.white,

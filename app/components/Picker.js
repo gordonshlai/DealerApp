@@ -48,13 +48,13 @@ function Picker({
           {icon && (
             <MaterialCommunityIcons
               name={icon}
-              size={24}
+              size={14}
               color={defaultStyles.colors.mediumGrey}
               style={styles.icon}
             />
           )}
           {selectedItem ? (
-            <AppText style={styles.text}>{selectedItem}</AppText>
+            <AppText style={styles.text}>{selectedItem.toString()}</AppText>
           ) : (
             <AppText style={styles.placeholder}>{placeholder}</AppText>
           )}
@@ -78,7 +78,7 @@ function Picker({
           />
           <FlatList
             data={items}
-            keyExtractor={(item) => item}
+            keyExtractor={(item) => item.toString()}
             ItemSeparatorComponent={ListItemSeparator}
             renderItem={({ item }) => {
               const isActive = item === selectedItem;
@@ -93,7 +93,8 @@ function Picker({
                   <AppText style={isActive && styles.activeText}>
                     {item}
                   </AppText>
-                  {selectedItem.toUpperCase() === item.toUpperCase() ? (
+                  {selectedItem.toString().toUpperCase() ===
+                  item.toString().toUpperCase() ? (
                     <MaterialCommunityIcons
                       name="check"
                       color={defaultStyles.colors.primary}
