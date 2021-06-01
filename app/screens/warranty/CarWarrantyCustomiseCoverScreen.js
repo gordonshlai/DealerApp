@@ -28,7 +28,7 @@ import routes from "../../navigation/routes";
 import ProgressBar from "./components/ProgressBar";
 import AdditionsItem from "./components/AdditionsItem";
 import QuotePrice from "./components/QuotePrice";
-import ToggleMarginSwitch from "./components/ToggleMarginSwitch";
+import AppSwitch from "./components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
 
 const validationSchema = Yup.object().shape({
@@ -301,8 +301,9 @@ function CarWarrantyCustomiseCoverScreen({ route, navigation }) {
                     <View style={[styles.fieldContainer, { marginTop: 30 }]}>
                       <View style={styles.planTitleContainer}>
                         <AppText style={styles.fieldTitle}>Plan</AppText>
-                        <ToggleMarginSwitch
-                          margin={margin}
+                        <AppSwitch
+                          value={margin}
+                          text="Toggle Margin"
                           onValueChange={() => setMargin(!margin)}
                         />
                       </View>

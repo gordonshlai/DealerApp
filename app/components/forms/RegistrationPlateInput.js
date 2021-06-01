@@ -6,13 +6,8 @@ import defaultStyles from "../../config/styles";
 import AppErrorMessage from "./AppErrorMessage";
 
 function RegistrationPlateInput({ name, ...otherProps }) {
-  const {
-    setFieldTouched,
-    setFieldValue,
-    errors,
-    touched,
-    values,
-  } = useFormikContext();
+  const { setFieldTouched, setFieldValue, errors, touched, values } =
+    useFormikContext();
   return (
     <>
       <View style={styles.container}>
@@ -32,7 +27,7 @@ function RegistrationPlateInput({ name, ...otherProps }) {
           value={values[name]}
           autoCapitalize="characters"
           autoCorrect={false}
-          placeholder=""
+          placeholder="ENTER REGISTRATION"
           textAlign="center"
           style={[
             styles.textInput,

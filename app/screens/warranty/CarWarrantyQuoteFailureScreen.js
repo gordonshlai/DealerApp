@@ -31,7 +31,7 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
 
-function CarWarrantyDetailScreen({ route, navigation }) {
+function CarWarrantyQuoteFailureScreen({ route, navigation }) {
   const { booking } = useContext(WarrantyContext);
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarWarrantyDetailScreen;
+export default CarWarrantyQuoteFailureScreen;

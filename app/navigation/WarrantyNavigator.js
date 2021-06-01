@@ -25,6 +25,7 @@ const WarrantyNavigator = () => {
   const [comparison, setComparison] = useState();
   const [quote, setQuote] = useState();
   const [booking, setBooking] = useState();
+  const [customer, setCustomer] = useState();
 
   return (
     <WarrantyContext.Provider
@@ -39,6 +40,8 @@ const WarrantyNavigator = () => {
         setQuote,
         booking,
         setBooking,
+        customer,
+        setCustomer,
       }}
     >
       <Stack.Navigator

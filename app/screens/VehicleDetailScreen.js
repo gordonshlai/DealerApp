@@ -153,11 +153,9 @@ function VehicleDetailScreen({ route, navigation }) {
       doors: vehicleInput.doors,
       tagline: vehicleInput.tagline,
       description: vehicleInput.description,
-      price_asking: vehicleInput.price_asking
-        ? vehicleInput.price_asking
-        : "0.00",
-      price_civ: vehicleInput.price_civ ? vehicleInput.price_civ : "0.00",
-      price_cap: vehicleInput.price_cap ? vehicleInput.price_cap : "0.00",
+      price_asking: vehicleInput.price_asking || "0.00",
+      price_civ: vehicleInput.price_civ || "0.00",
+      price_cap: vehicleInput.price_cap || "0.00",
       sales_status: sales_statusArray.indexOf(vehicleInput.sales_status),
       mot_expiry: vehicleInput.mot_expiry,
     };
@@ -253,95 +251,42 @@ function VehicleDetailScreen({ route, navigation }) {
             <View style={styles.informationContainer}>
               <Formik
                 initialValues={{
-                  make: vehicleDetail ? vehicleDetail.make : "",
-                  model: vehicleDetail ? vehicleDetail.model : "",
-                  registration: vehicleDetail ? vehicleDetail.registration : "",
-                  mileage:
-                    vehicleDetail && vehicleDetail.mileage
-                      ? vehicleDetail.mileage.toString()
-                      : "",
-                  colour:
-                    vehicleDetail && vehicleDetail.colour
-                      ? vehicleDetail.colour
-                      : "",
-                  fuel:
-                    vehicleDetail && vehicleDetail.fuel
-                      ? vehicleDetail.fuel
-                      : "",
+                  make: vehicleDetail?.make || "",
+                  model: vehicleDetail?.model || "",
+                  registration: vehicleDetail?.registration || "",
+                  mileage: vehicleDetail?.mileage.toString() || "",
+                  colour: vehicleDetail?.colour || "",
+                  fuel: vehicleDetail?.fuel || "",
                   engine_capacity:
-                    vehicleDetail && vehicleDetail.engine_capacity
-                      ? vehicleDetail.engine_capacity.toString()
-                      : "",
-                  year:
-                    vehicleDetail && vehicleDetail.year
-                      ? vehicleDetail.year.toString()
-                      : "",
-                  registration_date:
-                    vehicleDetail && vehicleDetail.registration_date
-                      ? new Date(dayjs(vehicleDetail.registration_date))
-                      : "",
-                  mot_expiry:
-                    vehicleDetail && vehicleDetail.mot_expiry
-                      ? new Date(dayjs(vehicleDetail.mot_expiry))
-                      : "",
-                  transmission:
-                    vehicleDetail && vehicleDetail.transmission
-                      ? vehicleDetail.transmission
-                      : "",
-                  seats:
-                    vehicleDetail && vehicleDetail.seats
-                      ? vehicleDetail.seats
-                      : "",
-                  doors:
-                    vehicleDetail && vehicleDetail.doors
-                      ? vehicleDetail.doors
-                      : "",
-                  body_style:
-                    vehicleDetail && vehicleDetail.body_style
-                      ? vehicleDetail.body_style
-                      : "",
+                    vehicleDetail?.engine_capacity.toString() || "",
+                  year: vehicleDetail?.year.toString() || "",
+                  registration_date: vehicleDetail?.registration_date
+                    ? dayjs(vehicleDetail.registration_date)
+                    : "",
+                  mot_expiry: vehicleDetail?.mot_expiry
+                    ? dayjs(vehicleDetail.mot_expiry)
+                    : "",
+                  transmission: vehicleDetail?.transmission || "",
+                  seats: vehicleDetail?.seats || "",
+                  doors: vehicleDetail?.doors || "",
+                  body_style: vehicleDetail?.body_style || "",
 
-                  title:
-                    vehicleDetail && vehicleDetail.title
-                      ? vehicleDetail.title
-                      : "",
-                  sales_status:
-                    vehicleDetail && vehicleDetail.sales_status
-                      ? sales_statusArray[vehicleDetail.sales_status]
-                      : sales_statusArray[0],
-                  tagline:
-                    vehicleDetail && vehicleDetail.tagline
-                      ? vehicleDetail.tagline
-                      : "",
-                  retail_price:
-                    vehicleDetail && vehicleDetail.retail_price
-                      ? vehicleDetail.retail_price
-                      : "",
-                  price_asking:
-                    vehicleDetail && vehicleDetail.price_asking
-                      ? vehicleDetail.price_asking
-                      : "",
-                  price_civ:
-                    vehicleDetail && vehicleDetail.price_civ
-                      ? vehicleDetail.price_civ
-                      : "",
-                  price_cap:
-                    vehicleDetail && vehicleDetail.price_cap
-                      ? vehicleDetail.price_cap
-                      : "",
-                  description:
-                    vehicleDetail && vehicleDetail.description
-                      ? vehicleDetail.description
-                      : "",
-                  images:
-                    vehicleDetail && vehicleDetail.images
-                      ? vehicleDetail.images
-                      : [],
+                  title: vehicleDetail?.title || "",
+                  sales_status: vehicleDetail?.sales_status
+                    ? sales_statusArray[vehicleDetail.sales_status]
+                    : sales_statusArray[0],
+                  tagline: vehicleDetail?.tagline || "",
+                  retail_price: vehicleDetail?.retail_price || "",
+                  price_asking: vehicleDetail?.price_asking || "",
+                  price_civ: vehicleDetail?.price_civ || "",
+                  price_cap: vehicleDetail?.price_cap || "",
+                  description: vehicleDetail?.description || "",
+                  images: vehicleDetail?.images || [],
                 }}
                 onSubmit={handleSubmit}
                 validationSchema={validationSchema}
               >
-                {({ errors, values, setFieldValue, isValid, submitCount }) => (
+                {({ values, setFieldValue, isValid, submitCount }) => (
                   <>
                     <AppText style={styles.sectionTitle}>
                       Vehicle Detail

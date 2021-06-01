@@ -2,17 +2,19 @@ import React from "react";
 import { View, StyleSheet, Switch } from "react-native";
 
 import AppText from "../../../components/AppText";
+import ToolTip from "../../../components/ToolTip";
 import colors from "../../../config/colors";
 
-function ToggleMarginSwitch({ margin, onValueChange }) {
+function AppSwitch({ value, text, tooltip, onValueChange }) {
   return (
     <View style={styles.container}>
-      <AppText style={styles.text}>Toggle Margin</AppText>
+      {text && <AppText style={styles.text}>{text}</AppText>}
       <Switch
         trackColor={{ false: colors.white, true: colors.primary }}
         onValueChange={onValueChange}
-        value={margin}
+        value={value}
       />
+      {tooltip && <ToolTip message={tooltip} />}
     </View>
   );
 }
@@ -30,4 +32,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ToggleMarginSwitch;
+export default AppSwitch;

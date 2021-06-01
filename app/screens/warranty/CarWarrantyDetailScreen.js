@@ -102,8 +102,8 @@ function CarWarrantyDetailScreen({ route, navigation }) {
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
               <AppForm
                 initialValues={{
-                  purchase_date: "",
-                  start_date: "",
+                  purchase_date: dayjs(),
+                  start_date: dayjs(),
                   mot_date: "",
                   service_date: "",
                   service_history: "",
@@ -140,10 +140,7 @@ function CarWarrantyDetailScreen({ route, navigation }) {
                 </View>
                 <View style={styles.fieldContainer}>
                   <AppText style={styles.fieldTitle}>Registration</AppText>
-                  <RegistrationPlateInput
-                    name="registration"
-                    placeholder="ENTER REGISTRATION"
-                  />
+                  <RegistrationPlateInput name="registration" />
                 </View>
                 <View style={styles.fieldContainer}>
                   <AppText style={styles.fieldTitle}>VIN Number</AppText>

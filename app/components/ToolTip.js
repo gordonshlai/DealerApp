@@ -30,11 +30,11 @@ const styles = StyleSheet.create({
   toolTip: {
     position: "absolute",
     right: 10,
-    top: -50,
+    bottom: 70,
     padding: 10,
     backgroundColor: "white",
     fontWeight: "bold",
-    width: "50%",
+    width: "70%",
     zIndex: 1,
     ...defaultStyles.shadow,
   },

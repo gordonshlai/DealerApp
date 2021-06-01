@@ -128,7 +128,6 @@ function CarWarrantyVehicleDetailScreen1({ navigation, route }) {
                   <View style={styles.fieldContainer}>
                     <RegistrationPlateInput
                       name="registration"
-                      placeholder="ENTER REGISTRATION"
                       onContentSizeChange={() => setError("")}
                     />
                   </View>

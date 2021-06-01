@@ -64,7 +64,6 @@ function NewCarScreen({ navigation }) {
               >
                 <RegistrationPlateInput
                   name="registration"
-                  placeholder="ENTER REGISTRATION"
                   onContentSizeChange={() => setError("")}
                 />
                 <AppErrorMessage error={error} visible={error} />

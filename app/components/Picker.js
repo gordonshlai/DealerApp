@@ -21,8 +21,8 @@ function Picker({
   icon,
   items,
   onSelectItem,
-  selectedItem,
-  placeholder,
+  selectedItem = "",
+  placeholder = "Please Select",
   width = "100%",
   disabled = false,
 }) {

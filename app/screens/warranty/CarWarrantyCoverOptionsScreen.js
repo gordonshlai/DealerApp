@@ -21,7 +21,7 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
-import ToggleMarginSwitch from "./components/ToggleMarginSwitch";
+import AppSwitch from "./components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
 
 function CarWarrantyCoverOptionsScreen({ navigation, route }) {
@@ -72,8 +72,9 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
-              <ToggleMarginSwitch
-                margin={margin}
+              <AppSwitch
+                value={margin}
+                text="Toggle Margin"
                 onValueChange={() => setMargin(!margin)}
               />
               {coverLevels.map((key) => {
