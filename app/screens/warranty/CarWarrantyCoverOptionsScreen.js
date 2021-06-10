@@ -129,16 +129,6 @@ const styles = StyleSheet.create({
     marginLeft: 20,
     marginVertical: 10,
   },
-  fieldContainer: {
-    marginBottom: 10,
-  },
-  fieldTitle: {
-    color: defaultStyles.colors.mediumGrey,
-  },
-  appFormField: {
-    backgroundColor: colors.white,
-    borderRadius: 5,
-  },
 });
 
 export default CarWarrantyCoverOptionsScreen;

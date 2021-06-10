@@ -8,6 +8,13 @@ import {
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { WebView } from "react-native-webview";
+import { Buffer } from "buffer";
+import * as FileSystem from "expo-file-system";
+import * as Progress from "react-native-progress";
+import * as MediaLibrary from "expo-media-library";
+import * as Linking from "expo-linking";
+import * as WebBrowser from "expo-web-browser";
 
 import AppButton from "../../components/AppButton";
 import AppText from "../../components/AppText";
@@ -30,6 +37,8 @@ import AdditionsItem from "./components/AdditionsItem";
 import QuotePrice from "./components/QuotePrice";
 import AppSwitch from "./components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
+import authStorage from "../../auth/storage";
+import settings from "../../config/settings";
 
 const validationSchema = Yup.object().shape({
   claims: Yup.number().required().label("Repair Limit"),
@@ -58,6 +67,14 @@ function CarWarrantyCustomiseCoverScreen({ route, navigation }) {
   const [error, setError] = useState();
   const [margin, setMargin] = useState(true);
   const [coverLength, setCoverLength] = useState(12);
+
+  const pdfApi = useApi(() =>
+    client.get(`api/car/warranty/quote/document/${quote.token}`)
+  );
+
+  const PdfReader = ({ url: uri }) => (
+    <WebView javaScriptEnabled={true} style={{ flex: 1 }} source={{ uri }} />
+  );
 
   const repairLimit =
     user.account.id === 43900 // hippo vehicle solutions
@@ -164,6 +181,7 @@ function CarWarrantyCustomiseCoverScreen({ route, navigation }) {
       cost_net: basePrice,
       cost_total: basePrice * vat,
     });
+    setQuote({ ...quote, coverLength });
   };
 
   const onClaimsSelect = async (selectedClaim, values, setFieldValue) => {
@@ -216,20 +234,140 @@ function CarWarrantyCustomiseCoverScreen({ route, navigation }) {
     }
   };
 
+  const fun = async () => {
+    const authToken = await authStorage.getToken();
+    console.log(authToken);
+    return authToken;
+  };
+
+  const genRanHex = (size) =>
+    [...Array(size)]
+      .map(() => Math.floor(Math.random() * 16).toString(16))
+      .join("");
+
   return (
     <>
       <Background />
-      <ActivityIndicator visible={patchQuoteApi.loading} />
+      <ActivityIndicator visible={patchQuoteApi.loading || pdfApi.loading} />
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : ""}
         keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
-        <AppText style={styles.sectionTitle}>Customise Cover</AppText>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginRight: 20,
+          }}
+        >
+          <AppText style={styles.sectionTitle}>Customise Cover</AppText>
+          <AppButton
+            title="Download Quote"
+            backgroundColor={colors.primary}
+            border={null}
+            onPress={async () => {
+              // const uri = Linking.createURL(
+              //   `${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`,
+              //   {
+              //     headers: {
+              //       Authorization:
+              //         "Bearer " +
+              //         "w7Gmp34ljlq1dPOxecbe9RGom7jtZTa1PaeRllL2VSCDVKKQR6tXuUIgvJWZ8nYt",
+              //     },
+              //   }
+              // );
+              // await Linking.openURL(uri);
+              // const callback = (downloadProgress) => {
+              //   const progress =
+              //     downloadProgress.totalBytesWritten /
+              //     downloadProgress.totalBytesExpectedToWrite;
+              //   setProgress(progress);
+              // };
+              // const downloadResumable = FileSystem.createDownloadResumable(
+              //   `${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`,
+              //   FileSystem.documentDirectory + genRanHex(12) + ".pdf",
+              //   {
+              //     headers: {
+              //       Authorization:
+              //         "Bearer " +
+              //         "w7Gmp34ljlq1dPOxecbe9RGom7jtZTa1PaeRllL2VSCDVKKQR6tXuUIgvJWZ8nYt",
+              //     },
+              //   },
+              //   callback
+              // );
+              // try {
+              //   const { uri } = await downloadResumable.downloadAsync();
+              //   // const contentUri = await FileSystem.getContentUriAsync(uri);
+              //   // MediaLibrary.saveToLibraryAsync(contentUri);
+              //   // console.log("contentUri: " + contentUri);
+              //   console.log("Finished downloading to ", uri);
+              //   // const result = await WebBrowser.openBrowserAsync(uri);
+              //   // console.log(result);
+              // } catch (e) {
+              //   console.error(e);
+              // }
+              // try {
+              //   await downloadResumable.pauseAsync();
+              //   console.log(
+              //     "Paused download operation, saving for future retrieval"
+              //   );
+              //   AsyncStorage.setItem(
+              //     "pausedDownload",
+              //     JSON.stringify(downloadResumable.savable())
+              //   );
+              // } catch (e) {
+              //   console.error(e);
+              // }
+              // try {
+              //   const { uri } = await downloadResumable.resumeAsync();
+              //   console.log("Finished downloading to ", uri);
+              // } catch (e) {
+              //   console.error(e);
+              // }
+              //To resume a download across app restarts, assuming the the DownloadResumable.savable() object was stored:
+              // const downloadSnapshotJson = await AsyncStorage.getItem(
+              //   "pausedDownload"
+              // );
+              // const downloadSnapshot = JSON.parse(downloadSnapshotJson);
+              // const downloadResumable = new FileSystem.DownloadResumable(
+              //   downloadSnapshot.url,
+              //   downloadSnapshot.fileUri,
+              //   downloadSnapshot.options,
+              //   callback,
+              //   downloadSnapshot.resumeData
+              // );
+              // try {
+              //   const { uri } = await downloadResumable.resumeAsync();
+              //   console.log("Finished downloading to ", uri);
+              // } catch (e) {
+              //   console.error(e);
+              // }
+              // console.log(genRanHex(24));
+            }}
+          />
+        </View>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
+              {/* <View
+                style={{ flex: 1, height: 300, backgroundColor: "#ecf0f1" }}
+              >
+                <WebView
+                  javaScriptEnabled={true}
+                  style={{ flex: 1 }}
+                  source={{
+                    uri: `${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`,
+                    headers: {
+                      Authorization:
+                        "Bearer " +
+                        "w7Gmp34ljlq1dPOxecbe9RGom7jtZTa1PaeRllL2VSCDVKKQR6tXuUIgvJWZ8nYt",
+                    },
+                  }}
+                />
+              </View> */}
               <Formik
                 initialValues={{
                   claims: quote.quote.claims,

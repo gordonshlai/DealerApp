@@ -14,10 +14,8 @@ import AppText from "../../components/AppText";
 import Background from "../../components/Background";
 import {
   AppErrorMessage,
-  AppForm,
   AppFormField,
   AppFormPicker,
-  RegistrationPlateInput,
   SubmitButton,
 } from "../../components/forms";
 import Screen from "../../components/Screen";
@@ -161,6 +159,7 @@ function CarWarrantyCustomerDetailScreen({ route, navigation }) {
                           <AppFormField
                             name="postcode"
                             placeholder="Postcode"
+                            autoCapitalize="characters"
                             onContentSizeChange={() => setError(null)}
                             style={styles.appFormField}
                           />
@@ -196,7 +195,7 @@ function CarWarrantyCustomerDetailScreen({ route, navigation }) {
                       )}
                     </View>
 
-                    <View style={styles.fieldContainer}>
+                    <View style={[styles.fieldContainer, { marginTop: 30 }]}>
                       <AppText style={styles.fieldTitle}>
                         Address Line 1
                       </AppText>
@@ -237,6 +236,7 @@ function CarWarrantyCustomerDetailScreen({ route, navigation }) {
                       <AppFormField
                         name="postcode"
                         placeholder="Postcode"
+                        autoCapitalize="characters"
                         style={styles.appFormField}
                       />
                     </View>

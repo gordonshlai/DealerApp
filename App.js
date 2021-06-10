@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { AppLoading } from "expo";
+import AppLoading from "expo-app-loading";
 import AuthContext from "./app/auth/context";
 import AppNavigator from "./app/navigation/AppNavigator";
 import authStorage from "./app/auth/storage";
@@ -81,7 +81,11 @@ export default function App() {
 
   if (!isReady)
     return (
-      <AppLoading startAsync={restoreToken} onFinish={() => setIsReady(true)} />
+      <AppLoading
+        startAsync={restoreToken}
+        onFinish={() => setIsReady(true)}
+        onError={(error) => console.log(error)}
+      />
     );
   return (
     <AuthContext.Provider

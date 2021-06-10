@@ -21,7 +21,7 @@ export default useNotifications = (notificationListener) => {
 
   const registerForPushNotification = async () => {
     try {
-      const permission = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+      const permission = await Notifications.requestPermissionsAsync();
       if (!permission.granted) return;
 
       const token = await Notifications.getExpoPushTokenAsync();
