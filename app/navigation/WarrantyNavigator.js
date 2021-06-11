@@ -28,72 +28,72 @@ const WarrantyNavigator = () => {
   const [customer, setCustomer] = useState();
 
   return (
-    <WarrantyContext.Provider
-      value={{
-        vehicle,
-        setVehicle,
-        user,
-        setUser,
-        comparison,
-        setComparison,
-        quote,
-        setQuote,
-        booking,
-        setBooking,
-        customer,
-        setCustomer,
+    // <WarrantyContext.Provider
+    //   value={{
+    //     vehicle,
+    //     setVehicle,
+    //     user,
+    //     setUser,
+    //     comparison,
+    //     setComparison,
+    //     quote,
+    //     setQuote,
+    //     booking,
+    //     setBooking,
+    //     customer,
+    //     setCustomer,
+    //   }}
+    // >
+    <Stack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerBackTitle: "",
+        headerTitle: "Car Warranty",
+        headerTitleStyle: styles.headerTitleStyle,
+        headerStyle: styles.headerStyle,
+        headerTintColor: "white",
+        headerTitleAlign: "center",
+        headerBackImage: () => (
+          <MaterialCommunityIcons
+            name="chevron-left"
+            size={32}
+            color={colors.primary}
+            style={{ paddingHorizontal: 10 }}
+          />
+        ),
+        headerRight: () => <Menu />,
       }}
     >
-      <Stack.Navigator
-        screenOptions={{
-          headerBackTitleVisible: false,
-          headerBackTitle: "",
-          headerTitle: "Car Warranty",
-          headerTitleStyle: styles.headerTitleStyle,
-          headerStyle: styles.headerStyle,
-          headerTintColor: "white",
-          headerTitleAlign: "center",
-          headerBackImage: () => (
-            <MaterialCommunityIcons
-              name="chevron-left"
-              size={32}
-              color={colors.primary}
-              style={{ paddingHorizontal: 10 }}
-            />
-          ),
-          headerRight: () => <Menu />,
-        }}
-      >
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_VEHICLE_DETAIL_1}
-          component={CarWarrantyVehicleDetailScreen1}
-        />
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_VEHICLE_DETAIL_2}
-          component={CarWarrantyVehicleDetailScreen2}
-        />
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_COVER_OPTIONS}
-          component={CarWarrantyCoverOptionsScreen}
-        />
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_CUSTOMISE_COVER}
-          component={CarWarrantyCustomiseCoverScreen}
-        />
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_DETAIL}
-          component={CarWarrantyDetailScreen}
-        />
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_CUSTOMER_DETAIL}
-          component={CarWarrantyCustomerDetailScreen}
-        />
-        <Stack.Screen
-          name={routes.CAR_WARRANTY_PAYMENT_DETAIL}
-          component={CarWarrantyPaymentDetailScreen}
-        />
-      </Stack.Navigator>
-    </WarrantyContext.Provider>
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_VEHICLE_DETAIL_1}
+        component={CarWarrantyVehicleDetailScreen1}
+      />
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_VEHICLE_DETAIL_2}
+        component={CarWarrantyVehicleDetailScreen2}
+      />
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_COVER_OPTIONS}
+        component={CarWarrantyCoverOptionsScreen}
+      />
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_CUSTOMISE_COVER}
+        component={CarWarrantyCustomiseCoverScreen}
+      />
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_DETAIL}
+        component={CarWarrantyDetailScreen}
+      />
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_CUSTOMER_DETAIL}
+        component={CarWarrantyCustomerDetailScreen}
+      />
+      <Stack.Screen
+        name={routes.CAR_WARRANTY_PAYMENT_DETAIL}
+        component={CarWarrantyPaymentDetailScreen}
+      />
+    </Stack.Navigator>
+    // </WarrantyContext.Provider>
   );
 };
 

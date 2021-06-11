@@ -1,9 +1,9 @@
 import React from "react";
 import { View, StyleSheet, Switch } from "react-native";
 
-import AppText from "../../../components/AppText";
-import ToolTip from "../../../components/ToolTip";
-import colors from "../../../config/colors";
+import AppText from "./AppText";
+import ToolTip from "./ToolTip";
+import colors from "../config/colors";
 
 function AppSwitch({ value, text, tooltip, onValueChange }) {
   return (

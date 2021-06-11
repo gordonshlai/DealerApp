@@ -21,7 +21,7 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
-import AppSwitch from "./components/AppSwitch";
+import AppSwitch from "../../components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
 
 function CarWarrantyCoverOptionsScreen({ navigation, route }) {

@@ -29,11 +29,14 @@ import TermsAndConditions from "../components/TermsAndConditions";
 import AuthContext from "../auth/context";
 import Background from "../components/Background";
 import MotHistory from "../components/MotHistory";
+import AppSwitch from "../components/AppSwitch";
 
 import client from "../api/client";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import useApi from "../hooks/useApi";
+import CoverOption from "./warranty/components/CoverOption";
+import WarrantyContext from "../warranty/context";
 
 dayjs.extend(customParseFormat);
 
@@ -59,25 +62,35 @@ function InventoryDetailScreen({ navigation, route }) {
     setLoadTradeFlag,
   } = useContext(AuthContext);
 
+  const { setVehicle, setUser, setQuote } = useContext(WarrantyContext);
+
   const [error, setError] = useState(false);
-  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [margin, setMargin] = useState(true);
+
+  const [errorModalVisible, setErrorModalVisible] = useState(false);
   const [actionModalVisible, setActionModalVisible] = useState(false);
-  const [termsAndConditionsVisible, setTermsAndConditionsVisible] = useState(
-    false
-  );
+  const [termsAndConditionsVisible, setTermsAndConditionsVisible] =
+    useState(false);
   const [areYouSureModalVisible, setAreYouSureModalVisible] = useState(false);
 
   const getVehicleApi = useApi(() =>
     client.get("api/inventory/vehicles/" + vehicle.id)
   );
-  const patchVehicleApi = useApi((payload) =>
-    client.patch("api/inventory/vehicles/" + vehicle.id, payload)
-  );
   const getMotHistoryApi = useApi(() =>
     client.get("api/inventory/dvsa/" + vehicle.id)
   );
+  const getWarrantyApi = useApi(() =>
+    client.get("api/inventory/warranty/" + vehicle.id)
+  );
+  const userApi = useApi(() => client.get("api/user"));
 
+  const quoteApi = useApi((payload) =>
+    client.post("api/car/warranty/quote", payload)
+  );
+  const patchVehicleApi = useApi((payload) =>
+    client.patch("api/inventory/vehicles/" + vehicle.id, payload)
+  );
   const deleteVehicleApi = useApi(() =>
     client.delete("api/inventory/vehicles/" + vehicle.id)
   );
@@ -85,6 +98,8 @@ function InventoryDetailScreen({ navigation, route }) {
   useEffect(() => {
     getVehicleApi.request();
     getMotHistoryApi.request();
+    getWarrantyApi.request();
+    userApi.request();
   }, [loadInventoryDetailFlag]);
 
   const numberWithCommas = (x) => {
@@ -152,6 +167,53 @@ function InventoryDetailScreen({ navigation, route }) {
     </>
   );
 
+  const coverOptions = () => {
+    const coverLevels = Object.keys(getWarrantyApi.data);
+    const coverOptions = coverLevels.map((key) => {
+      if (getWarrantyApi.data[key].available) {
+        return (
+          <CoverOption
+            data={getWarrantyApi.data[key]}
+            title={key}
+            margin={margin}
+            vat={userApi.data.user.account.vat}
+            selected={true}
+            onSelect={async () => {
+              console.log(vehicle);
+              const quoteVehicle = {
+                registration: vehicle.registration,
+                mileage: vehicle.mileage,
+                make: vehicle.make,
+                model: vehicle.model,
+                manufacture_date: vehicle.registration_date,
+                engine_cc: vehicle.engine_capacity,
+                fuel_type: vehicle.fuel.toUpperCase(),
+                retail_value: parseInt(vehicle.retail_price),
+              };
+              const payload = {
+                cover: key.toUpperCase(),
+                dealer_id: userApi.data.user.dealer_id,
+                ...quoteVehicle,
+              };
+              const quote = await quoteApi.request(payload);
+              console.log(quote);
+              if (!quote.ok) return setError(quote.data.message);
+              setVehicle(quoteVehicle);
+              setUser(userApi.data.user);
+              setQuote(quote.data);
+              navigation.navigate(routes.WARRANTY, {
+                screen: routes.CAR_WARRANTY_CUSTOMISE_COVER,
+                initial: false,
+              });
+            }}
+            key={key}
+          />
+        );
+      }
+    });
+    return coverOptions;
+  };
+
   return (
     <>
       <Background />
@@ -159,7 +221,9 @@ function InventoryDetailScreen({ navigation, route }) {
         visible={
           getVehicleApi.loading ||
           getMotHistoryApi.loading ||
-          patchVehicleApi.loading
+          patchVehicleApi.loading ||
+          getWarrantyApi.loading ||
+          quoteApi.loading
         }
       />
 
@@ -174,6 +238,8 @@ function InventoryDetailScreen({ navigation, route }) {
             onPress={() => {
               getVehicleApi.request();
               getMotHistoryApi.request();
+              getWarrantyApi.request();
+              userApi.request();
             }}
           />
         </View>
@@ -186,6 +252,8 @@ function InventoryDetailScreen({ navigation, route }) {
                 onRefresh={() => {
                   getVehicleApi.request();
                   getMotHistoryApi.request();
+                  getWarrantyApi.request();
+                  userApi.request();
                 }}
               />
             }
@@ -472,6 +540,18 @@ function InventoryDetailScreen({ navigation, route }) {
                     ? getVehicleApi.data.description
                     : "Not provided"}
                 </AppText>
+              </View>
+
+              <View style={styles.informationContainer}>
+                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+                  Cover Options
+                </AppText>
+                <AppSwitch
+                  value={margin}
+                  text="Toggle Margin"
+                  onValueChange={() => setMargin(!margin)}
+                />
+                {coverOptions()}
               </View>
 
               {getMotHistoryApi.data.tests && (

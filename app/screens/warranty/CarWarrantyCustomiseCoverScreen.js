@@ -35,7 +35,7 @@ import routes from "../../navigation/routes";
 import ProgressBar from "./components/ProgressBar";
 import AdditionsItem from "./components/AdditionsItem";
 import QuotePrice from "./components/QuotePrice";
-import AppSwitch from "./components/AppSwitch";
+import AppSwitch from "../../components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
 import authStorage from "../../auth/storage";
 import settings from "../../config/settings";

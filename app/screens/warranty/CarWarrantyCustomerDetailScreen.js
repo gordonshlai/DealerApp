@@ -29,7 +29,7 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
 import Picker from "../../components/Picker";
-import AppSwitch from "./components/AppSwitch";
+import AppSwitch from "../../components/AppSwitch";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().label("Title"),
