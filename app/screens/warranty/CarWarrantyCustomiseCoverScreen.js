@@ -86,9 +86,11 @@ function CarWarrantyCustomiseCoverScreen({ route, navigation }) {
       ? [1000, 2000, 3000]
       : coverLevel === "SILVER"
       ? [1000, 2000]
-      : coverLevel === "BRONZE"
+      : coverLevel === "BRONZE" &&
+        quote.vehicle.mileage <= 140000 &&
+        quote.vehicle.vehicle_age <= 14
       ? [1000]
-      : [];
+      : [500];
 
   const labourRate =
     coverLevel === "PLATINUM PLUS"

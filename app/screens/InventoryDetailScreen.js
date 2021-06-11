@@ -169,8 +169,10 @@ function InventoryDetailScreen({ navigation, route }) {
 
   const coverOptions = () => {
     const coverLevels = Object.keys(getWarrantyApi.data);
+    let renderItem = false;
     const coverOptions = coverLevels.map((key) => {
       if (getWarrantyApi.data[key].available) {
+        renderItem = true;
         return (
           <CoverOption
             data={getWarrantyApi.data[key]}
@@ -179,7 +181,6 @@ function InventoryDetailScreen({ navigation, route }) {
             vat={userApi.data.user.account.vat}
             selected={true}
             onSelect={async () => {
-              console.log(vehicle);
               const quoteVehicle = {
                 registration: vehicle.registration,
                 mileage: vehicle.mileage,
@@ -211,7 +212,21 @@ function InventoryDetailScreen({ navigation, route }) {
         );
       }
     });
-    return coverOptions;
+    return (
+      renderItem && (
+        <View style={styles.informationContainer}>
+          <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
+            Cover Options
+          </AppText>
+          <AppSwitch
+            value={margin}
+            text="Toggle Margin"
+            onValueChange={() => setMargin(!margin)}
+          />
+          {coverOptions}
+        </View>
+      )
+    );
   };
 
   return (
@@ -542,17 +557,7 @@ function InventoryDetailScreen({ navigation, route }) {
                 </AppText>
               </View>
 
-              <View style={styles.informationContainer}>
-                <AppText style={[styles.detailTitle, { marginBottom: 15 }]}>
-                  Cover Options
-                </AppText>
-                <AppSwitch
-                  value={margin}
-                  text="Toggle Margin"
-                  onValueChange={() => setMargin(!margin)}
-                />
-                {coverOptions()}
-              </View>
+              {coverOptions()}
 
               {getMotHistoryApi.data.tests && (
                 <View style={styles.informationContainer}>
