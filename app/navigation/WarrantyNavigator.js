@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-import WarrantyContext from "../warranty/context";
-
 import Menu from "../components/Menu";
+import CarWarrantyScreen from "../screens/warranty/CarWarrantyScreen";
 import CarWarrantyVehicleDetailScreen1 from "../screens/warranty/CarWarrantyVehicleDetailScreen1";
 import CarWarrantyVehicleDetailScreen2 from "../screens/warranty/CarWarrantyVehicleDetailScreen2";
 import CarWarrantyCoverOptionsScreen from "../screens/warranty/CarWarrantyCoverOptionsScreen";
@@ -20,30 +19,7 @@ import colors from "../config/colors";
 const Stack = createStackNavigator();
 
 const WarrantyNavigator = () => {
-  const [vehicle, setVehicle] = useState();
-  const [user, setUser] = useState();
-  const [comparison, setComparison] = useState();
-  const [quote, setQuote] = useState();
-  const [booking, setBooking] = useState();
-  const [customer, setCustomer] = useState();
-
   return (
-    // <WarrantyContext.Provider
-    //   value={{
-    //     vehicle,
-    //     setVehicle,
-    //     user,
-    //     setUser,
-    //     comparison,
-    //     setComparison,
-    //     quote,
-    //     setQuote,
-    //     booking,
-    //     setBooking,
-    //     customer,
-    //     setCustomer,
-    //   }}
-    // >
     <Stack.Navigator
       screenOptions={{
         headerBackTitleVisible: false,
@@ -64,6 +40,7 @@ const WarrantyNavigator = () => {
         headerRight: () => <Menu />,
       }}
     >
+      <Stack.Screen name={routes.WARRANTY} component={CarWarrantyScreen} />
       <Stack.Screen
         name={routes.CAR_WARRANTY_VEHICLE_DETAIL_1}
         component={CarWarrantyVehicleDetailScreen1}
@@ -93,7 +70,6 @@ const WarrantyNavigator = () => {
         component={CarWarrantyPaymentDetailScreen}
       />
     </Stack.Navigator>
-    // </WarrantyContext.Provider>
   );
 };
 
