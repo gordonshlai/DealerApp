@@ -199,7 +199,7 @@ function InventoryDetailScreen({ navigation, route }) {
               const quote = await quoteApi.request(payload);
               console.log(quote);
               if (!quote.ok) return setError(quote.data.message);
-              setVehicle(quoteVehicle);
+              setVehicle(quote.data.vehicle);
               setUser(userApi.data.user);
               setQuote(quote.data);
               navigation.navigate(routes.WARRANTY, {

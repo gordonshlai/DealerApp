@@ -64,7 +64,9 @@ const serviceHistoryOptions = [
 
 function CarWarrantyDetailScreen({ route, navigation }) {
   const {
-    vehicle: { registration },
+    quote: {
+      vehicle: { registration },
+    },
     booking,
     setBooking,
   } = useContext(WarrantyContext);

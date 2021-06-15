@@ -2,7 +2,7 @@
   "expo": {
     "name": "WiseDealer",
     "slug": "WiseDealer",
-    "version": "1.0.0",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
     "splash": {
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.warrantywise.dealer",
-      "buildNumber": "1.0.4"
+      "buildNumber": "1.0.5"
     },
     "android": {
       "permissions": [

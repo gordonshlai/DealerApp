@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import {
   StyleSheet,
   FlatList,
@@ -75,7 +75,7 @@ const fuelArray = ["Diesel", "Electric", "Hybrid", "Petrol"];
 const doorsArray = ["1", "2", "3", "4", "5", "6", "7"];
 const seatsArray = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
-function HomeScreen({ navigation }) {
+function TradeScreen({ navigation }) {
   const { loadTradeFlag } = useContext(AuthContext);
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -381,6 +381,10 @@ function HomeScreen({ navigation }) {
   );
 }
 
+const arePropsEqual = (prevProps, nextProps) => {
+  return prevProps.label === nextProps.label;
+};
+
 const styles = StyleSheet.create({
   errorContainer: {
     padding: 20,
@@ -454,4 +458,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default memo(TradeScreen, arePropsEqual);

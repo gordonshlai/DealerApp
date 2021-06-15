@@ -18,7 +18,7 @@ const settings = {
   },
   prod: {
     apiUrl: "https://dealer.warrantywise.co.uk/app/",
-    tradeEnv: "0",
+    tradeEnv: "1",
   },
 };
 

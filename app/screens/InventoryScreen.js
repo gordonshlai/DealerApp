@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, View, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
@@ -17,6 +17,7 @@ import { AppErrorMessage } from "../components/forms";
 import client from "../api/client";
 import useApi from "../hooks/useApi";
 import colors from "../config/colors";
+import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
 import useDidMountEffect from "../hooks/useDidMountEffect";
@@ -105,7 +106,7 @@ function InventoryScreen({ navigation }) {
     }, 500);
   };
 
-  const handleLazyLoading = async () => {
+  const handleLazyLoading = () => {
     if (!getVehiclesApi.loading && getVehiclesApi.data.next_page_url) {
       setPageCurrent(pageCurrent + 1);
       setReload(!reload);
@@ -169,22 +170,14 @@ function InventoryScreen({ navigation }) {
             <View
               style={
                 serachBarVisible
-                  ? { opacity: 1, marginHorizontal: 20 }
-                  : { height: 0, opacity: 0 }
+                  ? styles.searchBarVisible
+                  : styles.searchBarInvisible
               }
             >
               <AppTextInput
                 icon="magnify"
                 placeholder="Enter Your Registration"
-                style={{
-                  backgroundColor: "white",
-                  borderRadius: 10,
-                  shadowColor: colors.black,
-                  shadowRadius: 10,
-                  shadowOpacity: 0.3,
-                  shadowOffset: { height: 5 },
-                  elevation: 10,
-                }}
+                style={styles.searchBar}
                 onChangeText={handleSearch}
               />
             </View>
@@ -234,6 +227,10 @@ function InventoryScreen({ navigation }) {
   );
 }
 
+const arePropsEqual = (prevProps, nextProps) => {
+  return prevProps.label === nextProps.label;
+};
+
 const styles = StyleSheet.create({
   errorContainer: {
     padding: 20,
@@ -249,6 +246,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 20,
   },
+  searchBar: {
+    backgroundColor: "white",
+    borderRadius: 10,
+    ...defaultStyles.shadow,
+  },
+  searchBarVisible: {
+    opacity: 1,
+    marginHorizontal: 20,
+  },
+  searchBarInvisible: {
+    height: 0,
+    opacity: 0,
+  },
   noMatchingVehicles: {
     fontSize: 24,
     fontWeight: "bold",
@@ -262,4 +272,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InventoryScreen;
+export default memo(InventoryScreen, arePropsEqual);

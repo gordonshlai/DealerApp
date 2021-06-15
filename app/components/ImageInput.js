@@ -131,7 +131,7 @@ function ImageInput({ image, onChangeImage }) {
               style={styles.closeButton}
             />
             <View style={styles.buttonsContainer}>
-              <View style={{ width: "50%", alignItems: "center" }}>
+              <View style={styles.buttonContainer}>
                 <AppButton
                   icon="camera"
                   backgroundColor={null}
@@ -145,7 +145,7 @@ function ImageInput({ image, onChangeImage }) {
                 />
                 <AppText>Take a Picture</AppText>
               </View>
-              <View style={{ width: "50%", alignItems: "center" }}>
+              <View style={styles.buttonContainer}>
                 <AppButton
                   icon="image"
                   backgroundColor={null}
@@ -210,6 +210,10 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
+    alignItems: "center",
+  },
+  buttonContainer: {
+    width: "50%",
     alignItems: "center",
   },
 });

@@ -16,7 +16,7 @@ import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import routes from "../../navigation/routes";
 
-function CarWarrantyScreen({ navigation, route }) {
+function CarWarrantyScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   return (
@@ -40,7 +40,10 @@ function CarWarrantyScreen({ navigation, route }) {
             </View>
             <View style={styles.card}>
               <AppText style={styles.sectionTitle}>Exsisting Quotes</AppText>
-              <AppButton title="Saved Quotes" />
+              <AppButton
+                title="Saved Quotes"
+                onPress={() => navigation.navigate(routes.SAVED_QUOTES)}
+              />
               <AppButton
                 title="My Sales"
                 backgroundColor={null}

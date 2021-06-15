@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   View,
   StyleSheet,
@@ -101,6 +101,10 @@ function Card({
   );
 }
 
+const arePropsEqual = (prevProps, nextProps) => {
+  return prevProps.label === nextProps.label;
+};
+
 const styles = StyleSheet.create({
   container: {
     borderRadius: 10,
@@ -173,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Card;
+export default memo(Card, arePropsEqual);

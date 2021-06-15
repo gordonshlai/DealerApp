@@ -15,6 +15,7 @@ import CarWarrantyPaymentDetailScreen from "../screens/warranty/CarWarrantyPayme
 
 import routes from "./routes";
 import colors from "../config/colors";
+import SavedQuotesScreen from "../screens/warranty/SavedQuotesScreen";
 
 const Stack = createStackNavigator();
 
@@ -69,6 +70,7 @@ const WarrantyNavigator = () => {
         name={routes.CAR_WARRANTY_PAYMENT_DETAIL}
         component={CarWarrantyPaymentDetailScreen}
       />
+      <Stack.Screen name={routes.SAVED_QUOTES} component={SavedQuotesScreen} />
     </Stack.Navigator>
   );
 };
