@@ -168,47 +168,91 @@ function InventoryDetailScreen({ navigation, route }) {
   );
 
   const coverOptions = () => {
+    const [buyNowVisible, setBuyNowVisible] = useState(false);
+    const [selected, setSelected] = useState("");
+
     const coverLevels = Object.keys(getWarrantyApi.data);
+
+    const cover = (key) => (
+      <CoverOption
+        data={getWarrantyApi.data[key]}
+        title={key}
+        margin={margin}
+        vat={userApi.data.user.account.vat}
+        selected={true}
+        onSelect={() => {
+          setBuyNowVisible(true);
+          setSelected(key);
+        }}
+      />
+    );
+
+    const handleBuyNow = async (key) => {
+      const quoteVehicle = {
+        registration: vehicle.registration,
+        mileage: vehicle.mileage,
+        make: vehicle.make,
+        model: vehicle.model,
+        manufacture_date: vehicle.registration_date,
+        engine_cc: vehicle.engine_capacity,
+        fuel_type: vehicle.fuel.toUpperCase(),
+        retail_value: parseInt(vehicle.retail_price),
+      };
+      const payload = {
+        cover: key.toUpperCase(),
+        dealer_id: userApi.data.user.dealer_id,
+        ...quoteVehicle,
+      };
+      const quote = await quoteApi.request(payload);
+      console.log(quote);
+      if (!quote.ok) return setError(quote.data.message);
+      setVehicle(quote.data.vehicle);
+      setUser(userApi.data.user);
+      setQuote(quote.data);
+      navigation.navigate(routes.WARRANTY, {
+        screen: routes.CAR_WARRANTY_CUSTOMISE_COVER,
+        initial: false,
+      });
+    };
+
     let renderItem = false;
     const coverOptions = coverLevels.map((key) => {
       if (getWarrantyApi.data[key].available) {
         renderItem = true;
         return (
-          <CoverOption
-            data={getWarrantyApi.data[key]}
-            title={key}
-            margin={margin}
-            vat={userApi.data.user.account.vat}
-            selected={true}
-            onSelect={async () => {
-              const quoteVehicle = {
-                registration: vehicle.registration,
-                mileage: vehicle.mileage,
-                make: vehicle.make,
-                model: vehicle.model,
-                manufacture_date: vehicle.registration_date,
-                engine_cc: vehicle.engine_capacity,
-                fuel_type: vehicle.fuel.toUpperCase(),
-                retail_value: parseInt(vehicle.retail_price),
-              };
-              const payload = {
-                cover: key.toUpperCase(),
-                dealer_id: userApi.data.user.dealer_id,
-                ...quoteVehicle,
-              };
-              const quote = await quoteApi.request(payload);
-              console.log(quote);
-              if (!quote.ok) return setError(quote.data.message);
-              setVehicle(quote.data.vehicle);
-              setUser(userApi.data.user);
-              setQuote(quote.data);
-              navigation.navigate(routes.WARRANTY, {
-                screen: routes.CAR_WARRANTY_CUSTOMISE_COVER,
-                initial: false,
-              });
-            }}
-            key={key}
-          />
+          <View key={key}>
+            {cover(key)}
+            <Modal
+              visible={buyNowVisible}
+              animationType="slide"
+              transparent
+              onRequestClose={() => setBuyNowVisible(false)}
+            >
+              <View
+                style={[styles.modalBackground, { justifyContent: "flex-end" }]}
+              >
+                <View style={{ marginHorizontal: 20 }}>{cover(selected)}</View>
+                <View style={styles.buyNowContainer}>
+                  <AppText style={[styles.title, { alignSelf: "center" }]}>
+                    Buy Now?
+                  </AppText>
+                  <AppButton
+                    title="Confirm"
+                    onPress={() => {
+                      setBuyNowVisible(false);
+                      handleBuyNow(key);
+                    }}
+                  />
+                  <AppButton
+                    title="Cancel"
+                    backgroundColor={null}
+                    color={colors.success}
+                    onPress={() => setBuyNowVisible(false)}
+                  />
+                </View>
+              </View>
+            </Modal>
+          </View>
         );
       }
     });
@@ -883,6 +927,16 @@ const styles = StyleSheet.create({
     margin: 10,
     flex: 1,
     borderRadius: 10,
+    ...defaultStyles.shadow,
+  },
+  buyNowContainer: {
+    height: "40%",
+    backgroundColor: "white",
+    marginHorizontal: 20,
+    marginTop: 20,
+    padding: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
     ...defaultStyles.shadow,
   },
   actionItem: {
