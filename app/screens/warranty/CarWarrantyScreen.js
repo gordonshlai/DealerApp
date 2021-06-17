@@ -48,6 +48,7 @@ function CarWarrantyScreen({ navigation }) {
                 title="My Sales"
                 backgroundColor={null}
                 color={colors.success}
+                onPress={() => navigation.navigate(routes.MY_SALES)}
               />
             </View>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>

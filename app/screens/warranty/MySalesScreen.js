@@ -1,18 +1,17 @@
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, StyleSheet, KeyboardAvoidingView, FlatList } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 import AppText from "../../components/AppText";
-import AppButton from "../../components/AppButton";
-import Background from "../../components/Background";
 import Screen from "../../components/Screen";
 import ActivityIndicator from "../../components/ActivityIndicator";
-import Quote from "./components/Quote";
-import OptionButton from "../../components/OptionButton";
 import { AppErrorMessage } from "../../components/forms";
+import AppButton from "../../components/AppButton";
+import OptionButton from "../../components/OptionButton";
 import AppTextInput from "../../components/AppTextInput";
+import Background from "../../components/Background";
 import Loading from "../../components/Loading";
-import WarrantyContext from "../../warranty/context";
+import MySale from "./components/MySale";
 
 import useApi from "../../hooks/useApi";
 import client from "../../api/client";
@@ -22,45 +21,34 @@ import routes from "../../navigation/routes";
 
 const sortByArray = ["newest", "oldest"];
 
-function SavedQuotesScreen({ navigation }) {
-  const { setUser, setQuote } = useContext(WarrantyContext);
-
+function MySalesScreen({ navigation, route }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
   const [serachBarVisible, setSearchBarVisible] = useState(false);
-  const [savedQuotes, setSavedQuotes] = useState([]);
+  const [mySales, setMySales] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const [sort, setSort] = useState("newest");
   const [pageCurrent, setPageCurrent] = useState(1);
   const [search, setSearch] = useState("");
   const [reload, setReload] = useState(false);
-  const [deletedVisible, setDeletedVisible] = useState(false);
 
-  let endpoint = `api/car/warranty/quote?page=${pageCurrent}&sort=${sort}&search=${search}`;
-  const getSavedQuotesApi = useApi(() => client.get(endpoint));
+  let endpoint = `api/car/warranty/sale?page=${pageCurrent}&sort=${sort}&search=${search}`;
+  const getMySalesApi = useApi(() => client.get(endpoint));
 
-  const userApi = useApi(() => client.get("api/user"));
-  const getQuoteApi = useApi((token) =>
-    client.get(`api/car/warranty/quote/${token}`)
-  );
-
-  const deleteQuoteApi = useApi((id) =>
-    client.delete(`api/car/warranty/quote/${id}`)
-  );
   useEffect(() => {
-    getQuotes();
+    getMySales();
   }, [reload]);
 
-  const getQuotes = async () => {
-    const result = await getSavedQuotesApi.request();
+  const getMySales = async () => {
+    const result = await getMySalesApi.request();
     if (!result.ok) return setError(result.data.message);
-    const newSavedQuotes = result.data.data;
-    setSavedQuotes([...savedQuotes, ...newSavedQuotes]);
+    const newMySales = result.data.data;
+    setMySales([...mySales, ...newMySales]);
   };
 
   const handleRefresh = () => {
-    setSavedQuotes([]);
+    setMySales([]);
     setPageCurrent(1);
     setError("");
     setReload(!reload);
@@ -77,30 +65,8 @@ function SavedQuotesScreen({ navigation }) {
     }, 500);
   };
 
-  const handleOpenQuotePress = async (item) => {
-    const quote = await getQuoteApi.request(item.token);
-    if (!quote.ok) return setError(quote.data.message);
-
-    const user = await userApi.request();
-    if (!user.ok) return setError(user.data.message);
-
-    setUser(user.data.user);
-    setQuote(quote.data);
-    navigation.navigate(routes.CAR_WARRANTY_CUSTOMISE_COVER);
-  };
-
-  const handleDeleteQuotePress = async (id) => {
-    const quote = await deleteQuoteApi.request(id);
-    if (!quote.ok) return setError(quote.data.message);
-    handleRefresh();
-    setDeletedVisible(true);
-    setTimeout(() => {
-      setDeletedVisible(false);
-    }, 3000);
-  };
-
   const handleLazyLoading = () => {
-    if (!getSavedQuotesApi.loading && getSavedQuotesApi.data.next_page_url) {
+    if (!getMySalesApi.loading && getMySalesApi.data.next_page_url) {
       setPageCurrent(pageCurrent + 1);
       setReload(!reload);
     }
@@ -114,7 +80,7 @@ function SavedQuotesScreen({ navigation }) {
         keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
         style={styles.keyboardAvoidingView}
       >
-        <AppText style={styles.sectionTitle}>Saved Quotes</AppText>
+        <AppText style={styles.sectionTitle}>My Sales</AppText>
         <Screen style={styles.screen}>
           <View
             style={[
@@ -122,20 +88,17 @@ function SavedQuotesScreen({ navigation }) {
               { marginBottom: tabBarHeight + (serachBarVisible ? 60 : 10) },
             ]}
           >
-            {getSavedQuotesApi.error ? (
+            {getMySalesApi.error ? (
               <>
                 <AppText style={styles.title}>
                   Error Retrieving The Quotes.
                 </AppText>
-                <ActivityIndicator visible={getSavedQuotesApi.loading} />
+                <ActivityIndicator visible={getMySalesApi.loading} />
                 <AppErrorMessage visible={error} error={error} />
                 <AppButton title="RETRY" onPress={handleRefresh} />
               </>
             ) : (
               <>
-                <ActivityIndicator
-                  visible={getQuoteApi.loading || deleteQuoteApi.loading}
-                />
                 <View style={styles.optionBar}>
                   <OptionButton
                     backgroundColor={null}
@@ -178,22 +141,23 @@ function SavedQuotesScreen({ navigation }) {
                 </View>
                 <AppErrorMessage visible={error} error={error} />
                 <FlatList
-                  data={savedQuotes}
+                  data={mySales}
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => (
-                    <Quote
+                    <MySale
                       data={item}
-                      onOpenQuotePress={() => handleOpenQuotePress(item)}
-                      onDeleteQuotePress={() => handleDeleteQuotePress(item.id)}
+                      onOpenPress={() => {}}
+                      onInvoicePress={() => {}}
+                      onSchedulePress={() => {}}
                     />
                   )}
                   ListFooterComponent={
-                    <Loading visible={getSavedQuotesApi.loading} />
+                    <Loading visible={getMySalesApi.loading} />
                   }
                   ListEmptyComponent={
                     <>
-                      {!getSavedQuotesApi.loading && (
-                        <AppText style={styles.title}>No Quotes Found</AppText>
+                      {!getMySalesApi.loading && (
+                        <AppText style={styles.title}>No Sales</AppText>
                       )}
                     </>
                   }
@@ -207,20 +171,10 @@ function SavedQuotesScreen({ navigation }) {
             )}
           </View>
         </Screen>
-
-        {deletedVisible && (
-          <View style={styles.deletedContainer}>
-            <AppText style={styles.deletedText}>Quote Deleted</AppText>
-          </View>
-        )}
       </KeyboardAvoidingView>
     </>
   );
 }
-
-const arePropsEqual = (prevProps, nextProps) => {
-  return prevProps.label === nextProps.label;
-};
 
 const styles = StyleSheet.create({
   title: {
@@ -267,19 +221,6 @@ const styles = StyleSheet.create({
     height: 0,
     opacity: 0,
   },
-  deletedContainer: {
-    position: "absolute",
-    zIndex: 1,
-    alignSelf: "center",
-    backgroundColor: colors.success + "dd",
-    borderRadius: 20,
-    paddingHorizontal: 10,
-  },
-  deletedText: {
-    fontSize: 30,
-    fontWeight: "bold",
-    color: "white",
-  },
 });
 
-export default memo(SavedQuotesScreen, arePropsEqual);
+export default MySalesScreen;

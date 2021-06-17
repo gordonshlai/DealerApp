@@ -31,6 +31,7 @@ export default Object.freeze({
   CAR_WARRANTY_PAYMENT_DETAIL: "Car Warranty Payment Detail",
   CAR_WARRANTY_QUOTE_FAILURE: "Car Warranty Quote Failure",
   SAVED_QUOTES: "Saved Quotes",
+  MY_SALES: "My Sales",
 
   MESSAGES: "Messages",
   MESSAGE_DETAIL: "Message Detail",

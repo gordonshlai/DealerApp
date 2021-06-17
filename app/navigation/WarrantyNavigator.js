@@ -12,10 +12,11 @@ import CarWarrantyCustomiseCoverScreen from "../screens/warranty/CarWarrantyCust
 import CarWarrantyDetailScreen from "../screens/warranty/CarWarrantyDetailScreen";
 import CarWarrantyCustomerDetailScreen from "../screens/warranty/CarWarrantyCustomerDetailScreen";
 import CarWarrantyPaymentDetailScreen from "../screens/warranty/CarWarrantyPaymentDetailScreen";
+import SavedQuotesScreen from "../screens/warranty/SavedQuotesScreen";
+import MySalesScreen from "../screens/warranty/MySalesScreen";
 
 import routes from "./routes";
 import colors from "../config/colors";
-import SavedQuotesScreen from "../screens/warranty/SavedQuotesScreen";
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,7 @@ const WarrantyNavigator = () => {
         component={CarWarrantyPaymentDetailScreen}
       />
       <Stack.Screen name={routes.SAVED_QUOTES} component={SavedQuotesScreen} />
+      <Stack.Screen name={routes.MY_SALES} component={MySalesScreen} />
     </Stack.Navigator>
   );
 };
