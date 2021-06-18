@@ -23,6 +23,7 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import AppSwitch from "../../components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
+import dayjs from "dayjs";
 
 function CarWarrantyCoverOptionsScreen({ navigation, route }) {
   const { vehicle, user, comparison, setQuote } = useContext(WarrantyContext);
@@ -58,6 +59,12 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
     }
   }, []);
 
+  const VehiclesAge = () => {
+    const manufactureDate = dayjs(vehicle.manufacture_date);
+    const now = dayjs();
+    return now.diff(manufactureDate, "year", true);
+  };
+
   return (
     <>
       <Background />
@@ -72,34 +79,47 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
-              <AppSwitch
-                value={margin}
-                text="Toggle Margin"
-                onValueChange={() => setMargin(!margin)}
-              />
-              {coverLevels.map((key) => {
-                if (comparison[key].available) {
-                  return (
-                    <CoverOption
-                      data={comparison[key]}
-                      title={key}
-                      margin={margin}
-                      vat={user.account.vat}
-                      selected={cover == key}
-                      onSelect={(item) => setCover(item)}
-                      key={key}
-                    />
-                  );
-                }
-              })}
-              <AppErrorMessage error={error} visible={error} />
-              <AppButton title="Next" onPress={handleSubmit} />
-              <AppButton
-                backgroundColor={null}
-                color={colors.success}
-                title="Back"
-                onPress={() => navigation.goBack()}
-              />
+              {vehicle.mileage > 200000 || VehiclesAge() > 18 ? (
+                <AppText style={styles.notQualify}>
+                  The age or mileage of the vehicle you've selected does not
+                  qualify for our standard levels of cover as it needs to be
+                  under 200,000 miles or 18 years old. If you would like a quote
+                  on our Classics Car Warranty (for vehicles over 20 years of
+                  age) or believe this is an error, please contact your account
+                  manager or call 01254 355104.
+                </AppText>
+              ) : (
+                <>
+                  <AppSwitch
+                    value={margin}
+                    text="Toggle Margin"
+                    onValueChange={() => setMargin(!margin)}
+                  />
+                  {coverLevels.map((key) => {
+                    if (comparison[key].available) {
+                      return (
+                        <CoverOption
+                          data={comparison[key]}
+                          title={key}
+                          margin={margin}
+                          vat={user.account.vat}
+                          selected={cover == key}
+                          onSelect={(item) => setCover(item)}
+                          key={key}
+                        />
+                      );
+                    }
+                  })}
+                  <AppErrorMessage error={error} visible={error} />
+                  <AppButton title="Next" onPress={handleSubmit} />
+                  <AppButton
+                    backgroundColor={null}
+                    color={colors.success}
+                    title="Back"
+                    onPress={() => navigation.goBack()}
+                  />
+                </>
+              )}
             </View>
           </Screen>
         </ScrollView>
@@ -128,6 +148,10 @@ const styles = StyleSheet.create({
     color: "white",
     marginLeft: 20,
     marginVertical: 10,
+  },
+  notQualify: {
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
