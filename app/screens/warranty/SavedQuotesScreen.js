@@ -201,13 +201,12 @@ function SavedQuotesScreen({ navigation }) {
                   onRefresh={handleRefresh}
                   onEndReached={handleLazyLoading}
                   onEndReachedThreshold={0.1}
-                  style={{ padding: 20 }}
+                  style={{ paddingHorizontal: 20, paddingVertical: 10 }}
                 />
               </>
             )}
           </View>
         </Screen>
-
         {deletedVisible && (
           <View style={styles.deletedContainer}>
             <AppText style={styles.deletedText}>Quote Deleted</AppText>

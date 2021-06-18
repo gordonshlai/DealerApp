@@ -80,12 +80,13 @@ function MySale({ data, onOpenPress, onInvoicePress, onSchedulePress }) {
         visible={modalVisible}
         animationType="slide"
         transparent
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
+        onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
-          <View style={{ marginHorizontal: 10 }}>{card()}</View>
+        <Pressable
+          style={styles.modalBackground}
+          onPress={() => setModalVisible(false)}
+        >
+          <View style={styles.cardContainer}>{card()}</View>
           <View style={styles.modalContainer}>
             <AppButton
               icon="close"
@@ -111,7 +112,7 @@ function MySale({ data, onOpenPress, onInvoicePress, onSchedulePress }) {
               ItemSeparatorComponent={ListItemSeparator}
             />
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </>
   );
@@ -159,6 +160,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
     ...defaultStyles.shadow,
+  },
+  cardContainer: {
+    marginHorizontal: 10,
   },
   closeButton: {
     alignSelf: "flex-end",

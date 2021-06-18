@@ -75,11 +75,12 @@ function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
         visible={modalVisible}
         animationType="slide"
         transparent
-        onRequestClose={() => {
-          setModalVisible(false);
-        }}
+        onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.modalBackground}>
+        <Pressable
+          style={styles.modalBackground}
+          onPress={() => setModalVisible(false)}
+        >
           <View style={{ marginHorizontal: 10 }}>{card()}</View>
           <View style={styles.modalContainer}>
             <AppButton
@@ -106,7 +107,7 @@ function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
               ItemSeparatorComponent={ListItemSeparator}
             />
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </>
   );

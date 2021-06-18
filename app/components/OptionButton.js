@@ -6,6 +6,7 @@ import {
   FlatList,
   StyleSheet,
   Platform,
+  Pressable,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
@@ -51,7 +52,10 @@ function OptionButton({
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.background}>
+        <Pressable
+          style={styles.background}
+          onPress={() => setModalVisible(false)}
+        >
           <View style={styles.container}>
             <View style={styles.topBarContainer}>
               <AppText style={styles.title}>{modalTitle}</AppText>
@@ -104,7 +108,7 @@ function OptionButton({
               style={styles.bottomCloseButton}
             />
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </>
   );

@@ -17,6 +17,7 @@ import MySalesScreen from "../screens/warranty/MySalesScreen";
 
 import routes from "./routes";
 import colors from "../config/colors";
+import MySaleDetailScreen from "../screens/warranty/MySaleDetailScreen";
 
 const Stack = createStackNavigator();
 
@@ -73,6 +74,10 @@ const WarrantyNavigator = () => {
       />
       <Stack.Screen name={routes.SAVED_QUOTES} component={SavedQuotesScreen} />
       <Stack.Screen name={routes.MY_SALES} component={MySalesScreen} />
+      <Stack.Screen
+        name={routes.MY_SALE_DETAIL}
+        component={MySaleDetailScreen}
+      />
     </Stack.Navigator>
   );
 };

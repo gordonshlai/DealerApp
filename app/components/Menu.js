@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   Platform,
+  Pressable,
 } from "react-native";
 import Constants from "expo-constants";
 
@@ -50,12 +51,16 @@ function Menu() {
         transparent
         onRequestClose={() => setModalVisible(false)}
       >
-        <View style={styles.background}>
+        <Pressable
+          style={styles.background}
+          onPress={() => setModalVisible(false)}
+        >
           <View style={styles.container}>
             <View style={styles.topBarContainer}>
               <AppButton
                 backgroundColor={null}
                 border={false}
+                color={colors.primary}
                 size={30}
                 icon="close"
                 onPress={() => setModalVisible(false)}
@@ -104,7 +109,7 @@ function Menu() {
               />
             </View>
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </>
   );

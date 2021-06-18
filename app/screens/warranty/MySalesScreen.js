@@ -18,6 +18,7 @@ import client from "../../api/client";
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import routes from "../../navigation/routes";
+import CarWarrantyVehicleDetailScreen1 from "./CarWarrantyVehicleDetailScreen1";
 
 const sortByArray = ["newest", "oldest"];
 
@@ -80,8 +81,8 @@ function MySalesScreen({ navigation, route }) {
         keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
         style={styles.keyboardAvoidingView}
       >
-        <AppText style={styles.sectionTitle}>My Sales</AppText>
         <Screen style={styles.screen}>
+          <AppText style={styles.sectionTitle}>My Sales</AppText>
           <View
             style={[
               styles.card,
@@ -91,7 +92,7 @@ function MySalesScreen({ navigation, route }) {
             {getMySalesApi.error ? (
               <>
                 <AppText style={styles.title}>
-                  Error Retrieving The Quotes.
+                  Error Retrieving The Sales.
                 </AppText>
                 <ActivityIndicator visible={getMySalesApi.loading} />
                 <AppErrorMessage visible={error} error={error} />
@@ -146,7 +147,9 @@ function MySalesScreen({ navigation, route }) {
                   renderItem={({ item }) => (
                     <MySale
                       data={item}
-                      onOpenPress={() => {}}
+                      onOpenPress={() =>
+                        navigation.navigate(routes.MY_SALE_DETAIL, item.id)
+                      }
                       onInvoicePress={() => {}}
                       onSchedulePress={() => {}}
                     />
@@ -165,7 +168,7 @@ function MySalesScreen({ navigation, route }) {
                   onRefresh={handleRefresh}
                   onEndReached={handleLazyLoading}
                   onEndReachedThreshold={0.1}
-                  style={{ padding: 20 }}
+                  style={{ paddingHorizontal: 20, paddingVertical: 10 }}
                 />
               </>
             )}
@@ -175,7 +178,7 @@ function MySalesScreen({ navigation, route }) {
     </>
   );
 }
-
+CarWarrantyVehicleDetailScreen1;
 const styles = StyleSheet.create({
   title: {
     alignSelf: "center",
@@ -200,7 +203,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "white",
-    marginLeft: 20,
     marginVertical: 10,
   },
   optionBar: {

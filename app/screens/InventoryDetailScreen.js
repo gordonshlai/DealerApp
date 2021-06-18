@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   FlatList,
   Platform,
+  Pressable,
 } from "react-native";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -228,8 +229,9 @@ function InventoryDetailScreen({ navigation, route }) {
               transparent
               onRequestClose={() => setBuyNowVisible(false)}
             >
-              <View
+              <Pressable
                 style={[styles.modalBackground, { justifyContent: "flex-end" }]}
+                onPress={() => setBuyNowVisible(false)}
               >
                 <View style={{ marginHorizontal: 20 }}>{cover(selected)}</View>
                 <View style={styles.buyNowContainer}>
@@ -250,7 +252,7 @@ function InventoryDetailScreen({ navigation, route }) {
                     onPress={() => setBuyNowVisible(false)}
                   />
                 </View>
-              </View>
+              </Pressable>
             </Modal>
           </View>
         );

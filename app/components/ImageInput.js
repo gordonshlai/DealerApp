@@ -7,6 +7,7 @@ import {
   Alert,
   Modal,
   Platform,
+  Pressable,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -119,7 +120,10 @@ function ImageInput({ image, onChangeImage }) {
           setModalVisible(false);
         }}
       >
-        <View style={styles.modalBackground}>
+        <Pressable
+          style={styles.modalBackground}
+          onPress={() => setModalVisible(false)}
+        >
           <View style={styles.modalContainer}>
             <AppButton
               icon="close"
@@ -160,7 +164,7 @@ function ImageInput({ image, onChangeImage }) {
               </View>
             </View>
           </View>
-        </View>
+        </Pressable>
       </Modal>
     </>
   );
