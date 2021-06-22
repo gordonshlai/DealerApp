@@ -4,6 +4,15 @@ import { useFormikContext } from "formik";
 import AppErrorMessage from "./AppErrorMessage";
 import AppDateTimePicker from "../AppDateTimePicker";
 
+/**
+ *
+ * @param {string} icon The name of the icon
+ * @param {string} name The name of the field defined by the consumer of this component
+ * @param {string} placeholder The string to display as the placeholder when the field is empty
+ * @param {string|number} width The width of the component
+ * @param {function} onSelectDate The function to be called when the date is selected
+ * @param {boolean} disabled to disable the field
+ */
 function AppFormDateTimePicker({
   icon,
   name,

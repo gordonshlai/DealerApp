@@ -3,10 +3,10 @@ import { Modal, ScrollView, View, StyleSheet, Platform } from "react-native";
 import { useFormikContext } from "formik";
 import { CheckBox } from "react-native-elements";
 
-import AppErrorMessage from "./AppErrorMessage";
-import Screen from "../Screen";
-import AppText from "../AppText";
 import AppButton from "../AppButton";
+import AppErrorMessage from "./AppErrorMessage";
+import AppText from "../AppText";
+import Screen from "../Screen";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
@@ -15,8 +15,7 @@ import defaultStyles from "../../config/styles";
  * A field of a form, consist of an icon, text input and an error message.
  * @module components/forms/AppFormCheckBox
  * @param {string} name - the name of the field defined by the consumer of this component
- * @param {string|number} style - the style of the component container
- * @param {} otherProps - other properties to add to the text input component
+ * @param {} otherProps - other properties to add to the check box component
  */
 const AppFormCheckBox = ({ name, ...otherProps }) => {
   const { setFieldValue, errors, touched, values } = useFormikContext();

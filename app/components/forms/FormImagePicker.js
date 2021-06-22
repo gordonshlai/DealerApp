@@ -4,6 +4,10 @@ import { useFormikContext } from "formik";
 import AppErrorMessage from "./AppErrorMessage";
 import ImageInputList from "../ImageInputList";
 
+/**
+ *
+ * @param {string} name the name of the field defined by the consumer of this component
+ */
 function FormImagePicker({ name }) {
   const { errors, setFieldValue, touched, values } = useFormikContext();
   const images = values[name];

@@ -5,6 +5,11 @@ import { View, StyleSheet, Image, TextInput } from "react-native";
 import defaultStyles from "../../config/styles";
 import AppErrorMessage from "./AppErrorMessage";
 
+/**
+ *
+ * @param {string} name the name of the field defined by the consumer of this component
+ * @param {} otherProps - other properties to add to the text input component
+ */
 function RegistrationPlateInput({ name, ...otherProps }) {
   const { setFieldTouched, setFieldValue, errors, touched, values } =
     useFormikContext();

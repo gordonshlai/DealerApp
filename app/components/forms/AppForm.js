@@ -1,6 +1,5 @@
 import React from "react";
-import { Form, Formik } from "formik";
-import { View } from "react-native";
+import { Formik } from "formik";
 
 /**
  * A wrapper around a formik component.

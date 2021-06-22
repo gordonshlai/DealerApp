@@ -1,5 +1,4 @@
 import React from "react";
-import { View } from "react-native";
 import { useFormikContext } from "formik";
 
 import AppTextInput from "../AppTextInput";
@@ -10,6 +9,8 @@ import AppErrorMessage from "./AppErrorMessage";
  * @module components/forms/AppFormField
  * @param {string} name - the name of the field defined by the consumer of this component
  * @param {string|number} style - the style of the component container
+ * @param {string} color - the color of the text of the component
+ * @param {number} size - the size of the text of the component
  * @param {} otherProps - other properties to add to the text input component
  */
 const AppFormField = ({ icon, name, style, color, size, ...otherProps }) => {
