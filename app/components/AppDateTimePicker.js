@@ -15,6 +15,18 @@ import AppText from "./AppText";
 
 import colors from "../config/colors";
 
+/**
+ *
+ * The date time picker.
+ *
+ * @param {string} icon - the icon to be shown on the component
+ * @param {datetime} selectedDate - the date that is selected and is shown on the component
+ * @param {function} onSelectDate - the function to be called when a date is selected
+ * @param {string} placeholder - the string to be shown when the selected date is empty
+ * @param {number|string} width - the width of the component (default = "100%")
+ * @param {boolean} disabled - disable the component (default = false)
+ * @returns
+ */
 function AppDateTimePicker({
   icon,
   selectedDate,

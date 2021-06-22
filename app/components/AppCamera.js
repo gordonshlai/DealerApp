@@ -12,6 +12,15 @@ import ActivityIndicator from "./ActivityIndicator";
 import colors from "../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+/**
+ *
+ * A modal shows the preview of the camera. It only returns a picture in landscape orientation.
+ *
+ * @param {boolean} visible - the visiblilty of the camera
+ * @param {function} setVisible - the function to set the visibility of the camera
+ * @param {function} onAccept - the function to be called when the picture taken is accepted by the user
+ * @returns
+ */
 function AppCamera({ visible, setVisible, onAccept }) {
   let { portrait } = useDeviceOrientation();
 

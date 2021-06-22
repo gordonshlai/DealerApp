@@ -6,10 +6,13 @@ import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 
 /**
- * A custom text input component of the application
+ * A custom text input component of the application.
+ *
  * @module components/AppTextInput
  * @param {string} icon - the name of the icon
- * @param {string|number} width - the width of the component
+ * @param {object} style - the style of the container of the component
+ * @param {string} color - the color of the text
+ * @param {number} size - the size of the text
  * @param {} otherProps - all other properties to add into the text component
  */
 const AppTextInput = ({ icon, style, color, size = 14, ...otherProps }) => {

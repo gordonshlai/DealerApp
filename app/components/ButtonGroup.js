@@ -9,6 +9,20 @@ import {
 import AppText from "./AppText";
 import colors from "../config/colors";
 
+/**
+ *
+ * The buttons group of the application.
+ *
+ * @param {array} buttons - the array of strings that containing the name of the buttons
+ * @param {object} containerStyle - the style of the container of the entire button group
+ * @param {object} buttonContainerStyle - the style of the container of a single button
+ * @param {object} selectedButtonStyle - the style of a single button when it is selected
+ * @param {number} selectedIndex - the index of the buttons array that is selected
+ * @param {object} textStyle - the style of the text
+ * @param {object} selectedTextStyle - the style of the text when it is selected
+ * @param {function} onPress - the function to be called when the corresponding button is pressed
+ * @returns
+ */
 function ButtonGroup({
   buttons,
   containerStyle,

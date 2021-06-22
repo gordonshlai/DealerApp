@@ -2,7 +2,10 @@ import React from "react";
 import { View, Dimensions, Platform } from "react-native";
 import colors from "../config/colors";
 
-function Background(props) {
+/**
+ * The elliptical background.
+ */
+function Background() {
   return (
     <View
       style={{

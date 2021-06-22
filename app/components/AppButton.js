@@ -5,11 +5,17 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import colors from "../config/colors";
 
 /**
- * A custom button of the application
+ * A custom button of the application.
+ *
  * @module components/AppButton
+ * @param {string} icon - the icon of the button
  * @param {string} title - the words apears on the button
- * @param {string} color - the background color of the button (default = primary)
- * @param {method} onPress - the block of code that will execute when the button is pressed
+ * @param {string} backgroundColor - the background color of the button (dafault = success)
+ * @param {string} color - the color of the text of the button (default = white)
+ * @param {boolean} badge - a badge to be shown if the value given is true.
+ * @param {boolean} border - a border to be shown if the value given is true.
+ * @param {method} onPress - the function to be called when the button is pressed
+ * @param {object} style - the style of the container of the button
  */
 function AppButton({
   icon,
