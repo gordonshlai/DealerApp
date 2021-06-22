@@ -6,6 +6,8 @@ import AppDateTimePicker from "../AppDateTimePicker";
 
 /**
  *
+ * A field of a form, consist of an icon, date time picker and an error message.
+ *
  * @param {string} icon The name of the icon
  * @param {string} name The name of the field defined by the consumer of this component
  * @param {string} placeholder The string to display as the placeholder when the field is empty

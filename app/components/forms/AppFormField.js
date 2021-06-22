@@ -6,6 +6,7 @@ import AppErrorMessage from "./AppErrorMessage";
 
 /**
  * A field of a form, consist of an icon, text input and an error message.
+ *
  * @module components/forms/AppFormField
  * @param {string} name - the name of the field defined by the consumer of this component
  * @param {string|number} style - the style of the component container

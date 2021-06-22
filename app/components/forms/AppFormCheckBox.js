@@ -12,7 +12,7 @@ import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 
 /**
- * A field of a form, consist of an icon, text input and an error message.
+ * A field of a form, consist of an icon, check box and an error message.
  * @module components/forms/AppFormCheckBox
  * @param {string} name - the name of the field defined by the consumer of this component
  * @param {} otherProps - other properties to add to the check box component

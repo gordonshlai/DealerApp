@@ -6,6 +6,8 @@ import ImageInputList from "../ImageInputList";
 
 /**
  *
+ * A field of a form, consist image picker and an error message.
+ *
  * @param {string} name the name of the field defined by the consumer of this component
  */
 function FormImagePicker({ name }) {

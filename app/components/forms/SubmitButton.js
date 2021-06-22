@@ -4,7 +4,8 @@ import { useFormikContext } from "formik";
 import AppButton from "../AppButton";
 
 /**
- * The submit button of a form
+ * The submit button of a form.
+ *
  * @module components/forms/SubmitButton
  * @param {string} icon - the name of the icon
  * @param {string} title - the text to display on the button

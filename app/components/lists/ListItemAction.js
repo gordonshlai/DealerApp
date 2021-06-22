@@ -7,6 +7,16 @@ import AppText from "../AppText";
 import colors from "../../config/colors";
 import { TouchableOpacity } from "react-native";
 
+/**
+ *
+ * The component to be rendered when the ListItem component is being swipped to either side.
+ *
+ * @param {function} onPress - the function to be called when the component is pressed on
+ * @param {string} icon - the name of the icon
+ * @param {string} backgroundColor - the background color of the component
+ * @param {string} color - the color of the icon component
+ * @param {string} text - the text to be rendered
+ */
 function ListItemAction({
   onPress,
   icon = "trash-can",

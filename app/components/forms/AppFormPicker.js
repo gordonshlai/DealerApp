@@ -6,6 +6,8 @@ import AppErrorMessage from "./AppErrorMessage";
 
 /**
  *
+ * A field of a form, consist of an icon, a picker and an error message.
+ *
  * @param {string} icon The name of the icon
  * @param {Array} items The fields of the
  * @param {string} name The name of the field defined by the consumer of this component

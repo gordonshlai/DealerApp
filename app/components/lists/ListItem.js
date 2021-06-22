@@ -6,6 +6,23 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AppText from "../AppText";
 import colors from "../../config/colors";
 
+/**
+ *
+ * An itme that is presssable and can be swipe to both sides to render some actions,
+ * containing an icon, a title, a subtitle, a saved badge, an archive badge, a timestamp, and a unread badge.
+ *
+ * @param {binary} image - the image to show as an icon
+ * @param {component} IconComponent - the component to show as an icon
+ * @param {string} title - the title of the list item
+ * @param {boolean} saved - boolean to determine for showing the saved icon
+ * @param {boolean} archived - boolean to determine for showing the archived icon
+ * @param {datetime} time - the timestamp of the list item
+ * @param {string} subTitle - the subtitle of the list item
+ * @param {boolean} unread - boolean to determine whether the list item is read
+ * @param {component} onPress - function to be called when the list item is pressed on
+ * @param {function} renderRightActions - component to render when the list item is swipe to the right
+ * @param {function} renderLeftActions - component to render when the list item is swipe to the left
+ */
 function ListItem({
   image,
   IconComponent,

@@ -7,6 +7,8 @@ import AppErrorMessage from "./AppErrorMessage";
 
 /**
  *
+ * A field of a form, consist of a text input that has a registration plate outlook and an error message.
+ *
  * @param {string} name the name of the field defined by the consumer of this component
  * @param {} otherProps - other properties to add to the text input component
  */
