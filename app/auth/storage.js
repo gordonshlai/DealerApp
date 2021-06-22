@@ -43,17 +43,8 @@ const removeToken = async () => {
   }
 };
 
-/**
- * Get the user from the decoded json web token.
- */
-// const getUser = async () => {
-//   const token = await getToken();
-//   return token ? jwtDecode(token) : null;
-// };
-
 export default {
   getToken,
-  // getUser,
   storeToken,
   removeToken,
 };

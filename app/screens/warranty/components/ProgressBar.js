@@ -1,6 +1,5 @@
 import React from "react";
-import { Dimensions } from "react-native";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import Icon from "../../../components/Icon";
 import colors from "../../../config/colors";
 import routes from "../../../navigation/routes";

@@ -1,5 +1,4 @@
 import { useContext } from "react";
-// import jwtDecode from "jwt-decode";
 
 import AuthContext from "./context";
 import authStorage from "./storage";
@@ -17,7 +16,6 @@ export default useAuth = () => {
    * @param {string} authToken - the authentication json web token of the user
    */
   const logIn = (authToken) => {
-    // const user = jwtDecode(authToken);
     setAuthToken(authToken);
     authStorage.storeToken(authToken);
   };

@@ -6,7 +6,7 @@ import React from "react";
  */
 
 /**
- * the React context, so that information can be conssumed by every components
+ * the React context, so that information can be consumed by every components
  * in the application.
  */
 const AuthContext = React.createContext();
