@@ -2,6 +2,11 @@ import React from "react";
 import Svg, { Path } from "react-native-svg";
 import colors from "../../config/colors";
 
+/**
+ *
+ * @param {string} color - the color of the icon
+ * @param {number} size - the size of the icon
+ */
 function TradeCarsIcon({ color = colors.mediumGrey, size }) {
   return (
     <Svg

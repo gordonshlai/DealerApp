@@ -1,6 +1,11 @@
 import React from "react";
 import Svg, { Path } from "react-native-svg";
 
+/**
+ *
+ * @param {string} color - the color of the icon
+ * @param {number} size - the size of the icon
+ */
 function HomeIcon({ color, size }) {
   return (
     <Svg
