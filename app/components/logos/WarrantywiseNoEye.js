@@ -2,7 +2,10 @@ import React from "react";
 import { View } from "react-native";
 import { SvgXml } from "react-native-svg";
 
-function WarrantywiseNoEye(props) {
+/**
+ * A component containing the Warrantywise icon without the eye.
+ */
+function WarrantywiseNoEye() {
   const xml = `
   <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 24.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
