@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -28,6 +28,10 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
 import settings from "../../config/settings";
+import PaymentCard from "../../components/PaymentCard";
+import dayjs from "dayjs";
+import AppTextInput from "../../components/AppTextInput";
+import { AppErrorMessage } from "../../components/forms";
 
 function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const { user, quote, booking, customer } = useContext(WarrantyContext);
@@ -35,10 +39,21 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
 
   const [error, setError] = useState();
   const [termsVisible, setTermsVisible] = useState(false);
+  const [cv2, setCV2] = useState("");
 
   const pdfApi = useApi(() =>
     client.get(`api/car/warranty/quote/document/${quote.token}`)
   );
+  const getPaymentCardApi = useApi(() =>
+    client.get("api/car/warranty/payment")
+  );
+  const postPaymentApi = useApi((payload) =>
+    client.post("api/car/warranty/payment", payload)
+  );
+
+  useEffect(() => {
+    getPaymentCardApi.request();
+  }, []);
 
   const price = () =>
     user.account.vat === "1"
@@ -54,13 +69,80 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
     <WebView javaScriptEnabled={true} style={{ flex: 1 }} source={{ uri }} />
   );
 
+  const handlePurchase = async () => {
+    const payload = {
+      amount: booking.cost_margin,
+      booking: {
+        address_1: customer.address_1,
+        address_2: customer.address_2,
+        airbags: quote.quote.airbags,
+        aircon: quote.quote.aircon,
+        assist: quote.quote.assist,
+        claims: quote.quote.claims,
+        cost_margin: booking.cost_margin,
+        cost_net: booking.cost_net,
+        cost_total: booking.cost_total,
+        country: customer.country,
+        cover_length: quote.coverLength,
+        cover_type: quote.quote.cover,
+        dealer_id: user.account.id,
+        email: customer.email,
+        emissions: quote.quote.emissions,
+        engine_cc: quote.vehicle.engine_cc,
+        ev: quote.quote.ev,
+        first_name: customer.first_name,
+        fuel_type: quote.vehicle.fuel_type,
+        issue_date: dayjs().format("YYYY-MM-DD"),
+        labour: quote.quote.labour,
+        last_name: customer.last_name,
+        make: quote.vehicle.make,
+        manufacture_date: quote.vehicle.manufacture_date,
+        mileage: quote.vehicle.mileage,
+        model: quote.vehicle.model,
+        mot: quote.quote.mot,
+        mot_date: booking.mot_date,
+        multimedia: quote.quote.multimedia,
+        postcode: customer.postcode,
+        print: customer.print,
+        purchase_date: booking.purchase_date,
+        quote_id: quote.id,
+        registration: quote.vehicle.registration,
+        retail_value: quote.vehicle.retail_value,
+        service_date: booking.service_date,
+        service_history: booking.service_history,
+        start_date: booking.start_date,
+        telephone: customer.telephone,
+        test: quote.quote.test,
+        title: customer.title,
+        token: quote.token,
+        town: customer.town,
+        transmission: quote.vehicle.transmission,
+        vehicle_origin: quote.vehicle.vehicle_origin,
+        vin_number: booking.vin_number,
+      },
+      cv2,
+      token: getPaymentCardApi.data.token?.token,
+    };
+    const result = await postPaymentApi.request(payload);
+    console.log(result);
+    if (!result.ok) return setError(result.data.message);
+    navigation.popToTop();
+    navigation.navigate(routes.MY_SALE_DETAIL, result.data.id);
+  };
+
   return (
     <>
       <Background />
-      <ActivityIndicator visible={pdfApi.loading} />
-      {/* {console.log(quote)}
-      {console.log(booking)}
-      {console.log(customer)} */}
+      <ActivityIndicator
+        visible={
+          pdfApi.loading || getPaymentCardApi.loading || postPaymentApi.loading
+        }
+      />
+      {/* {console.log(user)} */}
+      {/* {console.log(quote)} */}
+      {/* {console.log(booking)} */}
+      {/* {console.log(customer)} */}
+      {/* {console.log(getPaymentCardApi.data)} */}
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : ""}
         keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
@@ -80,33 +162,18 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
             title="Download Quote"
             backgroundColor={colors.primary}
             border={null}
-            onPress={
-              async () => {
-                const res = await pdfApi.request();
-                console.log(res);
-                if (!res.ok) return setError(res.data.message);
-                const buff = Buffer.from(res, "base64");
-                console.log(buff.toString());
-              }
-              // Linking.openURL(
-              //   `${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`
-              // )
-            }
+            onPress={() => {}}
           />
         </View>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
               <AppText style={styles.title}>Payment Summary</AppText>
-              <View
+              {/* <View
                 style={{ flex: 1, height: 300, backgroundColor: "#ecf0f1" }}
               >
-                <PdfReader
-                // url={`https://dev-dealer.warrantywise.co.uk/api/car/warranty/quote/document/${quote.token}`}
-                // url={`${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`}
-                // url={"https://google.com"}
-                />
-              </View>
+                <PdfReader />
+              </View> */}
               <View style={styles.fieldContainer}>
                 <AppText style={[styles.fieldValue, { fontWeight: "bold" }]}>
                   Cover Level
@@ -179,8 +246,30 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
               <Terms visible={termsVisible} setVisible={setTermsVisible} />
 
               <AppText style={styles.title}>Payment Type</AppText>
-
-              <AppButton title="Accept & Purchase" />
+              {user.account.payment_type === "0" ? (
+                <View style={{ marginBottom: 20 }}>
+                  <AppText style={{ fontWeight: "bold", marginBottom: 20 }}>
+                    Card Payment
+                  </AppText>
+                  <PaymentCard
+                    last_4={getPaymentCardApi.data.token?.last_4}
+                    expiry={getPaymentCardApi.data.token?.expiry}
+                    type={getPaymentCardApi.data.token?.type}
+                  />
+                  {!getPaymentCardApi.data.repeat_allowed && (
+                    <View>
+                      <AppText style={styles.title}>Confirm Card CV2</AppText>
+                      <AppTextInput onChangeText={(value) => setCV2(value)} />
+                    </View>
+                  )}
+                </View>
+              ) : (
+                <AppText style={{ fontWeight: "bold", marginBottom: 20 }}>
+                  Invoiced
+                </AppText>
+              )}
+              <AppErrorMessage visible={error} error={error} />
+              <AppButton title="Accept & Purchase" onPress={handlePurchase} />
               <AppButton
                 backgroundColor={null}
                 color={colors.success}

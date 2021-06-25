@@ -242,7 +242,7 @@ function InventoryDetailScreen({ navigation, route }) {
                     title="Confirm"
                     onPress={() => {
                       setBuyNowVisible(false);
-                      handleBuyNow(key);
+                      handleBuyNow(selected);
                     }}
                   />
                   <AppButton

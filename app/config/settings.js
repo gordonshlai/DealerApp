@@ -9,7 +9,7 @@ import Constants from "expo-constants";
 const settings = {
   dev: {
     apiUrl: "https://dev-dealer.warrantywise.co.uk/app/",
-    // apiUrl: "http://b0a0495a73ea.ngrok.io/app/",
+    // apiUrl: "http://ed1e89d6275d.ngrok.io/app/",
     tradeEnv: "1",
   },
   staging: {
