@@ -1,11 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import AccountScreen from "../screens/AccountScreen";
+import AccountScreen from "../screens/account/AccountScreen";
 import routes from "./routes";
 
 import colors from "../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
+import PaymentCardsScreen from "../screens/account/PaymentCardsScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,14 +15,17 @@ const AccountNavigator = () => (
     screenOptions={{
       headerBackTitleVisible: false,
       headerBackTitle: "",
-      headerTitleStyle: { marginHorizontal: 10 },
+      headerTitleStyle: {
+        marginHorizontal: 10,
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      },
       headerStyle: {
         backgroundColor: colors.secondary,
         shadowColor: "transparent",
         elevation: 0,
       },
       headerTintColor: "white",
-      title: null,
       headerTitleAlign: "center",
       headerBackImage: () => (
         <MaterialCommunityIcons
@@ -34,7 +38,12 @@ const AccountNavigator = () => (
       headerRight: () => <Menu />,
     }}
   >
-    <Stack.Screen name={routes.ACCOUNT} component={AccountScreen} />
+    <Stack.Screen
+      name={routes.ACCOUNT}
+      component={AccountScreen}
+      options={{ title: null }}
+    />
+    <Stack.Screen name={routes.PAYMENT_CARDS} component={PaymentCardsScreen} />
   </Stack.Navigator>
 );
 

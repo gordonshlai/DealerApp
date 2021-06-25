@@ -138,11 +138,6 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
           pdfApi.loading || getPaymentCardApi.loading || postPaymentApi.loading
         }
       />
-      {/* {console.log(user)} */}
-      {/* {console.log(quote)} */}
-      {/* {console.log(booking)} */}
-      {/* {console.log(customer)} */}
-      {/* {console.log(getPaymentCardApi.data)} */}
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : ""}
         keyboardVerticalOffset={Platform.OS == "ios" ? 50 : 0}
@@ -253,6 +248,7 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
                   </AppText>
                   <PaymentCard
                     last_4={getPaymentCardApi.data.token?.last_4}
+                    holder={getPaymentCardApi.data.token?.holder}
                     expiry={getPaymentCardApi.data.token?.expiry}
                     type={getPaymentCardApi.data.token?.type}
                   />

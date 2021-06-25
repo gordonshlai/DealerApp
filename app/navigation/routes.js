@@ -38,4 +38,5 @@ export default Object.freeze({
   MESSAGE_DETAIL: "Message Detail",
 
   ACCOUNT: "Account",
+  PAYMENT_CARDS: "Payment Cards",
 });

@@ -12,22 +12,23 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-import useAuth from "../auth/useAuth";
-import useApi from "../hooks/useApi";
-import client from "../api/client";
-import colors from "../config/colors";
+import useAuth from "../../auth/useAuth";
+import useApi from "../../hooks/useApi";
+import client from "../../api/client";
+import colors from "../../config/colors";
 
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
 import {
   AppErrorMessage,
   AppForm,
   AppFormField,
   SubmitButton,
-} from "../components/forms";
-import ActivityIndicator from "../components/ActivityIndicator";
-import Info from "../components/Info";
-import Screen from "../components/Screen";
+} from "../../components/forms";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Info from "../../components/Info";
+import Screen from "../../components/Screen";
+import routes from "../../navigation/routes";
 
 const detailsValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -48,7 +49,7 @@ const changePasswordValidationSchema = Yup.object().shape({
   ),
 });
 
-function AccountScreen(props) {
+function AccountScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
   const { logOut } = useAuth();
 
@@ -131,7 +132,7 @@ function AccountScreen(props) {
               }
             >
               <Image
-                source={require("../assets/logo.png")}
+                source={require("../../assets/logo.png")}
                 style={styles.logo}
               />
               {getUserApi.data.user && (
@@ -309,6 +310,17 @@ function AccountScreen(props) {
                   </AppForm>
                 </View>
               )}
+
+              <AppButton
+                title="Payment Cards"
+                backgroundColor={null}
+                onPress={() => navigation.navigate(routes.PAYMENT_CARDS)}
+              />
+
+              <AppButton title="Margins" backgroundColor={null} />
+
+              <AppButton title="Users" backgroundColor={null} />
+
               <AppButton
                 title="Log Out"
                 onPress={() => setLogoutModalVisible(true)}
