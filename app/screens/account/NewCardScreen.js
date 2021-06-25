@@ -11,6 +11,7 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { CheckBox } from "react-native-elements/dist/checkbox/CheckBox";
 
 import ActivityIndicator from "../../components/ActivityIndicator";
+import AppButton from "../../components/AppButton";
 import AppText from "../../components/AppText";
 import {
   AppErrorMessage,
@@ -25,7 +26,6 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import colors from "../../config/colors";
 import routes from "../../navigation/routes";
-import AppButton from "../../components/AppButton";
 
 const validationSchema = Yup.object().shape({
   holder: Yup.string().required().label("Card Holder"),

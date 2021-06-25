@@ -317,7 +317,11 @@ function AccountScreen({ navigation }) {
                 onPress={() => navigation.navigate(routes.PAYMENT_CARDS)}
               />
 
-              <AppButton title="Margins" backgroundColor={null} />
+              <AppButton
+                title="Margins"
+                backgroundColor={null}
+                onPress={() => navigation.navigate(routes.MARGIN)}
+              />
 
               <AppButton title="Users" backgroundColor={null} />
 

@@ -8,6 +8,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 import PaymentCardsScreen from "../screens/account/PaymentCardsScreen";
 import NewCardScreen from "../screens/account/NewCardScreen";
+import MarginScreen from "../screens/account/MarginScreen";
 
 const Stack = createStackNavigator();
 
@@ -30,7 +31,7 @@ const AccountNavigator = () => (
       headerTitleAlign: "center",
       headerBackImage: () => (
         <MaterialCommunityIcons
-          name="arrow-left"
+          name="chevron-left"
           size={32}
           color={colors.primary}
           style={{ paddingHorizontal: 10 }}
@@ -46,6 +47,7 @@ const AccountNavigator = () => (
     />
     <Stack.Screen name={routes.PAYMENT_CARDS} component={PaymentCardsScreen} />
     <Stack.Screen name={routes.NEW_CARD} component={NewCardScreen} />
+    <Stack.Screen name={routes.MARGIN} component={MarginScreen} />
   </Stack.Navigator>
 );
 

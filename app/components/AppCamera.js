@@ -162,7 +162,6 @@ function AppCamera({ visible, setVisible, onAccept }) {
                     />
                   ),
                 }}
-                thumbTintColor="green"
                 trackStyle={styles.sliderTrack}
                 value={zoom}
               />
