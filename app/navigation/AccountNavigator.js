@@ -7,6 +7,7 @@ import colors from "../config/colors";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Menu from "../components/Menu";
 import PaymentCardsScreen from "../screens/account/PaymentCardsScreen";
+import NewCardScreen from "../screens/account/NewCardScreen";
 
 const Stack = createStackNavigator();
 
@@ -44,6 +45,7 @@ const AccountNavigator = () => (
       options={{ title: null }}
     />
     <Stack.Screen name={routes.PAYMENT_CARDS} component={PaymentCardsScreen} />
+    <Stack.Screen name={routes.NEW_CARD} component={NewCardScreen} />
   </Stack.Navigator>
 );
 

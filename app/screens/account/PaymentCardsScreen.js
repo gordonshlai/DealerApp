@@ -13,8 +13,9 @@ import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
+import routes from "../../navigation/routes";
 
-function PaymentCardsScreen(props) {
+function PaymentCardsScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -64,7 +65,8 @@ function PaymentCardsScreen(props) {
       <AppButton
         title="New Card"
         backgroundColor={null}
-        style={{ alignSelf: "flex-end", marginRight: 20 }}
+        style={styles.newCardButton}
+        onPress={() => navigation.navigate(routes.NEW_CARD)}
       />
       <FlatList
         data={getPaymentCardsApi.data}
@@ -148,6 +150,10 @@ const styles = StyleSheet.create({
     height: "100%",
     width: "100%",
     position: "absolute",
+  },
+  newCardButton: {
+    alignSelf: "flex-end",
+    marginRight: 20,
   },
   cardContainer: {
     margin: 10,
