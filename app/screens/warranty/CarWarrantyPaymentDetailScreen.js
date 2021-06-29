@@ -6,6 +6,8 @@ import {
   ScrollView,
   Linking,
   Dimensions,
+  RefreshControl,
+  Modal,
 } from "react-native";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -38,8 +40,12 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
+  const [refreshing, setRefreshing] = useState(false);
   const [termsVisible, setTermsVisible] = useState(false);
   const [cv2, setCV2] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [uri, setUri] = useState();
+  const [sage, setSage] = useState({});
 
   const pdfApi = useApi(() =>
     client.get(`api/car/warranty/quote/document/${quote.token}`)
@@ -50,6 +56,7 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const postPaymentApi = useApi((payload) =>
     client.post("api/car/warranty/payment", payload)
   );
+  const postAcsurlApi = useApi((url, payload) => client.post(url, payload));
 
   useEffect(() => {
     getPaymentCardApi.request();
@@ -125,6 +132,16 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
     };
     const result = await postPaymentApi.request(payload);
     console.log(result);
+    if (result.data.hasOwnProperty("auth")) {
+      const res = await postAcsurlApi.request(result.data.auth.ACSURL, {
+        MD: result.data.auth.MD,
+        PaReq: result.data.auth.PAReq,
+        TermUrl: result.data.auth.TermUrl,
+      });
+      console.log(res);
+      setSage(result.data.auth);
+      setModalVisible(true);
+    }
     if (!result.ok) return setError(result.data.message);
     navigation.popToTop();
     navigation.navigate(routes.MY_SALE_DETAIL, result.data.id);
@@ -160,15 +177,17 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
             onPress={() => {}}
           />
         </View>
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={() => getPaymentCardApi.request()}
+            />
+          }
+        >
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
               <AppText style={styles.title}>Payment Summary</AppText>
-              {/* <View
-                style={{ flex: 1, height: 300, backgroundColor: "#ecf0f1" }}
-              >
-                <PdfReader />
-              </View> */}
               <View style={styles.fieldContainer}>
                 <AppText style={[styles.fieldValue, { fontWeight: "bold" }]}>
                   Cover Level
@@ -252,10 +271,28 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
                     expiry={getPaymentCardApi.data.token?.expiry}
                     type={getPaymentCardApi.data.token?.type}
                   />
+                  <View style={styles.updatePaymentCardContainer}>
+                    <AppText>Update or change your payment card </AppText>
+                    <AppText
+                      style={styles.here}
+                      onPress={() =>
+                        navigation.navigate(routes.ACCOUNT, {
+                          screen: routes.PAYMENT_CARDS,
+                          initial: false,
+                        })
+                      }
+                    >
+                      here
+                    </AppText>
+                  </View>
+
                   {!getPaymentCardApi.data.repeat_allowed && (
                     <View>
                       <AppText style={styles.title}>Confirm Card CV2</AppText>
-                      <AppTextInput onChangeText={(value) => setCV2(value)} />
+                      <AppTextInput
+                        onChangeText={(value) => setCV2(value)}
+                        placeholder="Enter Card CV2"
+                      />
                     </View>
                   )}
                 </View>
@@ -276,6 +313,25 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
           </Screen>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <Modal
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <ActivityIndicator visible={!sage.ACSURL} />
+        {sage.ACSURL && (
+          <WebView
+            javaScriptEnabled={true}
+            source={{
+              uri: sage.ACSURL,
+              method: "POST",
+              body: { MD: sage.MD, PaReq: sage.PAReq, TermUrl: sage.TermUrl },
+            }}
+            style={{ flex: 1, marginVertical: 50 }}
+          />
+        )}
+        <AppButton onPress={() => setModalVisible(false)} />
+      </Modal>
     </>
   );
 }
@@ -325,6 +381,13 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGrey,
     borderTopWidth: 1,
     marginBottom: 30,
+  },
+  updatePaymentCardContainer: {
+    flexDirection: "row",
+    marginTop: 20,
+  },
+  here: {
+    color: colors.primary,
   },
 });
 

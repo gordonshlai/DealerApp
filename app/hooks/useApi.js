@@ -18,7 +18,11 @@ export default useApi = (apiFunc) => {
     const response = await apiFunc(...args);
     setLoading(false);
 
-    if (response.status === 401 && !response.data.hasOwnProperty("message")) {
+    if (
+      response.status === 401 &&
+      !response.data.hasOwnProperty("message") &&
+      !response.data.hasOwnProperty("auth")
+    ) {
       return logOut();
     }
     if (response.status === 429) {
