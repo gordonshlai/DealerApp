@@ -10,7 +10,7 @@ import AuthContext from "../auth/context";
 
 function ViewDocument({ visible, setVisible, uri }) {
   const { authToken } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   return (
     <Modal visible={visible} onRequestClose={() => setVisible(false)}>
@@ -24,7 +24,6 @@ function ViewDocument({ visible, setVisible, uri }) {
               Authorization: "Bearer " + authToken,
             },
           }}
-          onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
           style={styles.webView}
         />

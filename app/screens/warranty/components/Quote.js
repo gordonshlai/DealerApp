@@ -6,13 +6,16 @@ import AppButton from "../../../components/AppButton";
 import AppText from "../../../components/AppText";
 import { ListItem, ListItemSeparator } from "../../../components/lists";
 import Registration from "../../../components/Registration";
+import ViewDocument from "../../../components/ViewDocument";
 
 import colors from "../../../config/colors";
+import settings from "../../../config/settings";
 import defaultStyles from "../../../config/styles";
 
 function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
   const [pressing, setPressing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [documentModalVisible, setDocumentModalVisible] = useState(false);
 
   const card = () => (
     <Pressable
@@ -22,7 +25,7 @@ function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
       onPressOut={() => setPressing(false)}
     >
       <View style={[styles.textContainer, { marginBottom: 10 }]}>
-        <AppText style={styles.bold}>
+        <AppText style={[styles.bold, { flex: 1 }]} numberOfLines={1}>
           {data.make} {data.model}
         </AppText>
         {data.registration && <Registration registration={data.registration} />}
@@ -58,8 +61,8 @@ function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
       onPress: onOpenQuotePress,
     },
     {
-      title: "Quote Document",
-      onPress: () => console.log("Quote Document"),
+      title: "View Quote Document",
+      onPress: () => setDocumentModalVisible(true),
     },
     {
       title: "Delete Quote",
@@ -109,6 +112,11 @@ function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
           </View>
         </Pressable>
       </Modal>
+      <ViewDocument
+        visible={documentModalVisible}
+        setVisible={setDocumentModalVisible}
+        uri={`${settings.apiUrl}api/car/warranty/quote/document/${data.token}`}
+      />
     </>
   );
 }
