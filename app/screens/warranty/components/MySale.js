@@ -6,13 +6,17 @@ import AppButton from "../../../components/AppButton";
 import AppText from "../../../components/AppText";
 import { ListItem, ListItemSeparator } from "../../../components/lists";
 import Registration from "../../../components/Registration";
+import ViewDocument from "../../../components/ViewDocument";
 
 import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
+import settings from "../../../config/settings";
 
-function MySale({ data, onOpenPress, onInvoicePress, onSchedulePress }) {
+function MySale({ data, onOpenPress }) {
   const [pressing, setPressing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [invoiceVisible, setInvoiceVisible] = useState(false);
+  const [scheduleVisible, setScheduleVisible] = useState(false);
 
   const card = () => (
     <Pressable
@@ -63,12 +67,12 @@ function MySale({ data, onOpenPress, onInvoicePress, onSchedulePress }) {
       onPress: onOpenPress,
     },
     {
-      title: "Invoice",
-      onPress: onInvoicePress,
+      title: "View Invoice",
+      onPress: () => setInvoiceVisible(true),
     },
     {
-      title: "Schedule",
-      onPress: onSchedulePress,
+      title: "View Schedule",
+      onPress: () => setScheduleVisible(true),
     },
   ];
 
@@ -114,6 +118,16 @@ function MySale({ data, onOpenPress, onInvoicePress, onSchedulePress }) {
           </View>
         </Pressable>
       </Modal>
+      <ViewDocument
+        visible={invoiceVisible}
+        setVisible={setInvoiceVisible}
+        uri={`${settings.apiUrl}api/car/warranty/sale/pdf/${data.id}`}
+      />
+      <ViewDocument
+        visible={scheduleVisible}
+        setVisible={setScheduleVisible}
+        uri={`${settings.apiUrl}api/car/warranty/sale/plan-book/${data.id}`}
+      />
     </>
   );
 }

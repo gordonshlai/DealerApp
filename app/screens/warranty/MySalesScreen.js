@@ -150,8 +150,6 @@ function MySalesScreen({ navigation, route }) {
                       onOpenPress={() =>
                         navigation.navigate(routes.MY_SALE_DETAIL, item.id)
                       }
-                      onInvoicePress={() => {}}
-                      onSchedulePress={() => {}}
                     />
                   )}
                   ListFooterComponent={
