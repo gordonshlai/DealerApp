@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -23,11 +23,13 @@ import {
 import Screen from "../../components/Screen";
 import ProgressBar from "./components/ProgressBar";
 import ActivityIndicator from "../../components/ActivityIndicator";
+import ViewDocument from "../../components/ViewDocument";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
+import settings from "../../config/settings";
 
 const validationSchema = Yup.object().shape({
   purchase_date: Yup.date()
@@ -63,13 +65,9 @@ const serviceHistoryOptions = [
 ];
 
 function CarWarrantyDetailScreen({ route, navigation }) {
-  const {
-    quote: {
-      vehicle: { registration },
-    },
-    booking,
-    setBooking,
-  } = useContext(WarrantyContext);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const { quote, booking, setBooking } = useContext(WarrantyContext);
   const tabBarHeight = useBottomTabBarHeight();
 
   const handleSubmit = (values) => {
@@ -98,7 +96,20 @@ function CarWarrantyDetailScreen({ route, navigation }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
-        <AppText style={styles.sectionTitle}>Warranty Detail</AppText>
+        <View style={styles.sectionTitleContainer}>
+          <AppText style={styles.sectionTitle}>Warranty Detail</AppText>
+          <AppButton
+            title="View Quote"
+            backgroundColor={colors.primary}
+            border={null}
+            onPress={() => setModalVisible(true)}
+          />
+          <ViewDocument
+            visible={modalVisible}
+            setVisible={setModalVisible}
+            uri={`${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`}
+          />
+        </View>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
@@ -109,7 +120,7 @@ function CarWarrantyDetailScreen({ route, navigation }) {
                   mot_date: "",
                   service_date: "",
                   service_history: "",
-                  registration: registration || "",
+                  registration: quote.vehicle.registration || "",
                   vin_number: "",
                 }}
                 onSubmit={handleSubmit}
@@ -181,6 +192,12 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     ...defaultStyles.shadow,
+  },
+  sectionTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginRight: 20,
   },
   sectionTitle: {
     fontSize: 22,

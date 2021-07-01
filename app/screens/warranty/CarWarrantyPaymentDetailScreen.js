@@ -4,36 +4,32 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   ScrollView,
-  Linking,
-  Dimensions,
   RefreshControl,
   Modal,
 } from "react-native";
-import * as Yup from "yup";
-import { Formik } from "formik";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { WebView } from "react-native-webview";
-import { Buffer } from "buffer";
+import dayjs from "dayjs";
 
 import AppButton from "../../components/AppButton";
 import AppText from "../../components/AppText";
+import ActivityIndicator from "../../components/ActivityIndicator";
 import Background from "../../components/Background";
 import Screen from "../../components/Screen";
 import ProgressBar from "./components/ProgressBar";
 import Terms from "./components/Terms";
+import PaymentCard from "../../components/PaymentCard";
+import AppTextInput from "../../components/AppTextInput";
+import { AppErrorMessage } from "../../components/forms";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import useApi from "../../hooks/useApi";
 import client from "../../api/client";
-import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
 import settings from "../../config/settings";
-import PaymentCard from "../../components/PaymentCard";
-import dayjs from "dayjs";
-import AppTextInput from "../../components/AppTextInput";
-import { AppErrorMessage } from "../../components/forms";
+import ViewDocument from "../../components/ViewDocument";
 
 function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const { user, quote, booking, customer } = useContext(WarrantyContext);
@@ -43,8 +39,8 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [termsVisible, setTermsVisible] = useState(false);
   const [cv2, setCV2] = useState("");
-  const [modalVisible, setModalVisible] = useState(false);
-  const [uri, setUri] = useState();
+  const [documentModalVisible, setDocumentModalVisible] = useState(false);
+  const [sageModalVisible, setSageModalVisible] = useState(false);
   const [sage, setSage] = useState({});
 
   const pdfApi = useApi(() =>
@@ -71,10 +67,6 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
 
   const vatDue = () =>
     user.account.vat === "1" ? (price() * 0.2).toFixed(2) : "0.00";
-
-  const PdfReader = ({ url: uri }) => (
-    <WebView javaScriptEnabled={true} style={{ flex: 1 }} source={{ uri }} />
-  );
 
   const handlePurchase = async () => {
     const payload = {
@@ -140,7 +132,7 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
       });
       console.log(res);
       setSage(result.data.auth);
-      setModalVisible(true);
+      setSageModalVisible(true);
     }
     if (!result.ok) return setError(result.data.message);
     navigation.popToTop();
@@ -161,20 +153,18 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginRight: 20,
-          }}
-        >
+        <View style={styles.sectionTitleContainer}>
           <AppText style={styles.sectionTitle}>Payment Detail</AppText>
           <AppButton
-            title="Download Quote"
+            title="View Quote"
             backgroundColor={colors.primary}
             border={null}
-            onPress={() => {}}
+            onPress={() => setDocumentModalVisible(true)}
+          />
+          <ViewDocument
+            visible={documentModalVisible}
+            setVisible={setDocumentModalVisible}
+            uri={`${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`}
           />
         </View>
         <ScrollView
@@ -315,8 +305,8 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
       </KeyboardAvoidingView>
 
       <Modal
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
+        visible={sageModalVisible}
+        onRequestClose={() => setSageModalVisible(false)}
       >
         <ActivityIndicator visible={!sage.ACSURL} />
         {sage.ACSURL && (
@@ -330,7 +320,7 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
             style={{ flex: 1, marginVertical: 50 }}
           />
         )}
-        <AppButton onPress={() => setModalVisible(false)} />
+        <AppButton onPress={() => setSageModalVisible(false)} />
       </Modal>
     </>
   );
@@ -349,6 +339,12 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     ...defaultStyles.shadow,
+  },
+  sectionTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginRight: 20,
   },
   sectionTitle: {
     fontSize: 22,

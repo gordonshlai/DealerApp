@@ -20,6 +20,9 @@ import {
 } from "../../components/forms";
 import Screen from "../../components/Screen";
 import ProgressBar from "./components/ProgressBar";
+import ViewDocument from "../../components/ViewDocument";
+import Picker from "../../components/Picker";
+import AppSwitch from "../../components/AppSwitch";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
@@ -28,8 +31,7 @@ import client from "../../api/client";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
-import Picker from "../../components/Picker";
-import AppSwitch from "../../components/AppSwitch";
+import settings from "../../config/settings";
 
 const validationSchema = Yup.object().shape({
   title: Yup.string().required().label("Title"),
@@ -46,7 +48,8 @@ const validationSchema = Yup.object().shape({
 });
 
 function CarWarrantyCustomerDetailScreen({ route, navigation }) {
-  const { setCustomer } = useContext(WarrantyContext);
+  const { quote, setCustomer } = useContext(WarrantyContext);
+
   const tabBarHeight = useBottomTabBarHeight();
 
   const titleOptions = ["Mr", "Ms", "Mrs", "Miss", "Dr"];
@@ -54,6 +57,7 @@ function CarWarrantyCustomerDetailScreen({ route, navigation }) {
   const [error, setError] = useState();
   const [addresses, setAddresses] = useState([]);
   const [address, setAddress] = useState("");
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleSubmit = (values) => {
     setCustomer(values);
@@ -91,7 +95,20 @@ function CarWarrantyCustomerDetailScreen({ route, navigation }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
-        <AppText style={styles.sectionTitle}>Customer Detail</AppText>
+        <View style={styles.sectionTitleContainer}>
+          <AppText style={styles.sectionTitle}>Customer Detail</AppText>
+          <AppButton
+            title="View Quote"
+            backgroundColor={colors.primary}
+            border={null}
+            onPress={() => setModalVisible(true)}
+          />
+          <ViewDocument
+            visible={modalVisible}
+            setVisible={setModalVisible}
+            uri={`${settings.apiUrl}api/car/warranty/quote/document/${quote.token}`}
+          />
+        </View>
         <ScrollView>
           <Screen style={styles.screen}>
             <View style={[styles.card, { marginBottom: tabBarHeight }]}>
@@ -285,6 +302,12 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     ...defaultStyles.shadow,
+  },
+  sectionTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginRight: 20,
   },
   sectionTitle: {
     fontSize: 22,

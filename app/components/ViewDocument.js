@@ -1,44 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, StyleSheet, Modal } from "react-native";
 import WebView from "react-native-webview";
 
 import AppButton from "./AppButton";
 
 import colors from "../config/colors";
-import authStorage from "../auth/storage";
 import ActivityIndicator from "./ActivityIndicator";
+import AuthContext from "../auth/context";
 
 function ViewDocument({ visible, setVisible, uri }) {
-  const [token, setToken] = useState();
+  const { authToken } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-
-  const getAuthToken = async () => {
-    const authToken = await authStorage.getToken();
-    setToken(authToken);
-  };
-
-  useEffect(() => {
-    getAuthToken();
-  }, []);
 
   return (
     <Modal visible={visible} onRequestClose={() => setVisible(false)}>
       <View style={styles.modalContainer}>
         <ActivityIndicator visible={loading} />
-        {token && (
-          <WebView
-            javaScriptEnabled={true}
-            source={{
-              uri: uri,
-              headers: {
-                Authorization: "Bearer " + token,
-              },
-            }}
-            onLoadStart={() => setLoading(true)}
-            onLoadEnd={() => setLoading(false)}
-            style={styles.webView}
-          />
-        )}
+        <WebView
+          javaScriptEnabled={true}
+          source={{
+            uri: uri,
+            headers: {
+              Authorization: "Bearer " + authToken,
+            },
+          }}
+          onLoadStart={() => setLoading(true)}
+          onLoadEnd={() => setLoading(false)}
+          style={styles.webView}
+        />
       </View>
       <AppButton
         icon="close"

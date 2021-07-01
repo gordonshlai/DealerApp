@@ -236,14 +236,7 @@ function CarWarrantyCustomiseCoverScreen({ route, navigation }) {
         style={styles.keyboardAvoidingView}
       >
         <ProgressBar route={route} />
-        <View
-          style={{
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginRight: 20,
-          }}
-        >
+        <View style={styles.sectionTitleContainer}>
           <AppText style={styles.sectionTitle}>Customise Cover</AppText>
           <AppButton
             title="View Quote"
@@ -386,6 +379,12 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 10,
     ...defaultStyles.shadow,
+  },
+  sectionTitleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginRight: 20,
   },
   sectionTitle: {
     fontSize: 22,
