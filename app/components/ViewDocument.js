@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, StyleSheet, Modal } from "react-native";
 import WebView from "react-native-webview";
 
 import AppButton from "./AppButton";
+import ActivityIndicator from "./ActivityIndicator";
 
 import colors from "../config/colors";
-import ActivityIndicator from "./ActivityIndicator";
 import AuthContext from "../auth/context";
 
 function ViewDocument({ visible, setVisible, uri }) {

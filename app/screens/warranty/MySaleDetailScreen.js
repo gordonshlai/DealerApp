@@ -9,20 +9,22 @@ import {
   Pressable,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import dayjs from "dayjs";
+
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Background from "../../components/Background";
+import Screen from "../../components/Screen";
+import { AppErrorMessage } from "../../components/forms";
+import { ListItem, ListItemSeparator } from "../../components/lists";
+import ViewDocument from "../../components/ViewDocument";
 
 import useApi from "../../hooks/useApi";
 import client from "../../api/client";
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
-import routes from "../../navigation/routes";
-import Background from "../../components/Background";
-import AppText from "../../components/AppText";
-import Screen from "../../components/Screen";
-import ActivityIndicator from "../../components/ActivityIndicator";
-import { AppErrorMessage } from "../../components/forms";
-import AppButton from "../../components/AppButton";
-import dayjs from "dayjs";
-import { ListItem, ListItemSeparator } from "../../components/lists";
+import settings from "../../config/settings";
 
 const serviceHistory = [
   "Unknown",
@@ -33,18 +35,29 @@ const serviceHistory = [
   "Last service only",
 ];
 
-function MySaleDetailScreen({ navigation, route }) {
+function MySaleDetailScreen({ route }) {
   const id = route.params;
   const tabBarHeight = useBottomTabBarHeight();
 
   const [error, setError] = useState();
   const [actionModalVisible, setActionModalVisible] = useState(false);
   const [messageVisible, setMessageVisible] = useState(false);
+  const [invoiceVisible, setInvoiceVisible] = useState(false);
+  const [scheduleVisible, setScheduleVisible] = useState(false);
 
   const getMySaleApi = useApi(() => client.get(`api/car/warranty/sale/${id}`));
   const sendEmailApi = useApi(() =>
     client.get(`api/car/warranty/sale/customer/${id}`)
   );
+
+  const sendEmail = async () => {
+    const result = await sendEmailApi.request();
+    if (!result.ok) setError(result.data.message);
+    setMessageVisible(true);
+    setTimeout(() => {
+      setMessageVisible(false);
+    }, 3000);
+  };
 
   useEffect(() => {
     getMySaleApi.request();
@@ -230,22 +243,15 @@ function MySaleDetailScreen({ navigation, route }) {
   const actions = [
     {
       title: "View Invoice",
-      onPress: () => console.log("View Invoice"),
+      onPress: () => setInvoiceVisible(true),
     },
     {
       title: "View Schedule",
-      onPress: () => console.log("View Schedule"),
+      onPress: () => setScheduleVisible(true),
     },
     {
       title: "Email Customer Confirmation",
-      onPress: async () => {
-        const result = await sendEmailApi.request();
-        if (!result.ok) setError(result.data.message);
-        setMessageVisible(true);
-        setTimeout(() => {
-          setMessageVisible(false);
-        }, 3000);
-      },
+      onPress: sendEmail,
     },
   ];
 
@@ -347,6 +353,16 @@ function MySaleDetailScreen({ navigation, route }) {
           </View>
         )}
       </KeyboardAvoidingView>
+      <ViewDocument
+        visible={invoiceVisible}
+        setVisible={setInvoiceVisible}
+        uri={`${settings.apiUrl}api/car/warranty/sale/pdf/${getMySaleApi.data.id}`}
+      />
+      <ViewDocument
+        visible={scheduleVisible}
+        setVisible={setScheduleVisible}
+        uri={`${settings.apiUrl}api/car/warranty/sale/plan-book/${getMySaleApi.data.id}`}
+      />
     </>
   );
 }
