@@ -41,4 +41,6 @@ export default Object.freeze({
   PAYMENT_CARDS: "Payment Cards",
   NEW_CARD: "New Card",
   MARGIN: "Warranty Margins",
+  USERS: "Dealership Users",
+  NEW_USER: "New User",
 });

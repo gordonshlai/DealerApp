@@ -29,6 +29,7 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import Info from "../../components/Info";
 import Screen from "../../components/Screen";
 import routes from "../../navigation/routes";
+import Message from "./components/Message";
 
 const detailsValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
@@ -56,7 +57,7 @@ function AccountScreen({ navigation }) {
   const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
   const [editing, setEditing] = useState(false);
-  const [updatedMessage, setUpdatedMessage] = useState(null);
+  const [message, setMessage] = useState(null);
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
@@ -84,9 +85,9 @@ function AccountScreen({ navigation }) {
     if (!result.ok) return setError(getUserApi.data.message);
     setEditing(false);
     getUser();
-    setUpdatedMessage(result.data.message);
+    setMessage(result.data.message);
     setTimeout(() => {
-      setUpdatedMessage(null);
+      setMessage(null);
     }, 3000);
   };
 
@@ -94,9 +95,9 @@ function AccountScreen({ navigation }) {
     const result = await patchPasswordApi.request(passwords);
     if (!result.ok) return setError(result.data.message);
     setChangePasswordVisible(false);
-    setUpdatedMessage(result.data.message);
+    setMessage(result.data.message);
     setTimeout(() => {
-      setUpdatedMessage(null);
+      setMessage(null);
     }, 3000);
   };
 
@@ -323,7 +324,11 @@ function AccountScreen({ navigation }) {
                 onPress={() => navigation.navigate(routes.MARGIN)}
               />
 
-              <AppButton title="Users" backgroundColor={null} />
+              <AppButton
+                title="Users"
+                backgroundColor={null}
+                onPress={() => navigation.navigate(routes.USERS)}
+              />
 
               <AppButton
                 title="Log Out"
@@ -356,18 +361,7 @@ function AccountScreen({ navigation }) {
                 </View>
               </View>
             </Modal>
-
-            {updatedMessage && (
-              <View style={styles.updatedContainer}>
-                <Info
-                  name="check"
-                  size={24}
-                  text={updatedMessage}
-                  color="white"
-                  textStyle={styles.updatedText}
-                />
-              </View>
-            )}
+            <Message message={message} />
           </KeyboardAvoidingView>
         )}
       </Screen>
@@ -449,19 +443,6 @@ const styles = StyleSheet.create({
   actionButtonsContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-  },
-  updatedContainer: {
-    backgroundColor: colors.success + "ee",
-    position: "absolute",
-    top: 50,
-    alignSelf: "center",
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    zIndex: 1,
-  },
-  updatedText: {
-    fontWeight: "bold",
   },
 });
 

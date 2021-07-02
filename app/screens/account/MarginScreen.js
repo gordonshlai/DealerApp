@@ -17,6 +17,7 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import AppText from "../../components/AppText";
 import AppButton from "../../components/AppButton";
 import { AppErrorMessage } from "../../components/forms";
+import Message from "./components/Message";
 
 function MarginScreen({ navigation }) {
   const [margin, setMargin] = useState();
@@ -127,11 +128,7 @@ function MarginScreen({ navigation }) {
           </ScrollView>
         </KeyboardAvoidingView>
       </Screen>
-      {message && (
-        <View style={styles.messageContainer}>
-          <AppText style={styles.message}>{message}</AppText>
-        </View>
-      )}
+      <Message message={message} />
     </>
   );
 }
@@ -177,20 +174,6 @@ const styles = StyleSheet.create({
   sliderTrack: {
     height: 10,
     borderRadius: 20,
-  },
-  messageContainer: {
-    backgroundColor: colors.success + "ee",
-    position: "absolute",
-    alignSelf: "center",
-    paddingVertical: 5,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    zIndex: 1,
-  },
-  message: {
-    fontWeight: "bold",
-    color: "white",
-    fontSize: 20,
   },
 });
 

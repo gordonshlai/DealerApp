@@ -9,6 +9,8 @@ import Menu from "../components/Menu";
 import PaymentCardsScreen from "../screens/account/PaymentCardsScreen";
 import NewCardScreen from "../screens/account/NewCardScreen";
 import MarginScreen from "../screens/account/MarginScreen";
+import UsersScreen from "../screens/account/UsersScreen";
+import NewUserScreen from "../screens/account/NewUserScreen";
 
 const Stack = createStackNavigator();
 
@@ -48,6 +50,8 @@ const AccountNavigator = () => (
     <Stack.Screen name={routes.PAYMENT_CARDS} component={PaymentCardsScreen} />
     <Stack.Screen name={routes.NEW_CARD} component={NewCardScreen} />
     <Stack.Screen name={routes.MARGIN} component={MarginScreen} />
+    <Stack.Screen name={routes.USERS} component={UsersScreen} />
+    <Stack.Screen name={routes.NEW_USER} component={NewUserScreen} />
   </Stack.Navigator>
 );
 
