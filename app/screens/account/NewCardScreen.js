@@ -53,6 +53,7 @@ function NewCardScreen({ navigation }) {
   );
 
   const handleSubmit = async (values) => {
+    values.number = values.number.replace(/\s+/g, "");
     values.type =
       values.type === "Master Card"
         ? "MC"
@@ -61,7 +62,11 @@ function NewCardScreen({ navigation }) {
         : "VISA";
 
     const result = await postPaymentCardApi.request(values);
-    if (!result.ok) return setError(result.data.message);
+    console.log(result);
+    if (!result.ok)
+      return setError(
+        result.data?.message?.StatusDetail ?? result.data?.message
+      );
     navigation.popToTop();
     navigation.navigate(routes.PAYMENT_CARDS);
   };

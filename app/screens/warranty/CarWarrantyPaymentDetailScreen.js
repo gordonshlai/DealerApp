@@ -41,7 +41,8 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const [cv2, setCV2] = useState("");
   const [documentModalVisible, setDocumentModalVisible] = useState(false);
   const [sageModalVisible, setSageModalVisible] = useState(false);
-  const [sage, setSage] = useState({});
+  const [sageHTML, setSageHTML] = useState("");
+  const [sageLoading, setSageLoading] = useState(true);
 
   const pdfApi = useApi(() =>
     client.get(`api/car/warranty/quote/document/${quote.token}`)
@@ -52,7 +53,9 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const postPaymentApi = useApi((payload) =>
     client.post("api/car/warranty/payment", payload)
   );
-  const postAcsurlApi = useApi((url, payload) => client.post(url, payload));
+  const patchPaymentApi = useApi((payload) =>
+    client.patch("api/car/warranty/payment", payload)
+  );
 
   useEffect(() => {
     getPaymentCardApi.request();
@@ -69,74 +72,120 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
     user.account.vat === "1" ? (price() * 0.2).toFixed(2) : "0.00";
 
   const handlePurchase = async () => {
-    const payload = {
-      amount: booking.cost_margin,
-      booking: {
-        address_1: customer.address_1,
-        address_2: customer.address_2,
-        airbags: quote.quote.airbags,
-        aircon: quote.quote.aircon,
-        assist: quote.quote.assist,
-        claims: quote.quote.claims,
-        cost_margin: booking.cost_margin,
-        cost_net: booking.cost_net,
-        cost_total: booking.cost_total,
-        country: customer.country,
-        cover_length: quote.coverLength,
-        cover_type: quote.quote.cover,
-        dealer_id: user.account.id,
-        email: customer.email,
-        emissions: quote.quote.emissions,
-        engine_cc: quote.vehicle.engine_cc,
-        ev: quote.quote.ev,
-        first_name: customer.first_name,
-        fuel_type: quote.vehicle.fuel_type,
-        issue_date: dayjs().format("YYYY-MM-DD"),
-        labour: quote.quote.labour,
-        last_name: customer.last_name,
-        make: quote.vehicle.make,
-        manufacture_date: quote.vehicle.manufacture_date,
-        mileage: quote.vehicle.mileage,
-        model: quote.vehicle.model,
-        mot: quote.quote.mot,
-        mot_date: booking.mot_date,
-        multimedia: quote.quote.multimedia,
-        postcode: customer.postcode,
-        print: customer.print,
-        purchase_date: booking.purchase_date,
-        quote_id: quote.id,
-        registration: quote.vehicle.registration,
-        retail_value: quote.vehicle.retail_value,
-        service_date: booking.service_date,
-        service_history: booking.service_history,
-        start_date: booking.start_date,
-        telephone: customer.telephone,
-        test: quote.quote.test,
-        title: customer.title,
-        token: quote.token,
-        town: customer.town,
-        transmission: quote.vehicle.transmission,
-        vehicle_origin: quote.vehicle.vehicle_origin,
-        vin_number: booking.vin_number,
-      },
-      cv2,
-      token: getPaymentCardApi.data.token?.token,
-    };
-    const result = await postPaymentApi.request(payload);
-    console.log(result);
-    if (result.data.hasOwnProperty("auth")) {
-      const res = await postAcsurlApi.request(result.data.auth.ACSURL, {
-        MD: result.data.auth.MD,
-        PaReq: result.data.auth.PAReq,
-        TermUrl: result.data.auth.TermUrl,
-      });
-      console.log(res);
-      setSage(result.data.auth);
-      setSageModalVisible(true);
+    if (!patchPaymentApi.loading) {
+      const payload = {
+        amount: booking.cost_margin,
+        booking: {
+          address_1: customer.address_1,
+          address_2: customer.address_2,
+          airbags: quote.quote.airbags,
+          aircon: quote.quote.aircon,
+          assist: quote.quote.assist,
+          claims: quote.quote.claims,
+          cost_margin: booking.cost_margin,
+          cost_net: booking.cost_net,
+          cost_total: booking.cost_total,
+          country: customer.country,
+          cover_length: quote.coverLength,
+          cover_type: quote.quote.cover,
+          dealer_id: user.account.id,
+          email: customer.email,
+          emissions: quote.quote.emissions,
+          engine_cc: quote.vehicle.engine_cc,
+          ev: quote.quote.ev,
+          first_name: customer.first_name,
+          fuel_type: quote.vehicle.fuel_type,
+          issue_date: dayjs().format("YYYY-MM-DD"),
+          labour: quote.quote.labour,
+          last_name: customer.last_name,
+          make: quote.vehicle.make,
+          manufacture_date: quote.vehicle.manufacture_date,
+          mileage: quote.vehicle.mileage,
+          model: quote.vehicle.model,
+          mot: quote.quote.mot,
+          mot_date: booking.mot_date,
+          multimedia: quote.quote.multimedia,
+          postcode: customer.postcode,
+          print: customer.print,
+          purchase_date: booking.purchase_date,
+          quote_id: quote.id,
+          registration: quote.vehicle.registration,
+          retail_value: quote.vehicle.retail_value,
+          service_date: booking.service_date,
+          service_history: booking.service_history,
+          start_date: booking.start_date,
+          telephone: customer.telephone,
+          test: quote.quote.test,
+          title: customer.title,
+          token: quote.token,
+          town: customer.town,
+          transmission: quote.vehicle.transmission,
+          vehicle_origin: quote.vehicle.vehicle_origin,
+          vin_number: booking.vin_number,
+        },
+        cv2,
+        token: getPaymentCardApi.data.token?.token,
+      };
+      const result = await postPaymentApi.request(payload);
+      if (result.data.hasOwnProperty("auth")) {
+        setSageHTML(`
+              <!DOCTYPE html>
+                <html lang="en">
+                  <head>
+                    <meta charset="UTF-8" />
+                    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+                    <title>Document</title>
+                  </head>
+                  <body>
+                    <form
+                      id="pa-form"
+                      action="${result.data.auth.ACSURL}"
+                      method="POST"
+                      target="iframewindow"
+                      style="display: none"
+                    >
+                      <input name="MD" value="${result.data.auth.MD}" />
+                      <input name="PaReq" value="${result.data.auth.PAReq}" />
+                      <input name="TermUrl" value="${result.data.auth.TermUrl}" />
+                      <input type="submit" />
+                    </form>
+                    <iframe name="iframewindow" width="100%" height="500px"> </iframe>
+                  </body>
+                  <script>document.addEventListener("DOMContentLoaded",function(){var b=document.getElementById("pa-form");b&&b.submit()})</script>
+                </html>
+        `);
+        setSageModalVisible(true);
+        repeatPatchPayment(payload);
+      }
+      console.log("before setError " + Date());
+      console.log(result);
+      if (!result.ok) return setError(result.data?.message);
+      console.log("after setError");
+      navigation.popToTop();
+      navigation.navigate(routes.MY_SALE_DETAIL, result.data.id);
     }
-    if (!result.ok) return setError(result.data.message);
-    navigation.popToTop();
-    navigation.navigate(routes.MY_SALE_DETAIL, result.data.id);
+  };
+
+  const repeatPatchPayment = async (payload) => {
+    const result = await patchPaymentApi.request(payload);
+    console.log(result);
+
+    if (result.data.message) {
+      setSageModalVisible(false);
+      return setError(
+        "Unfortunately, we have been unable to take payment from your supplied card. Please ensure the details have been entered correctly or re-add your card and try again. If the problem persists, please contact your bank to ensure there are no issues with your card. Alternatively, contact your account manager to discuss other options."
+      );
+    }
+    if (result.data.token) {
+      setSageModalVisible(false);
+      navigation.popToTop();
+      return navigation.navigate(routes.MY_SALE_DETAIL, result.data.id);
+    }
+    setTimeout(() => {
+      console.log("patchPayment" + Date());
+      repeatPatchPayment(payload);
+    }, 1000);
   };
 
   return (
@@ -265,12 +314,13 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
                     <AppText>Update or change your payment card </AppText>
                     <AppText
                       style={styles.here}
-                      onPress={() =>
+                      onPress={() => {
+                        navigation.goBack();
                         navigation.navigate(routes.ACCOUNT, {
                           screen: routes.PAYMENT_CARDS,
                           initial: false,
-                        })
-                      }
+                        });
+                      }}
                     >
                       here
                     </AppText>
@@ -308,19 +358,27 @@ function CarWarrantyPaymentDetailScreen({ route, navigation }) {
         visible={sageModalVisible}
         onRequestClose={() => setSageModalVisible(false)}
       >
-        <ActivityIndicator visible={!sage.ACSURL} />
-        {sage.ACSURL && (
-          <WebView
-            javaScriptEnabled={true}
-            source={{
-              uri: sage.ACSURL,
-              method: "POST",
-              body: { MD: sage.MD, PaReq: sage.PAReq, TermUrl: sage.TermUrl },
-            }}
-            style={{ flex: 1, marginVertical: 50 }}
+        <Screen style={styles.modalScreen}>
+          <ActivityIndicator visible={sageLoading} />
+          <AppText style={styles.title}>
+            Further Authentication Required
+          </AppText>
+          {sageHTML && (
+            <WebView
+              javaScriptEnabled={true}
+              originWhitelist={["*"]}
+              source={{ html: sageHTML }}
+              onLoadEnd={() => setSageLoading(false)}
+              style={{ flex: 1 }}
+            />
+          )}
+          <AppButton
+            title="Cancel"
+            backgroundColor={null}
+            color={colors.success}
+            onPress={() => setSageModalVisible(false)}
           />
-        )}
-        <AppButton onPress={() => setSageModalVisible(false)} />
+        </Screen>
       </Modal>
     </>
   );
@@ -384,6 +442,9 @@ const styles = StyleSheet.create({
   },
   here: {
     color: colors.primary,
+  },
+  modalScreen: {
+    paddingHorizontal: 10,
   },
 });
 
