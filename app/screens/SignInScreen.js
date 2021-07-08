@@ -12,7 +12,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 
-// import authApi from "../api/auth";
 import client from "../api/client";
 import useAuth from "../auth/useAuth";
 import ActivityIndicator from "../components/ActivityIndicator";
@@ -23,9 +22,7 @@ import {
   SubmitButton,
 } from "../components/forms";
 import useApi from "../hooks/useApi";
-import authStorage from "../auth/storage";
 
-import colors from "../config/colors";
 import routes from "../navigation/routes";
 import Screen from "../components/Screen";
 

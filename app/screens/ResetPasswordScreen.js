@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {
   Image,
-  ImageBackground,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,8 +12,6 @@ import * as Yup from "yup";
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
 
-// import authApi from "../api/auth";
-// import useAuth from "../auth/useAuth";
 import useApi from "../hooks/useApi";
 import ActivityIndicator from "../components/ActivityIndicator";
 import {
@@ -28,7 +25,6 @@ import Screen from "../components/Screen";
 import client from "../api/client";
 
 import colors from "../config/colors";
-import routes from "../navigation/routes";
 
 /**
  * The login screen, allowing user to input their login details and handling the
@@ -47,25 +43,18 @@ const validationSchema = Yup.object().shape({
  * The reset password screen functional component
  */
 const ResetPasswordScreen = ({ navigation }) => {
-  // const loginApi = useApi(authApi.login);
-  // const { logIn } = useAuth();
   const [error, setError] = useState();
   const [info, setInfo] = useState();
 
-  /**
-   * Handles the submit operation
-   * @param {string} email - the user input in the email field
-   */
-  // const handleSubmit = async ({ email, password }) => {
-  //   const result = await loginApi.request(email, password);
-  //   if (!result.ok) return setError(result.data);
-  //   logIn(result.data);
-  // };
   const endpoint = "auth/reset";
   const resetPasswordApi = useApi(({ email }) =>
     client.post(endpoint, { email })
   );
 
+  /**
+   * Handles the submit operation
+   * @param {string} email - the user input in the email field
+   */
   const handleSubmit = async ({ email }) => {
     const result = await resetPasswordApi.request({ email });
     if (!result.ok) {

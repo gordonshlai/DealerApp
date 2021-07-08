@@ -35,12 +35,11 @@ function HomeScreen({ navigation }) {
 
   const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
-  const [env, setEnv] = useState(settings.tradeEnv);
 
   const getUserApi = useApi(() => client.get("api/user"));
   const getTradeVehiclesApi = useApi(() =>
     client.get(
-      `api/trade/all/inventory?make=all&seller=&env=${env}&sortBy=listed-desc&perPage=12&page=1`
+      `api/trade/all/inventory?make=all&seller=&env=${settings.tradeEnv}&sortBy=listed-desc&perPage=12&page=1`
     )
   );
   const getInventoryVehiclesApi = useApi(() =>

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -19,17 +19,17 @@ import {
 } from "../../components/forms";
 import Screen from "../../components/Screen";
 import ViewDocument from "../../components/ViewDocument";
+import ProgressBar from "./components/ProgressBar";
+import AdditionsItem from "./components/AdditionsItem";
+import QuotePrice from "./components/QuotePrice";
+import AppSwitch from "../../components/AppSwitch";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import useApi from "../../hooks/useApi";
 import client from "../../api/client";
-import ActivityIndicator from "../../components/ActivityIndicator";
 import routes from "../../navigation/routes";
-import ProgressBar from "./components/ProgressBar";
-import AdditionsItem from "./components/AdditionsItem";
-import QuotePrice from "./components/QuotePrice";
-import AppSwitch from "../../components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
 import settings from "../../config/settings";
 

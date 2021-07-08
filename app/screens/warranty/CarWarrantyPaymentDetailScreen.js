@@ -21,6 +21,7 @@ import Terms from "./components/Terms";
 import PaymentCard from "../../components/PaymentCard";
 import AppTextInput from "../../components/AppTextInput";
 import { AppErrorMessage } from "../../components/forms";
+import ViewDocument from "../../components/ViewDocument";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
@@ -29,7 +30,6 @@ import client from "../../api/client";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
 import settings from "../../config/settings";
-import ViewDocument from "../../components/ViewDocument";
 
 function CarWarrantyPaymentDetailScreen({ route, navigation }) {
   const { user, quote, booking, customer } = useContext(WarrantyContext);

@@ -6,6 +6,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import dayjs from "dayjs";
 
 import AppButton from "../../components/AppButton";
 import AppText from "../../components/AppText";
@@ -14,16 +15,15 @@ import CoverOption from "./components/CoverOption";
 import { AppErrorMessage } from "../../components/forms";
 import ProgressBar from "./components/ProgressBar";
 import Screen from "../../components/Screen";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import AppSwitch from "../../components/AppSwitch";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
-import ActivityIndicator from "../../components/ActivityIndicator";
+import warrantyApi from "../../api/warranty";
 import routes from "../../navigation/routes";
-import AppSwitch from "../../components/AppSwitch";
 import WarrantyContext from "../../warranty/context";
-import dayjs from "dayjs";
 
 function CarWarrantyCoverOptionsScreen({ navigation, route }) {
   const { vehicle, user, comparison, setQuote } = useContext(WarrantyContext);
@@ -34,10 +34,11 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
   const [margin, setMargin] = useState(true);
   const [cover, setCover] = useState();
 
-  const quoteApi = useApi((payload) =>
-    client.post("api/car/warranty/quote", payload)
-  );
+  const quoteApi = useApi((payload) => warrantyApi.postWarranty(payload));
 
+  /**
+   * Handles the submit event.
+   */
   const handleSubmit = async () => {
     const payload = {
       cover: cover.toUpperCase(),
@@ -59,6 +60,11 @@ function CarWarrantyCoverOptionsScreen({ navigation, route }) {
     }
   }, []);
 
+  /**
+   * Calculate the age of the vehicle.
+   *
+   * @returns The age of the vehicle
+   */
   const VehiclesAge = () => {
     const manufactureDate = dayjs(vehicle.manufacture_date);
     const now = dayjs();

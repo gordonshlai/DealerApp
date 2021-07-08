@@ -12,21 +12,43 @@ import AppText from "../../../components/AppText";
 import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
 
+/**
+ * The component showcasing the information of a cover option.
+ *
+ * @param {object} data The object containing the cover option's information
+ * @param {string} title The title of the cover option
+ * @param {boolean} margin if true, it will show the price with added margin, else it will show the base price
+ * @param {boolean} vat if true, it will show the price with added vat
+ * @param {boolean} selected True if the component is currently selected
+ * @param {function} onSelect Function to be called when the component is pressed
+ */
 function CoverOption({ data, title, margin, vat, selected, onSelect }) {
   const [pressing, setPressing] = useState(false);
 
+  /**
+   * Calculate the total price
+   * @returns the total price in 2 decimal places
+   */
   const price = () => {
     return margin
       ? (data.pricing.total.price12 * (vat === "1" ? 1.2 : 1)).toFixed(2)
       : (data.pricing.base.price12 * (vat === "1" ? 1.2 : 1)).toFixed(2);
   };
 
+  /**
+   * Calculate the VAT
+   * @returns the VAT in 2 decimal places
+   */
   const vatValue = () => {
     return margin
       ? (data.pricing.total.price12 * (vat === "1" ? 0.2 : 0)).toFixed(2)
       : (data.pricing.base.price12 * (vat === "1" ? 0.2 : 0)).toFixed(2);
   };
 
+  /**
+   * Return th cover limit.
+   * @returns The repair limit in £1000s
+   */
   const repairLimit = () => {
     return title === "gold"
       ? 3

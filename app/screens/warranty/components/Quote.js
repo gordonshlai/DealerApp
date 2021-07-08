@@ -12,6 +12,14 @@ import colors from "../../../config/colors";
 import settings from "../../../config/settings";
 import defaultStyles from "../../../config/styles";
 
+/**
+ * Component showcasing the information of a quote.
+ *
+ * @param {object} data The object containing the information of the quote
+ * @param {function} onOpenQuotePress The function to be called when the "Open Quote" button is pressed
+ * @param {function} onDeleteQuotePress The function to be called when the "Delete Quote" button is pressed
+ * @returns
+ */
 function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
   const [pressing, setPressing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,6 +63,9 @@ function Quote({ data, onOpenQuotePress, onDeleteQuotePress }) {
     </Pressable>
   );
 
+  /**
+   * Options to perform on this component.
+   */
   const options = [
     {
       title: "Open Quote",

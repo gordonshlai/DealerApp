@@ -23,12 +23,12 @@ import ProgressBar from "./components/ProgressBar";
 import ViewDocument from "../../components/ViewDocument";
 import Picker from "../../components/Picker";
 import AppSwitch from "../../components/AppSwitch";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
-import ActivityIndicator from "../../components/ActivityIndicator";
+import customerApi from "../../api/customer";
 import routes from "../../navigation/routes";
 import WarrantyContext from "../../warranty/context";
 import settings from "../../config/settings";
@@ -64,9 +64,7 @@ function CarWarrantyCustomerDetailScreen({ route, navigation }) {
     navigation.navigate(routes.CAR_WARRANTY_PAYMENT_DETAIL);
   };
 
-  const lookupApi = useApi((payload) =>
-    client.post("api/customer/postcode/lookup", payload)
-  );
+  const lookupApi = useApi((payload) => customerApi.postcodeLookup(payload));
 
   const addressesArray = () => {
     let addressCollection = [];

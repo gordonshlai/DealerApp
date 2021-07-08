@@ -5,6 +5,14 @@ import LottieView from "lottie-react-native";
 
 import defaultStyles from "../config/styles";
 
+/**
+ * The screen to show during the uploading progress.
+ *
+ * @param {function} onDone Function to be called when the done animation is finished
+ * @param {number} progress The upload progress. (default = 0)
+ * @param {boolean} visible The visibility of the screen. (default = false)
+ * @returns
+ */
 function UploadScreen({ onDone, progress = 0, visible = false }) {
   return (
     <Modal visible={visible}>

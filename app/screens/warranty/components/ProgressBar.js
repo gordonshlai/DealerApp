@@ -4,6 +4,9 @@ import Icon from "../../../components/Icon";
 import colors from "../../../config/colors";
 import routes from "../../../navigation/routes";
 
+/**
+ * The routes referring to the stage of creating a quote.
+ */
 const progress = [
   {
     icon: "car",

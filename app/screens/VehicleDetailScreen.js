@@ -8,6 +8,8 @@ import {
   LogBox,
 } from "react-native";
 import * as Yup from "yup";
+import { Formik } from "formik";
+import dayjs from "dayjs";
 
 import AppButton from "../components/AppButton";
 import Screen from "../components/Screen";
@@ -21,18 +23,16 @@ import {
 } from "../components/forms";
 import ActivityIndicator from "../components/ActivityIndicator";
 import Background from "../components/Background";
+import UploadScreen from "./UploadScreen";
+import ToolTip from "../components/ToolTip";
+import AppText from "../components/AppText";
 
+import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
 import useApi from "../hooks/useApi";
 import client from "../api/client";
-import { Formik } from "formik";
-import dayjs from "dayjs";
-import AppText from "../components/AppText";
-import colors from "../config/colors";
 import AuthContext from "../auth/context";
-import UploadScreen from "./UploadScreen";
-import ToolTip from "../components/ToolTip";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",

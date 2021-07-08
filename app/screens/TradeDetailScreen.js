@@ -13,6 +13,7 @@ import {
 import dayjs from "dayjs";
 import * as Yup from "yup";
 import { CheckBox } from "react-native-elements";
+import { Formik } from "formik";
 
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
@@ -39,7 +40,6 @@ import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import routes from "../navigation/routes";
 import AuthContext from "../auth/context";
-import { Formik } from "formik";
 
 const offerValidationSchema = Yup.object().shape({
   price: Yup.number().required().min(0).label("Price"),
@@ -697,7 +697,8 @@ function TradeDetailScreen({ route, navigation }) {
 
                               const message =
                                 "\nCan you provide with service history please?";
-                              const patt = /\nCan you provide with service history please?/;
+                              const patt =
+                                /\nCan you provide with service history please?/;
 
                               if (serviceHistory) {
                                 if (patt.test(values["message"])) {
@@ -732,7 +733,8 @@ function TradeDetailScreen({ route, navigation }) {
 
                               const message =
                                 "\nCan you provide with numbers of previous owners please?";
-                              const patt = /\nCan you provide with numbers of previous owners please?/;
+                              const patt =
+                                /\nCan you provide with numbers of previous owners please?/;
 
                               if (owners) {
                                 if (patt.test(values["message"])) {

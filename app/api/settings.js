@@ -3,7 +3,6 @@ import client from "./client";
 /**
  * This module contains all the logic sending requests to the api/settings endpoint.
  */
-
 const endpoint = "api/settings";
 
 /**

@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   FlatList,
-  Dimensions,
   Platform,
   Modal,
   ScrollView,
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import * as Yup from "yup";
+import dayjs from "dayjs";
 
 import AppButton from "../components/AppButton";
 import AppText from "../components/AppText";
@@ -20,16 +20,9 @@ import {
   ListItemSeparator,
 } from "../components/lists";
 import Screen from "../components/Screen";
-import useApi from "../hooks/useApi";
-import client from "../api/client";
-import colors from "../config/colors";
-import dayjs from "dayjs";
 import Loading from "../components/Loading";
 import OptionButton from "../components/OptionButton";
 import AppTextInput from "../components/AppTextInput";
-import routes from "../navigation/routes";
-import AuthContext from "../auth/context";
-import useDidMountEffect from "../hooks/useDidMountEffect";
 import ButtonGroup from "../components/ButtonGroup";
 import Background from "../components/Background";
 import {
@@ -38,8 +31,15 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-import defaultStyles from "../config/styles";
 import ActivityIndicator from "../components/ActivityIndicator";
+
+import defaultStyles from "../config/styles";
+import colors from "../config/colors";
+import useApi from "../hooks/useApi";
+import client from "../api/client";
+import routes from "../navigation/routes";
+import AuthContext from "../auth/context";
+import useDidMountEffect from "../hooks/useDidMountEffect";
 
 const sortByQueryArray = ["desc", "asc"];
 const sortByDisplayArray = ["Newest First", "Oldest First"];
@@ -51,9 +51,8 @@ const validationSchema = Yup.object().shape({
 });
 
 function MessagesScreen({ navigation }) {
-  const { unread, loadMessagesFlag, setLoadMessagesFlag } = useContext(
-    AuthContext
-  );
+  const { unread, loadMessagesFlag, setLoadMessagesFlag } =
+    useContext(AuthContext);
   const tabBarHeight = useBottomTabBarHeight();
   const [error, setError] = useState(false);
   const [messages, setMessages] = useState([]);

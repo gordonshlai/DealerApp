@@ -9,22 +9,20 @@ import * as Yup from "yup";
 
 import client from "../api/client";
 import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
 import Screen from "../components/Screen";
 import {
   AppErrorMessage,
   AppForm,
-  AppFormField,
   RegistrationPlateInput,
   SubmitButton,
 } from "../components/forms";
+import ActivityIndicator from "../components/ActivityIndicator";
+import Background from "../components/Background";
 
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 import useApi from "../hooks/useApi";
 import routes from "../navigation/routes";
-import ActivityIndicator from "../components/ActivityIndicator";
-import Background from "../components/Background";
 
 const validationSchema = Yup.object().shape({
   registration: Yup.string().required().label("Registration"),

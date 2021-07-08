@@ -13,10 +13,6 @@ import routes from "../navigation/routes";
  * and handling the registration operation based on the user input.
  * @module screens/RegisterScreen2
  */
-
-/**
- * The register screen 2 functional component
- */
 function RegisterScreen2({ navigation }) {
   return (
     <>

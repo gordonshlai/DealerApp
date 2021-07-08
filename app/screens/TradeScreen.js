@@ -89,7 +89,6 @@ function TradeScreen({ navigation }) {
 
   const [pageCurrent, setPageCurrent] = useState(1);
   const [seller, setSeller] = useState("");
-  const [env, setEnv] = useState(settings.tradeEnv);
   const [sortBy, setSortBy] = useState("listed-desc");
 
   const [filterModalVisible, setFilterModalVisible] = useState(false);
@@ -108,7 +107,7 @@ function TradeScreen({ navigation }) {
     "api/trade/all/vehicles?seller=" +
     seller +
     "&env=" +
-    env +
+    settings.tradeEnv +
     "&sortBy=" +
     sortBy +
     "&perPage=12" +
@@ -144,7 +143,8 @@ function TradeScreen({ navigation }) {
   };
 
   const getMakes = async () => {
-    let makeEndpoint = "api/trade/all/makes?seller=" + seller + "&env=" + env;
+    let makeEndpoint =
+      "api/trade/all/makes?seller=" + seller + "&env=" + settings.tradeEnv;
     const result = await client.get(makeEndpoint);
     if (!result.ok) return setError(result.data.message);
     const makes = result.data;

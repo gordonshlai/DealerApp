@@ -7,6 +7,16 @@ import Icon from "../../../components/Icon";
 import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
 
+/**
+ * The component representing the additions that can be added to the warranty quote.
+ *
+ * @param {binary} image The image of the component
+ * @param {string} text The text of the component
+ * @param {boolean} selected True if the component is currently selected
+ * @param {boolean} disabled True if the component is currently disabled
+ * @param {string} tooltip The text of the tooltip
+ * @param {function} onPress Function to be called when the component is pressed
+ */
 function AdditionsItem({ image, text, selected, disabled, tooltip, onPress }) {
   const [tooltipVisible, setTooltipVisible] = useState(false);
   const [pressing, setPressing] = useState(false);

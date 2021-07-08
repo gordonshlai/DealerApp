@@ -62,12 +62,6 @@ const validationSchema = Yup.object().shape({
 function RegisterScreen1({ navigation }) {
   const [error, setError] = useState();
 
-  /**
-   * Handles the registration operation
-   * @param {string} password - the user input in the password field
-   * @param {string} confirmPassword - the user input in the confirm password field
-   */
-
   const endpoint = "auth/register";
   const registerApi = useApi(({ fullName, businessName, email, password }) =>
     client.post(endpoint, {

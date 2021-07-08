@@ -12,6 +12,12 @@ import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
 import settings from "../../../config/settings";
 
+/**
+ * Component showcasing the information of a sale.
+ *
+ * @param {object} data An object containing the information of the sale
+ * @param {function} onOpenPress Function to be called when the "Open" button is pressed
+ */
 function MySale({ data, onOpenPress }) {
   const [pressing, setPressing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
@@ -61,6 +67,9 @@ function MySale({ data, onOpenPress }) {
     </Pressable>
   );
 
+  /**
+   * The options to perform on this component.
+   */
   const options = [
     {
       title: "Open",

@@ -8,6 +8,13 @@ import Screen from "../../../components/Screen";
 import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
 
+/**
+ * Terms and conditions for purchasing a quote.
+ *
+ * @param {boolean} visible Visibility of the modal
+ * @param {function} setVisible Function to set the visibility of the modal
+ * @returns
+ */
 function Terms({ visible, setVisible }) {
   return (
     <Modal

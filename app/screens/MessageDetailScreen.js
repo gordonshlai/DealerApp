@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, StyleSheet, FlatList, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  FlatList,
+  Modal,
+  Platform,
+  KeyboardAvoidingView,
+} from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import * as Yup from "yup";
 
-import client from "../api/client";
-import useApi from "../hooks/useApi";
-
 import Conversation from "../components/Conversation";
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
 import Loading from "../components/Loading";
 import {
   AppErrorMessage,
@@ -17,14 +19,16 @@ import {
   AppFormField,
   SubmitButton,
 } from "../components/forms";
-import AuthContext from "../auth/context";
-import { Modal } from "react-native";
 import AppButton from "../components/AppButton";
 import Screen from "../components/Screen";
 import AppText from "../components/AppText";
 import Background from "../components/Background";
-import { Platform } from "react-native";
-import { KeyboardAvoidingView } from "react-native";
+
+import defaultStyles from "../config/styles";
+import colors from "../config/colors";
+import client from "../api/client";
+import useApi from "../hooks/useApi";
+import AuthContext from "../auth/context";
 
 const validationSchema = Yup.object().shape({
   text: Yup.string().label("Text Message"),
@@ -34,12 +38,8 @@ function MessageDetailScreen({ navigation, route }) {
   const messageId = route.params.messageId;
 
   const tabBarHeight = useBottomTabBarHeight();
-  const {
-    unread,
-    setUnread,
-    loadMessagesFlag,
-    setLoadMessagesFlag,
-  } = useContext(AuthContext);
+  const { unread, setUnread, loadMessagesFlag, setLoadMessagesFlag } =
+    useContext(AuthContext);
 
   const [error, setError] = useState();
   const [action, setAction] = useState("");
