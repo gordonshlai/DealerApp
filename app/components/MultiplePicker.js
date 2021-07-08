@@ -17,6 +17,17 @@ import { ListItemSeparator } from "../components/lists";
 import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 
+/**
+ * The picker component that can handle multiple selections.
+ *
+ * @param {string} icon The name of the icon, referring to https://icons.expo.fyi/
+ * @param {array} items The array of options to pick from.
+ * @param {function} onConfirm The function to be called when the confirm button is pressed.
+ * @param {function} selectedItems The function to be called when an item is selected.
+ * @param {string} placeholder The string to be rendered as the placeholder when no item is selected.
+ * @param {number|string} width The width of the component. (default = '100%')
+ * @param {boolean} disabled Option to disable the component.
+ */
 function MultiplePicker({
   icon,
   items,
@@ -29,6 +40,10 @@ function MultiplePicker({
   const [modalVisible, setModalVisible] = useState(false);
   const [temp, setTemp] = useState(selectedItems);
 
+  /**
+   * Concatenate the selected items into a string with commas between each item.
+   * @returns The string to be displayed.
+   */
   const displaySelectedItems = () => {
     let displayString = "";
     selectedItems.forEach((item, index) => {
@@ -41,6 +56,12 @@ function MultiplePicker({
     return displayString;
   };
 
+  /**
+   * Make the array of selected items before the confirm button is pressed.
+   *
+   * @param {boolean} isActive true when the item is selected. else false.
+   * @param {string} item The item selected
+   */
   const temporarySelection = (isActive, item) => {
     let array = [...temp];
     if (isActive) {
@@ -96,7 +117,7 @@ function MultiplePicker({
             color={colors.primary}
             border={null}
             size={24}
-            style={{ alignSelf: "flex-end", marginRight: 20 }}
+            style={styles.closeButton}
             onPress={() => {
               setModalVisible(false);
               setTemp(selectedItems);
@@ -168,6 +189,10 @@ const styles = StyleSheet.create({
   placeholder: {
     color: "#bbb",
     flex: 1,
+  },
+  closeButton: {
+    alignSelf: "flex-end",
+    marginRight: 20,
   },
   listItem: {
     padding: 15,

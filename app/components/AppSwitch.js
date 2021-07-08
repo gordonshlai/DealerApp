@@ -3,6 +3,7 @@ import { View, StyleSheet, Switch } from "react-native";
 
 import AppText from "./AppText";
 import ToolTip from "./ToolTip";
+
 import colors from "../config/colors";
 
 /**

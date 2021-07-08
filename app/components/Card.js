@@ -8,14 +8,34 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+import AppText from "./AppText";
 import Registration from "./Registration";
 
-import AppText from "./AppText";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 
+/**
+ * The status of the a vehicle, ordered in a way that matches with the backend.
+ */
 const vehicleStatusArray = ["In Stock", "Sold", "Trade Listed", "Sold"];
 
+/**
+ * A component showcasing the brief details of the vehicle. It is a pressable component when can
+ * trigger a function when it is pressed on.
+ *
+ * @param {string} title The title of the vehicle
+ * @param {string} make Vehicle's make
+ * @param {string} model Vehicle's model
+ * @param {string} year Vehicle's manufacture year
+ * @param {string} mileage Vehicle's mileage
+ * @param {number} engineCapacity Vehicle's engine capacity
+ * @param {number} priceAsking Vehicle's asking price
+ * @param {string} registration Vehicle's registration
+ * @param {number} sales_status Vehicle's sale status
+ * @param {function} onPress Function to be called when the card is pressed
+ * @param {string} imageUrl The URL of the vehicle's image, pointing to the AWS database
+ *
+ */
 function Card({
   title,
   make,
@@ -29,8 +49,14 @@ function Card({
   onPress,
   imageUrl,
 }) {
-  const numberWithCommas = (x) => {
-    var parts = x.toString().split(".");
+  /**
+   * Added commas into the prices. eg. 1000000.00 will become 1,000,000.00
+   *
+   * @param {string|number} num
+   * @returns the number with commas in.
+   */
+  const numberWithCommas = (num) => {
+    var parts = num.toString().split(".");
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return parts.join(".");
   };

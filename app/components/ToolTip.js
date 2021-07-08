@@ -3,9 +3,15 @@ import React, { useState } from "react";
 import { StyleSheet, Pressable } from "react-native";
 
 import AppText from "./AppText";
+
 import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 
+/**
+ * A pressable component that shows a tooltip.
+ *
+ * @param {string} message The message to display
+ */
 function ToolTip({ message }) {
   const [toolTipVisible, setToolTipVisible] = useState(false);
   return (
@@ -18,7 +24,7 @@ function ToolTip({ message }) {
           name="comment-question"
           color={colors.mediumGrey}
           size={18}
-          style={{ marginLeft: 10 }}
+          style={styles.icon}
         />
       </Pressable>
       {toolTipVisible && <AppText style={styles.toolTip}>{message}</AppText>}
@@ -27,6 +33,9 @@ function ToolTip({ message }) {
 }
 
 const styles = StyleSheet.create({
+  icon: {
+    marginLeft: 10,
+  },
   toolTip: {
     position: "absolute",
     right: 10,

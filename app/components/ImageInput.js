@@ -14,13 +14,19 @@ import * as ImagePicker from "expo-image-picker";
 import { Camera } from "expo-camera";
 import * as ImageManipulator from "expo-image-manipulator";
 
+import AppText from "./AppText";
 import AppCamera from "./AppCamera";
 import AppButton from "./AppButton";
 
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
-import AppText from "./AppText";
 
+/**
+ * This component controls the input of images into the app.
+ *
+ * @param {object} image The image object provided by the consumer of the component.
+ * @param {function} onChangeImage The function to be called if an image is inputed or deleted.
+ */
 function ImageInput({ image, onChangeImage }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [cameraVisible, setCameraVisible] = useState(false);
@@ -30,16 +36,27 @@ function ImageInput({ image, onChangeImage }) {
     requestCameraPermission();
   }, []);
 
+  /**
+   * Request for user's permissions to access the media library of the device.
+   */
   const requestLibraryPermission = async () => {
     const { granted } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!granted) alert("You need to enable permission to access the library.");
   };
 
+  /**
+   * Request for user's permissions to access the camera of the device.
+   */
   const requestCameraPermission = async () => {
     const { granted } = await Camera.requestPermissionsAsync();
     if (!granted) alert("You need to enable permission to use the camera.");
   };
 
+  /**
+   * Handle the event when the user press on the component.
+   * If an image is imported, it will ask the user if they want to delete the selected image.
+   * If no image is imported, it will allow the user to choose the way they want to import an image.
+   */
   const handlePress = () => {
     if (!image) setModalVisible(true);
     else
@@ -49,6 +66,11 @@ function ImageInput({ image, onChangeImage }) {
       ]);
   };
 
+  /**
+   * Import the image that the user selected from their media library.
+   *
+   * It will automatically reduce the quality of the image by 50%.
+   */
   const selectImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
@@ -64,6 +86,12 @@ function ImageInput({ image, onChangeImage }) {
     }
   };
 
+  /**
+   * Import the image to the temporary memory in the app.
+   * It will rotate the image to landscape orientation if the image's height is greater than its width.
+   *
+   * @param {object} image The image object that going to be imported.
+   */
   const importImage = async (image) => {
     let tempImage = image;
     if (tempImage.height > tempImage.width) {

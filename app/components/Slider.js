@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -12,10 +12,20 @@ import {
 import ImageZoom from "react-native-image-pan-zoom";
 import Constants from "expo-constants";
 
-import colors from "../config/colors";
 import AppText from "./AppText";
 import AppButton from "./AppButton";
 
+import colors from "../config/colors";
+
+/**
+ * The carousel with optional thumbnails component. With an ImageZoom component built in.
+ *
+ * @param {array} images The array of images objects.
+ * @param {number|string} height The height of the component.
+ * @param {number|string} width The width of the component.
+ * @param {boolean} hasThumbnail Determine whether the images has thumbnails. (default = true)
+ * @returns
+ */
 function Slider({ images, height, width, hasThumbnail = true }) {
   const [active, setActive] = useState(0);
   const [imageZoomVisible, setImageZoomVisible] = useState(false);

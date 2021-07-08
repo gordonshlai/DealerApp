@@ -4,13 +4,13 @@ import { Camera } from "expo-camera";
 import Constants from "expo-constants";
 import { useDeviceOrientation } from "@react-native-community/hooks";
 import { Slider } from "react-native-elements";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppButton from "./AppButton";
 import AppText from "./AppText";
 import ActivityIndicator from "./ActivityIndicator";
 
 import colors from "../config/colors";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 /**
  *

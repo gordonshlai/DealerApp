@@ -9,17 +9,20 @@ import {
   Pressable,
 } from "react-native";
 import Constants from "expo-constants";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppButton from "./AppButton";
+import AppText from "./AppText";
 import { ListItemSeparator } from "./lists";
 
 import routes from "../navigation/routes";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import AppText from "./AppText";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
+/**
+ * The list of routes to be rendered in the menu.
+ */
 const list = [
   routes.HOME,
   routes.TRADE,
@@ -29,6 +32,10 @@ const list = [
   routes.ACCOUNT,
 ];
 
+/**
+ * The alternative top layer navigation of the bottom tab bar.
+ * Appears on the top right hand corner of every screen.
+ */
 function Menu() {
   const navigation = useNavigation();
   const route = useRoute();

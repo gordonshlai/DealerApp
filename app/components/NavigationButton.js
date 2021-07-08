@@ -7,10 +7,18 @@ import {
   Dimensions,
   Platform,
 } from "react-native";
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
+
 import AppText from "./AppText";
 
+import colors from "../config/colors";
+import defaultStyles from "../config/styles";
+
+/**
+ *
+ * @param {function} onPress Function to be called when the button is pressed.
+ * @param {string} icon The name of the icon, referring to https://icons.expo.fyi/
+ * @param {string} title The title of the button.
+ */
 function NavigationButton({ onPress, icon, title }) {
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
@@ -20,15 +28,7 @@ function NavigationButton({ onPress, icon, title }) {
         end={{ x: 1, y: 1 }}
         style={styles.linearGradient}
       />
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        {icon}
-      </View>
+      <View style={styles.iconContainer}>{icon}</View>
       <AppText style={styles.cardTitle}>{title}</AppText>
     </TouchableOpacity>
   );
@@ -48,6 +48,11 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     borderRadius: 10,
+  },
+  iconContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   cardTitle: {
     fontWeight: "bold",

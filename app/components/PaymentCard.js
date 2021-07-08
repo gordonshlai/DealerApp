@@ -7,6 +7,15 @@ import AppText from "./AppText";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 
+/**
+ * The pressable payment card component.
+ *
+ * @param {string} last_4 The last 4 digits of the payment card.
+ * @param {string} holder The holder name of the payment card.
+ * @param {string} type The type of the payment card. ('VISA', 'American express', 'Master card')
+ * @param {function} onPress The function to be called when the component is pressed.
+ * @returns
+ */
 function PaymentCard({ last_4, holder, expiry, type, onPress }) {
   const [pressing, setPressing] = useState(false);
   const expiryMonth = expiry?.slice(0, 2);

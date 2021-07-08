@@ -6,7 +6,9 @@ import {
   FlatList,
   Dimensions,
 } from "react-native";
+
 import AppText from "./AppText";
+
 import colors from "../config/colors";
 
 /**

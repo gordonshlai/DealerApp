@@ -1,7 +1,15 @@
 import React, { useRef } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
+
 import ImageInput from "./ImageInput";
 
+/**
+ * A horizontal scrollable imageInput components.
+ *
+ * @param {array} images The array of images objects to be displayed.
+ * @param {function} onRemoveImage Function to be called when the user removes an image from the images array.
+ * @param {function} onAddImage Function to be called when the user adds an image to the images array.
+ */
 function ImageInputList({ images = [], onRemoveImage, onAddImage }) {
   const scrollView = useRef();
 

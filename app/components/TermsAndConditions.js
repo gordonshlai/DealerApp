@@ -1,13 +1,23 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, Modal, Platform } from "react-native";
-import AppText from "./AppText";
-import Info from "./Info";
 
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
+import AppText from "./AppText";
 import AppButton from "./AppButton";
 import Screen from "./Screen";
 
+import colors from "../config/colors";
+import defaultStyles from "../config/styles";
+
+/**
+ * A modal containing the terms and conditions for the trade to trade platform, if the user want to put their car
+ * on trade to trade or trying to enquire a vehicle or trying to make offer on a vehicle.
+ *
+ * @param {boolean} visible The modal visibility.
+ * @param {function} setVisible The function to call to set the visibility of the modal.
+ * @param {function} onAcceptPress The function to call when the accept button is pressed.
+ * @param {function} onCancelPress The function to call when the cancel button is pressed.
+ * @param {...} otherprops The props to put into the modal
+ */
 function TermsAndConditions({
   visible,
   setVisible,

@@ -17,6 +17,17 @@ import { ListItemSeparator } from "../components/lists";
 import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 
+/**
+ * A component for the user to pick from a list of options.
+ *
+ * @param {string} icon The name of the icon, referring to https://icons.expo.fyi/
+ * @param {array} items The list of options
+ * @param {function} onSelectItem The function to be called when an item is selected
+ * @param {string} selectedItem The selected item (default = "")
+ * @param {string} placeholder The string to be displayed as the placeholder when there is no item selected. (default = "Please Select")
+ * @param {string|number} width The width of the component
+ * @param {boolean} disabled Disabling the component. (default = false)
+ */
 function Picker({
   icon,
   items,
@@ -73,7 +84,7 @@ function Picker({
             color={colors.primary}
             border={null}
             size={24}
-            style={{ alignSelf: "flex-end", marginRight: 20 }}
+            style={styles.closeButton}
             onPress={() => setModalVisible(false)}
           />
           <FlatList
@@ -128,6 +139,10 @@ const styles = StyleSheet.create({
   placeholder: {
     color: "#bbb",
     flex: 1,
+  },
+  closeButton: {
+    alignSelf: "flex-end",
+    marginRight: 20,
   },
   listItem: {
     padding: 15,

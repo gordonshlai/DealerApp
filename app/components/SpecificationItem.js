@@ -1,23 +1,22 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
-import Info from "./Info";
 import AppText from "./AppText";
 
 import colors from "../config/colors";
 
-function SpecificationItem({
-  color = colors.mediumGrey,
-  icon,
-  title,
-  value,
-  style,
-}) {
+/**
+ * The component containig a title and a value.
+ *
+ * @param {string} title The title of the field.
+ * @param {string} value The value of the field.
+ * @param {object} style The style object to put into the conatiner of the component.
+ */
+function SpecificationItem({ title, value, style }) {
   return (
     <View style={[styles.container, style]}>
       <View style={styles.infoContainer}>
         <AppText style={styles.title}>{title}</AppText>
-        {/* <Info name={icon} text={text} color={color} /> */}
       </View>
       <View style={styles.valueContainer}>
         {value && <AppText style={styles.value}>{value}</AppText>}

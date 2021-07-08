@@ -611,7 +611,7 @@ function InventoryDetailScreen({ navigation, route }) {
                     MOT Histroy
                   </AppText>
                   {getMotHistoryApi.data.tests.map((item, index) => (
-                    <MotHistory item={item} index={index} key={index} />
+                    <MotHistory item={item} key={index} />
                   ))}
                 </View>
               )}

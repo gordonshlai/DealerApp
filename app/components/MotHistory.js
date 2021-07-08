@@ -1,17 +1,21 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import dayjs from "dayjs";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
+import AppText from "./AppText";
 
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
-import AppText from "./AppText";
-import Info from "./Info";
-import Icon from "./Icon";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-function MotHistory({ item, index }) {
+/**
+ * A component displaying the details of an MOT history entry.
+ *
+ * @param {object} item The MOT history object returned from the backend.
+ */
+function MotHistory({ item }) {
   return (
-    <View style={styles.container} key={index}>
+    <View style={styles.container}>
       <View style={styles.row}>
         <View style={styles.detailField}>
           <AppText style={styles.detailTitle}>Date</AppText>
@@ -77,23 +81,6 @@ function MotHistory({ item, index }) {
           ))}
         </View>
       )}
-      {/* <View
-        style={{
-          position: "absolute",
-          right: 10,
-          top: 10,
-        }}
-      >
-        <MaterialCommunityIcons
-          name={
-            item.testResult === "PASSED"
-              ? "check-circle-outline"
-              : "close-circle-outline"
-          }
-          size={30}
-          color={item.testResult === "PASSED" ? "green" : "red"}
-        />
-      </View> */}
     </View>
   );
 }

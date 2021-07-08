@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Dimensions, Platform } from "react-native";
+
 import colors from "../config/colors";
 
 /**

@@ -1,14 +1,12 @@
 import LottieView from "lottie-react-native";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import AppText from "./AppText";
-
-import defaultStyles from "../config/styles";
 
 /**
  * An animated component that indicates the loading activity.
  * @module components/Loading
- * @param {boolean} visible - visibility of the activity indicator
+ * @param {boolean} visible Visibility of the activity indicator
+ * @param {object} style The style object to be added to be container of the component.
  */
 function Loading({ visible = false, style }) {
   if (!visible) return null;

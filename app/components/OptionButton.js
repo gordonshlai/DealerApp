@@ -11,14 +11,28 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Constants from "expo-constants";
 
-import colors from "../config/colors";
-import defaultStyle from "../config/styles";
-
 import AppButton from "./AppButton";
 import AppText from "./AppText";
 import { ListItemSeparator } from "./lists";
-import Screen from "./Screen";
 
+import colors from "../config/colors";
+import defaultStyle from "../config/styles";
+
+/**
+ *
+ * @param {string} title The title of the button. (default = "Sort By")
+ * @param {string} backgroundColor The background color of the button
+ * @param {string} color The text color of the button
+ * @param {boolean} border True for displaying the border of the button, else false.
+ * @param {boolean} icon The name of the icon, referring to https://icons.expo.fyi/ (default = "sort-variant")
+ * @param {string} size The size of the icon, referring to https://icons.expo.fyi/ (default = "sort-variant")
+ * @param {string} modalTitle The title of the modal.
+ * @param {string} initialValue The initial value when nothing is selected. Used to determine whether to show the badge.
+ * @param {string} value The value selected.
+ * @param {array} queryArray The array containing the values to be send to the api.
+ * @param {array} displayArray The array containing the values to be displayed in this component.
+ * @param {function} onSelect The function to be called when an item is selected.
+ */
 function OptionButton({
   title = "Sort By",
   backgroundColor,

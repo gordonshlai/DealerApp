@@ -8,6 +8,13 @@ import ActivityIndicator from "./ActivityIndicator";
 import colors from "../config/colors";
 import AuthContext from "../auth/context";
 
+/**
+ * A component used to show a PDF on the screen.
+ *
+ * @param {boolean} visible The visibility of the modal
+ * @param {function} setVisible The function to be called for setting the visibility of the modal
+ * @param {string} uri The uri to retrieve the PDF file.
+ */
 function ViewDocument({ visible, setVisible, uri }) {
   const { authToken } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
