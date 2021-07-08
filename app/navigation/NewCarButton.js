@@ -6,7 +6,13 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import colors from "../config/colors";
 import defaultStyles from "../config/styles";
 
-function NewListingButton({ onPress, style }) {
+/**
+ * The floating orange plus sign button.
+ *
+ * @param {function} onPress The function to be called when the button is pressed
+ * @param {object} style The style object to put into the container of the component
+ */
+function NewCarButton({ onPress, style }) {
   const tabBarHeight = useBottomTabBarHeight();
 
   return (
@@ -34,4 +40,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NewListingButton;
+export default NewCarButton;

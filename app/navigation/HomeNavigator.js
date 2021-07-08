@@ -1,18 +1,13 @@
 import React from "react";
-import { Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Menu from "../components/Menu";
 import HomeScreen from "../screens/HomeScreen";
+import WarrantywiseNoEye from "../components/logos/WarrantywiseNoEye";
 
 import routes from "./routes";
 import colors from "../config/colors";
-import { Platform } from "react-native";
-import { Dimensions } from "react-native";
-import TradeDetailScreen from "../screens/TradeDetailScreen";
-import WarrantywiseNoEye from "../components/logos/WarrantywiseNoEye";
-import { View } from "react-native";
 
 const Stack = createStackNavigator();
 

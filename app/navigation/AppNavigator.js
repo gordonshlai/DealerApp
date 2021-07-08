@@ -2,12 +2,15 @@ import React, { useContext, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Platform } from "react-native";
+import navigation from "./rootNavigation";
 
 import HomeNavigator from "./HomeNavigator";
 import TradeNavigator from "./TradeNavigator";
 import InventoryNavigator from "./InventoryNavigator";
 import MessageNavigator from "./MessageNavigator";
 import AccountNavigator from "./AccountNavigator";
+import WarrantyNavigator from "./WarrantyNavigator";
 
 import AccountIcon from "../components/icons/AccountIcon";
 import CarIcon from "../components/icons/CarIcon";
@@ -20,12 +23,13 @@ import defaultStyles from "../config/styles";
 import colors from "../config/colors";
 import AuthContext from "../auth/context";
 import WarrantyContext from "../warranty/context";
-import { Platform } from "react-native";
-import navigation from "./rootNavigation";
 import useNotifications from "../hooks/useNotifications";
-import WarrantyNavigator from "./WarrantyNavigator";
 
 const Tab = createBottomTabNavigator();
+
+/**
+ * Routes that hiding the bottom navigation tab
+ */
 const tabHiddenRoutes = [
   routes.TRADE_DETAIL,
   routes.INVENTORY_DETAIL,
@@ -44,6 +48,11 @@ const AppNavigator = () => {
     console.log(notification);
   });
 
+  /**
+   * Hides the bottom navigation tab bar.
+   * @param {object} navigation the react navigation object
+   * @param {object} route the react route object
+   */
   const hideTabBar = (navigation, route) => {
     if (tabHiddenRoutes.includes(getFocusedRouteNameFromRoute(route))) {
       navigation.setOptions({ tabBarVisible: false });

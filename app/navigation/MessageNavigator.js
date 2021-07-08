@@ -1,40 +1,19 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+
 import MessagesScreen from "../screens/MessagesScreen";
 import MessageDetailScreen from "../screens/MessageDetailScreen";
-import routes from "./routes";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 import Menu from "../components/Menu";
-import colors from "../config/colors";
+
+import routes from "./routes";
+import defaultStyles from "../config/styles";
 
 const Stack = createStackNavigator();
 
 const MessageNavigator = () => (
   <Stack.Navigator
     screenOptions={{
-      headerBackTitleVisible: false,
-      headerBackTitle: "",
-      headerTitleStyle: {
-        marginHorizontal: 10,
-        fontWeight: "bold",
-        textTransform: "uppercase",
-      },
-      headerStyle: {
-        backgroundColor: colors.secondary,
-        shadowColor: "transparent",
-        elevation: 0,
-      },
-      headerTintColor: "white",
-      headerTitleAlign: "center",
-      headerBackImage: () => (
-        <MaterialCommunityIcons
-          name="chevron-left"
-          size={32}
-          color={colors.primary}
-          style={{ paddingHorizontal: 10 }}
-        />
-      ),
+      ...defaultStyles.stackNavigator,
       headerRight: () => <Menu />,
     }}
   >
