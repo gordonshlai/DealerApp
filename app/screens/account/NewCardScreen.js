@@ -23,10 +23,13 @@ import {
 import Screen from "../../components/Screen";
 
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
+import settingsApi from "../../api/settings";
 import colors from "../../config/colors";
 import routes from "../../navigation/routes";
 
+/**
+ * Validation schema for the New Card form.
+ */
 const validationSchema = Yup.object().shape({
   holder: Yup.string().required().label("Card Holder"),
   number: Yup.string().required().label("Card Number"),
@@ -40,6 +43,9 @@ const validationSchema = Yup.object().shape({
   permissions: Yup.boolean().label("Permission"),
 });
 
+/**
+ * Card types applicable to the backend.
+ */
 const cardType = ["VISA", "Master Card", "American Express"];
 
 function NewCardScreen({ navigation }) {
@@ -49,9 +55,14 @@ function NewCardScreen({ navigation }) {
   const [error, setError] = useState();
 
   const postPaymentCardApi = useApi((payload) =>
-    client.post("api/settings/payment", payload)
+    settingsApi.postPayment(payload)
   );
 
+  /**
+   * Handle the submit for the new card form.
+   *
+   * @param {object} values The input values to the new card form.
+   */
   const handleSubmit = async (values) => {
     values.number = values.number.replace(/\s+/g, "");
     values.type =
@@ -70,6 +81,7 @@ function NewCardScreen({ navigation }) {
     navigation.popToTop();
     navigation.navigate(routes.PAYMENT_CARDS);
   };
+
   return (
     <>
       <LinearGradient

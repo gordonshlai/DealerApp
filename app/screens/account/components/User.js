@@ -8,8 +8,18 @@ import { ListItem, ListItemSeparator } from "../../../components/lists";
 import colors from "../../../config/colors";
 import defaultStyles from "../../../config/styles";
 
+/**
+ * The list of permissions that matches with the backend.
+ */
 const permissions = ["LOCKED", "ADMIN", "FULL"];
 
+/**
+ * A pressable component showcasing the detail of a dealship user.
+ *
+ * @param {object} data The object containing the informatio about the user
+ * @param {function} onSetAdminPress TThe function to be called when the "Set as Admin" button is pressed
+ * @param {function} onDeletePress TThe function to be called when the "Remove User" button is pressed
+ */
 function User({ data, onSetAdminPress, onDeletePress }) {
   const [pressing, setPressing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);

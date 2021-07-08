@@ -8,6 +8,7 @@ import ActivityIndicator from "../../components/ActivityIndicator";
 import User from "./components/User";
 
 import useApi from "../../hooks/useApi";
+import settingsApi from "../../api/settings";
 import client from "../../api/client";
 import routes from "../../navigation/routes";
 import Message from "./components/Message";
@@ -19,14 +20,17 @@ function UsersScreen({ navigation }) {
   const [refreshing, setRefreshing] = useState(false);
   const [message, setMessage] = useState();
 
-  const getUsersApi = useApi(() => client.get("api/settings/users/account"));
+  const getUsersApi = useApi(settingsApi.getUser);
   const patchUserApi = useApi((id, payload) =>
-    client.patch(`api/settings/users/${id}`, payload)
+    settingsApi.patchUserPermission(id, payload)
   );
-  const deleteUserApi = useApi((id) =>
-    client.delete(`api/settings/users/${id}`)
-  );
+  const deleteUserApi = useApi((id) => settingsApi.deleteUser(id));
 
+  /**
+   * Handle the change of permissions of a user.
+   *
+   * @param {string} id user ID
+   */
   const handlePatch = async (id) => {
     const result = await patchUserApi.request(id, { permissions: "1" });
     setMessage(result.data.message);
@@ -36,6 +40,11 @@ function UsersScreen({ navigation }) {
     getUsersApi.request();
   };
 
+  /**
+   * Handle the delete user action.
+   *
+   * @param {string} id user ID
+   */
   const handleDelete = async (id) => {
     const result = await deleteUserApi.request(id);
     setMessage(result.data.message);

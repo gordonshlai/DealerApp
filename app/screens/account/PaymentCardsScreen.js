@@ -10,7 +10,7 @@ import PaymentCard from "../../components/PaymentCard";
 import { ListItem, ListItemSeparator } from "../../components/lists";
 
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
+import settingsApi from "../../api/settings";
 import colors from "../../config/colors";
 import defaultStyles from "../../config/styles";
 import routes from "../../navigation/routes";
@@ -22,20 +22,17 @@ function PaymentCardsScreen({ navigation }) {
   const [selectedCard, setSelectedCard] = useState();
   const [refreshing, setRefreshing] = useState(false);
 
-  const getPaymentCardsApi = useApi(() =>
-    client.get("api/settings/payment/user")
-  );
-  const patchPaymentCardApi = useApi((id) =>
-    client.patch(`api/settings/payment/${id}`)
-  );
-  const deletePaymentCardApi = useApi((id) =>
-    client.delete(`api/settings/payment/${id}`)
-  );
+  const getPaymentCardsApi = useApi(settingsApi.getPayment);
+  const patchPaymentCardApi = useApi((id) => settingsApi.patchPayment(id));
+  const deletePaymentCardApi = useApi((id) => settingsApi.deletePayment(id));
 
   useEffect(() => {
     getPaymentCardsApi.request();
   }, []);
 
+  /**
+   * The options to perform on a payment card.
+   */
   const options = [
     {
       title: "Set as default",

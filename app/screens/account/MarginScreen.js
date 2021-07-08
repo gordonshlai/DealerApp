@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  StyleSheet,
-  KeyboardAvoidingView,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, KeyboardAvoidingView, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { Slider } from "react-native-elements";
 
-import useApi from "../../hooks/useApi";
-import client from "../../api/client";
-import colors from "../../config/colors";
-import Screen from "../../components/Screen";
 import ActivityIndicator from "../../components/ActivityIndicator";
 import AppText from "../../components/AppText";
 import AppButton from "../../components/AppButton";
 import { AppErrorMessage } from "../../components/forms";
 import Message from "./components/Message";
+
+import useApi from "../../hooks/useApi";
+import userApi from "../../api/users";
+import colors from "../../config/colors";
+import Screen from "../../components/Screen";
+import settingsApi from "../../api/settings";
 
 function MarginScreen({ navigation }) {
   const [margin, setMargin] = useState();
@@ -26,25 +23,40 @@ function MarginScreen({ navigation }) {
 
   const tabBarHeight = useBottomTabBarHeight();
 
-  const getMarginApi = useApi(() => client.get("api/settings/margin/account"));
+  const getMarginApi = useApi(settingsApi.getMargin);
   const patchMarginApi = useApi((userId) =>
-    client.patch(`api/settings/margin/${userId}`, { margin })
+    settingsApi.patchMargin(userId, { margin })
   );
-  const getUserApi = useApi(() => client.get("api/user"));
+  const getUserApi = useApi(userApi.getUser);
 
   useEffect(() => {
-    getMargin();
+    requestMargin();
   }, []);
 
-  const getMargin = async () => {
+  /**
+   * Send a GET request to the server, getting the current margin.
+   */
+  const requestMargin = async () => {
     const margin = await getMarginApi.request();
     if (!margin.ok) return setError(margin.data.message);
     setMargin(margin.data.margin);
   };
 
+  /**
+   * Calculate the cost for the customer.
+   * @returns The cost for the customer in 2 decimal places
+   */
   const customerCost = () => (327 * (1 + margin / 100)).toFixed(2);
+
+  /**
+   * Calculate the profit made from the margin.
+   * @returns The profit made from the margin in 2 decimal places
+   */
   const profit = () => ((327 * margin) / 100).toFixed(2);
 
+  /**
+   * Handles the update margin event.
+   */
   const handleUpdate = async () => {
     const user = await getUserApi.request();
     if (!user.ok) return setError(user.data.message);

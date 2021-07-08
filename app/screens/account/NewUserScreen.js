@@ -22,10 +22,13 @@ import UploadScreen from "../UploadScreen";
 import Screen from "../../components/Screen";
 
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
+import settingsApi from "../../api/settings";
 import colors from "../../config/colors";
 import routes from "../../navigation/routes";
 
+/**
+ * Validation schema for the New User form.
+ */
 const validationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   email: Yup.string().required().email().label("Email"),
@@ -50,12 +53,17 @@ function NewUserScreen({ navigation }) {
   const [progress, setProgress] = useState();
 
   const postUserApi = useApi((payload, onUploadProgress) =>
-    client.post(`api/settings/users`, payload, {
+    settingsApi.postUser(payload, {
       onUploadProgress: (progress) =>
         onUploadProgress(progress.loaded / progress.total),
     })
   );
 
+  /**
+   * Handles the submit for the new user form.
+   *
+   * @param {object} values The input values from the new user form.
+   */
   const handleSubmit = async (values) => {
     setUploadVisible(true);
     const result = await postUserApi.request(values, (progress) => {

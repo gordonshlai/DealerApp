@@ -12,11 +12,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-import useAuth from "../../auth/useAuth";
-import useApi from "../../hooks/useApi";
-import client from "../../api/client";
-import colors from "../../config/colors";
-
 import AppButton from "../../components/AppButton";
 import AppText from "../../components/AppText";
 import {
@@ -26,15 +21,27 @@ import {
   SubmitButton,
 } from "../../components/forms";
 import ActivityIndicator from "../../components/ActivityIndicator";
-import Info from "../../components/Info";
 import Screen from "../../components/Screen";
-import routes from "../../navigation/routes";
 import Message from "./components/Message";
 
+import routes from "../../navigation/routes";
+import userApi from "../../api/users";
+import settingsApi from "../../api/settings";
+import useAuth from "../../auth/useAuth";
+import useApi from "../../hooks/useApi";
+import colors from "../../config/colors";
+
+/**
+ * validation schema for the "Edit Details" form.
+ */
 const detailsValidationSchema = Yup.object().shape({
   name: Yup.string().required().label("Name"),
   email: Yup.string().required().email().min(8).label("Email"),
 });
+
+/**
+ * validation schema for the "Change Password" form.
+ */
 const changePasswordValidationSchema = Yup.object().shape({
   current_password: Yup.string().required().label("Password"),
   password_1: Yup.string()
@@ -61,36 +68,50 @@ function AccountScreen({ navigation }) {
   const [changePasswordVisible, setChangePasswordVisible] = useState(false);
   const [logoutModalVisible, setLogoutModalVisible] = useState(false);
 
-  const getUserApi = useApi(() => client.get("api/user"));
+  const getUserApi = useApi(userApi.getUser);
   const patchUserApi = useApi((payload) =>
-    client.patch("api/settings/profile/" + getUserApi.data.user.id, payload)
+    settingsApi.patchUser(getUserApi.data.user.id, payload)
   );
   const patchPasswordApi = useApi((payload) =>
-    client.patch("api/settings/password/" + getUserApi.data.user.id, payload)
+    settingsApi.patchPassword(getUserApi.data.user.id, payload)
   );
 
   useEffect(() => {
-    getUser();
+    requestUser();
   }, []);
 
-  const getUser = async () => {
+  /**
+   * Send the GET request to the api getting the user information.
+   */
+  const requestUser = async () => {
     const result = await getUserApi.request();
     if (!result.ok) return setError(result.data.message);
   };
 
+  /**
+   * Handles the submit for Edit Details.
+   *
+   * @param {string} name The name of the user they want to change to
+   * @param {string} name The email of the user they want to change to
+   */
   const handleChangeDetailsSubmit = async ({ name, email }) => {
     getUserApi.data.user.name = name;
     getUserApi.data.user.email = email;
     const result = await patchUserApi.request(getUserApi.data.user);
     if (!result.ok) return setError(getUserApi.data.message);
     setEditing(false);
-    getUser();
+    requestUser();
     setMessage(result.data.message);
     setTimeout(() => {
       setMessage(null);
     }, 3000);
   };
 
+  /**
+   * Handles the submit for the Change password.
+   *
+   * @param {string} passwords The password the user wants to change to
+   */
   const handleChangePasswordSubmit = async (passwords) => {
     const result = await patchPasswordApi.request(passwords);
     if (!result.ok) return setError(result.data.message);
@@ -119,7 +140,7 @@ function AccountScreen({ navigation }) {
               Couldn't retrieve user detail.
             </AppText>
             <AppErrorMessage visible={error} visible={error} />
-            <AppButton title="RETRY" onPress={getUser} />
+            <AppButton title="RETRY" onPress={requestUser} />
           </>
         ) : (
           <KeyboardAvoidingView
@@ -129,7 +150,10 @@ function AccountScreen({ navigation }) {
           >
             <ScrollView
               refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={getUser} />
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={requestUser}
+                />
               }
             >
               <Image

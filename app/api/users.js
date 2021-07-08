@@ -1,18 +1,17 @@
 import client from "./client";
 
 /**
- * This module contains all the logic sending requests to the /users endpoint.
+ * This module contains all the logic sending requests to the api/user endpoint.
  * @module api/users
  */
 
-const endpoint = "/users";
+const endpoint = "api/user";
 
 /**
- * Send a get request to the users/me end point using the authentication
- * json web token.
- * @param {string} authToken - the authentication json web token of the user
+ * Send a GET request to the api/user end point
+ *
  */
-const getUser = (authToken) => client.get(endpoint + "/me", authToken);
+const getUser = () => client.get(endpoint);
 
 /**
  * Send a post request to the users end point, passing the information that the user

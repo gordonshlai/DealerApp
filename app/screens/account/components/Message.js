@@ -5,6 +5,11 @@ import AppText from "../../../components/AppText";
 
 import colors from "../../../config/colors";
 
+/**
+ * The floating green message used to prompt the user after an API call.
+ *
+ * @param {string} meesage The message to show after the API call.
+ */
 function Message({ message }) {
   return message ? (
     <View style={styles.container}>
