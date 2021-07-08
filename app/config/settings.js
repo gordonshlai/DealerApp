@@ -5,12 +5,10 @@ import Constants from "expo-constants";
  * environment of the application.
  * @module config/settings
  */
-
 const settings = {
   dev: {
     apiUrl: "https://dev-dealer.warrantywise.co.uk/app/",
-    // apiUrl: "http://ed1e89d6275d.ngrok.io/app/",
-    tradeEnv: "1",
+    tradeEnv: "1", // "1" means pulling data from the testing database.
   },
   staging: {
     apiUrl: "https://dev-dealer.warrantywise.co.uk/app/",
@@ -18,7 +16,7 @@ const settings = {
   },
   prod: {
     apiUrl: "https://dealer.warrantywise.co.uk/app/",
-    tradeEnv: "1",
+    tradeEnv: "1", // change this to "0" if decided to push the app live. It will pull the data from the live database.
   },
 };
 

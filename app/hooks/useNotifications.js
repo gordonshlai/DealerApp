@@ -1,8 +1,10 @@
 import { useEffect } from "react";
-import * as Permissions from "expo-permissions";
 import expoPushTokenApi from "../api/expoPushToken";
 import * as Notifications from "expo-notifications";
 
+/**
+ * configuration set up for notifications.
+ */
 export default useNotifications = (notificationListener) => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
