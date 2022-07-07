@@ -22,7 +22,7 @@ const AccountNavigator = () => (
     }}
   >
     <Stack.Screen
-      name={routes.ACCOUNT_INNER}
+      name={routes.ACCOUNT}
       component={AccountScreen}
       options={{ title: null }}
     />

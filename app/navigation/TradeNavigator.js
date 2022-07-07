@@ -18,7 +18,7 @@ const TradeNavigator = () => (
       headerRight: () => <Menu />,
     }}
   >
-    <Stack.Screen name={routes.TRADE_INNER} component={TradeScreen} />
+    <Stack.Screen name={routes.TRADE} component={TradeScreen} />
     <Stack.Screen
       name={routes.TRADE_DETAIL}
       component={TradeDetailScreen}

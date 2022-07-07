@@ -28,10 +28,7 @@ const WarrantyNavigator = () => {
         headerRight: () => <Menu />,
       }}
     >
-      <Stack.Screen
-        name={routes.WARRANTY_INNER}
-        component={CarWarrantyScreen}
-      />
+      <Stack.Screen name={routes.WARRANTY} component={CarWarrantyScreen} />
       <Stack.Screen
         name={routes.CAR_WARRANTY_VEHICLE_DETAIL_1}
         component={CarWarrantyVehicleDetailScreen1}

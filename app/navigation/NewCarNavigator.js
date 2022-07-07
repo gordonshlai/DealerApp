@@ -17,7 +17,7 @@ const NewCarNavigator = () => (
       headerRight: () => <Menu />,
     }}
   >
-    <Stack.Screen name={routes.NEW_CAR_INNER} component={NewCarScreen} />
+    <Stack.Screen name={routes.NEW_CAR} component={NewCarScreen} />
     <Stack.Screen
       name={routes.VEHICLE_DETAIL}
       component={VehicleDetailScreen}

@@ -90,6 +90,7 @@ const AppNavigator = () => {
           activeTintColor: defaultStyles.colors.primary,
           inactiveTintColor: "#8B8BA1",
           safeAreaInsets: { bottom: Platform.OS === "android" ? 10 : null },
+          headerShown: false,
           tabBarStyle: [
             {
               display: "flex",
@@ -107,12 +108,13 @@ const AppNavigator = () => {
         }}
       >
         <Tab.Screen
-          name={routes.HOME}
+          name={routes.HOME_ROOT}
           component={HomeNavigator}
           options={{
             tabBarIcon: ({ color, size }) => (
               <HomeIcon color={color} size={size} />
             ),
+            tabBarLabel: "Home",
           }}
           listeners={({ navigation, route }) => ({
             state: hideTabBar(navigation, route),
@@ -120,10 +122,11 @@ const AppNavigator = () => {
         />
 
         <Tab.Screen
-          name={routes.TRADE}
+          name={routes.TRADE_ROOT}
           component={TradeNavigator}
           options={{
             tabBarIcon: ({ color, size }) => <TradeCarsIcon color={color} />,
+            tabBarLabel: "Trade Cars",
           }}
           listeners={({ navigation, route }) => ({
             state: hideTabBar(navigation, route),
@@ -131,10 +134,11 @@ const AppNavigator = () => {
         />
 
         <Tab.Screen
-          name={routes.INVENTORY}
+          name={routes.INVENTORY_ROOT}
           component={InventoryNavigator}
           options={{
             tabBarIcon: ({ color, size }) => <CarIcon color={color} />,
+            tabBarLabel: "My Inventory",
           }}
           listeners={({ navigation, route }) => ({
             state: hideTabBar(navigation, route),
@@ -142,7 +146,7 @@ const AppNavigator = () => {
         />
 
         <Tab.Screen
-          name={routes.WARRANTY}
+          name={routes.WARRANTY_ROOT}
           component={WarrantyNavigator}
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -152,14 +156,16 @@ const AppNavigator = () => {
                 size={size}
               />
             ),
+            tabBarLabel: "Warranty",
           }}
         />
 
         <Tab.Screen
-          name={routes.MESSAGES}
+          name={routes.MESSAGES_ROOT}
           component={MessageNavigator}
           options={{
             tabBarIcon: ({ color, size }) => <MessagesIcon color={color} />,
+            tabBarLabel: "Messages",
             tabBarBadge: unread ? unread : null,
             tabBarBadgeStyle: {
               backgroundColor: colors.primary,
@@ -171,10 +177,11 @@ const AppNavigator = () => {
         />
 
         <Tab.Screen
-          name={routes.ACCOUNT}
+          name={routes.ACCOUNT_ROOT}
           component={AccountNavigator}
           options={{
             tabBarIcon: ({ color, size }) => <AccountIcon color={color} />,
+            tabBarLabel: "Account",
           }}
         />
       </Tab.Navigator>
