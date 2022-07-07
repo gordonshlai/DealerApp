@@ -8,10 +8,16 @@ import * as SplashScreen from "expo-splash-screen";
 import AuthNavigator from "./app/navigation/AuthNavigator";
 import navigationTheme from "./app/navigation/navigationTheme";
 import client from "./app/api/client";
-import { StatusBar, View } from "react-native";
+import { LogBox, StatusBar } from "react-native";
 // import OnboardingScreen from "./app/screens/OnboardingScreen";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 import { navigationRef } from "./app/navigation/rootNavigation";
+
+LogBox.ignoreLogs([
+  "ViewPropTypes will be removed from React Native. Migrate to ViewPropTypes exported from 'deprecated-react-native-prop-types'.",
+  "NativeBase: The contrast ratio of",
+  "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
+]);
 
 export default function App() {
   // const [isFirstLaunch, setIsFirstLaunch] = useState("null");
