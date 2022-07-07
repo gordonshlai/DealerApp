@@ -86,20 +86,24 @@ const AppNavigator = () => {
       }}
     >
       <Tab.Navigator
-        tabBarOptions={{
+        screenOptions={{
           activeTintColor: defaultStyles.colors.primary,
           inactiveTintColor: "#8B8BA1",
-          style: {
-            shadowColor: defaultStyles.colors.black,
-            shadowRadius: 5,
-            shadowOpacity: 0.5,
-            elevation: 10,
-            borderTopLeftRadius: 20,
-            borderTopRightRadius: 20,
-            keyboardHidesTabBar: true,
-            position: "absolute",
-          },
           safeAreaInsets: { bottom: Platform.OS === "android" ? 10 : null },
+          tabBarStyle: [
+            {
+              display: "flex",
+              shadowColor: defaultStyles.colors.black,
+              shadowRadius: 5,
+              shadowOpacity: 0.5,
+              elevation: 10,
+              borderTopLeftRadius: 20,
+              borderTopRightRadius: 20,
+              keyboardHidesTabBar: true,
+              position: "absolute",
+            },
+            null,
+          ],
         }}
       >
         <Tab.Screen
