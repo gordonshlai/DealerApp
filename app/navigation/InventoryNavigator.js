@@ -18,7 +18,7 @@ const InventoryNavigator = () => (
       headerRight: () => <Menu />,
     }}
   >
-    <Stack.Screen name={routes.INVENTORY} component={InventoryScreen} />
+    <Stack.Screen name={routes.INVENTORY_INNER} component={InventoryScreen} />
     <Stack.Screen
       name={routes.INVENTORY_DETAIL}
       component={InventoryDetailScreen}

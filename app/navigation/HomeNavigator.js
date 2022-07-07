@@ -35,7 +35,7 @@ const HomeNavigator = () => (
     }}
   >
     <Stack.Screen
-      name={routes.HOME}
+      name={routes.HOME_INNER}
       component={HomeScreen}
       options={{
         headerTitle: () => <WarrantywiseNoEye />,

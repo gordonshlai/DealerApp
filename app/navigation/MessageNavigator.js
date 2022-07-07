@@ -17,7 +17,7 @@ const MessageNavigator = () => (
       headerRight: () => <Menu />,
     }}
   >
-    <Stack.Screen name={routes.MESSAGES} component={MessagesScreen} />
+    <Stack.Screen name={routes.MESSAGES_INNER} component={MessagesScreen} />
     <Stack.Screen
       name={routes.MESSAGE_DETAIL}
       component={MessageDetailScreen}
