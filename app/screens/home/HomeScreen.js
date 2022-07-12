@@ -11,24 +11,25 @@ import {
 } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-import AppText from "../components/AppText";
-import Background from "../components/Background";
-import Screen from "../components/Screen";
-import { AppErrorMessage } from "../components/forms";
-import AppButton from "../components/AppButton";
-import ActivityIndicator from "../components/ActivityIndicator";
-import TradeCarsIcon from "../components/icons/TradeCarsIcon";
-import CarIcon from "../components/icons/CarIcon";
-import MessagesIcon from "../components/icons/MessagesIcon";
-import Card from "../components/Card";
-import NavigationButton from "../components/NavigationButton";
+import AppText from "../../components/AppText";
+import Background from "../../components/Background";
+import Screen from "../../components/Screen";
+import AppButton from "../../components/AppButton";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import TradeCarsIcon from "../../components/icons/TradeCarsIcon";
+import CarIcon from "../../components/icons/CarIcon";
+import MessagesIcon from "../../components/icons/MessagesIcon";
+import Card from "../../components/Card";
+import NavigationButton from "./components/NavigationButton";
 
-import colors from "../config/colors";
-import useApi from "../hooks/useApi";
-import client from "../api/client";
-import routes from "../navigation/routes";
-import defaultStyles from "../config/styles";
-import settings from "../config/settings";
+import colors from "../../config/colors";
+import useApi from "../../hooks/useApi";
+import routes from "../../navigation/routes";
+import defaultStyles from "../../config/styles";
+import userApi from "../../api/users";
+import tradeApi from "../../api/trade";
+import inventory from "../../api/inventory";
+import ErrorScreen from "./components/ErrorScreen";
 
 function HomeScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
@@ -36,15 +37,9 @@ function HomeScreen({ navigation }) {
   const [error, setError] = useState();
   const [refreshing, setRefreshing] = useState(false);
 
-  const getUserApi = useApi(() => client.get("api/user"));
-  const getTradeVehiclesApi = useApi(() =>
-    client.get(
-      `api/trade/all/inventory?make=all&seller=&env=${settings.tradeEnv}&sortBy=listed-desc&perPage=12&page=1`
-    )
-  );
-  const getInventoryVehiclesApi = useApi(() =>
-    client.get("api/inventory/vehicles?make=all&page=1")
-  );
+  const getUserApi = useApi(userApi.getUser);
+  const getTradeVehiclesApi = useApi(tradeApi.getTrade);
+  const getInventoryVehiclesApi = useApi(inventory.getInventory);
 
   const getUser = async () => {
     const result = await getUserApi.request();
@@ -78,13 +73,7 @@ function HomeScreen({ navigation }) {
         }
       />
       {getUserApi.error ? (
-        <View style={styles.screen}>
-          <AppText style={styles.errorMessage}>
-            Couldn't retrieve user detail.
-          </AppText>
-          <AppErrorMessage visible={error} visible={error} />
-          <AppButton title="RETRY" onPress={getUser} />
-        </View>
+        <ErrorScreen error={error} getUser={getUser} />
       ) : (
         <ScrollView
           refreshControl={
@@ -111,18 +100,11 @@ function HomeScreen({ navigation }) {
           </View>
           <View style={styles.bannerContainer}>
             <View style={styles.bannerInnerContainer}>
-              {/* <Slider
-                images={[require("../assets/Generic-Home-Banner.jpg")]}
-                height={(Dimensions.get("window").width - 40) / 1.5 / 0.8}
-                width={Dimensions.get("window").width - 40}
-                hasThumbnail={false}
-              /> */}
               <Image
-                source={require("../assets/Generic-Home-Banner.jpg")}
+                source={require("../../assets/Generic-Home-Banner.jpg")}
                 style={styles.bannerImage}
                 resizeMode="cover"
               />
-              {/* <AppText style={styles.bannerText}>DEALERS OFFER!</AppText> */}
             </View>
           </View>
           <View style={styles.navigationContainer}>
@@ -283,15 +265,6 @@ function HomeScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    padding: 20,
-  },
-  errorMessage: {
-    alignSelf: "center",
-    color: "white",
-    fontWeight: "bold",
-    fontSize: 24,
-  },
   listHeaderComponent: {
     marginHorizontal: 20,
     marginTop: 50,
@@ -332,14 +305,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width - 40,
     borderRadius: 10,
   },
-  // bannerText: {
-  //   position: "absolute",
-  //   color: colors.primary,
-  //   fontWeight: "bold",
-  //   fontSize: 20,
-  //   paddingHorizontal: 20,
-  //   ...defaultStyles.shadow,
-  // },
   navigationContainer: {
     flexDirection: "row",
     paddingHorizontal: 20,

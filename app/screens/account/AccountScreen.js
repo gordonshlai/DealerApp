@@ -92,7 +92,7 @@ function AccountScreen({ navigation }) {
    * Handles the submit for Edit Details.
    *
    * @param {string} name The name of the user they want to change to
-   * @param {string} name The email of the user they want to change to
+   * @param {string} email The email of the user they want to change to
    */
   const handleChangeDetailsSubmit = async ({ name, email }) => {
     getUserApi.data.user.name = name;
@@ -139,7 +139,7 @@ function AccountScreen({ navigation }) {
             <AppText style={styles.errorMessage}>
               Couldn't retrieve user detail.
             </AppText>
-            <AppErrorMessage visible={error} visible={error} />
+            <AppErrorMessage visible={error} />
             <AppButton title="RETRY" onPress={requestUser} />
           </>
         ) : (

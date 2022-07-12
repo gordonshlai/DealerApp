@@ -8,12 +8,14 @@ import {
   Platform,
 } from "react-native";
 
-import AppText from "./AppText";
+import AppText from "../../../components/AppText";
 
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
+import colors from "../../../config/colors";
+import defaultStyles from "../../../config/styles";
 
 /**
+ *
+ * The button on Home screen navigating to other stack navigators
  *
  * @param {function} onPress Function to be called when the button is pressed.
  * @param {string} icon The name of the icon, referring to https://icons.expo.fyi/

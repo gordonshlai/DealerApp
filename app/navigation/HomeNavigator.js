@@ -3,7 +3,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import Menu from "../components/Menu";
-import HomeScreen from "../screens/HomeScreen";
+import HomeScreen from "../screens/home/HomeScreen";
 import WarrantywiseNoEye from "../components/logos/WarrantywiseNoEye";
 
 import routes from "./routes";
