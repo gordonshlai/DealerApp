@@ -24,12 +24,12 @@ import defaultStyles from "../config/styles";
  * The list of routes to be rendered in the menu.
  */
 const list = [
-  routes.HOME,
-  routes.TRADE,
-  routes.INVENTORY,
-  routes.WARRANTY,
-  routes.MESSAGES,
-  routes.ACCOUNT,
+  routes.HOME_ROOT,
+  routes.TRADE_ROOT,
+  routes.INVENTORY_ROOT,
+  routes.WARRANTY_ROOT,
+  routes.MESSAGES_ROOT,
+  routes.ACCOUNT_ROOT,
 ];
 
 /**
@@ -88,7 +88,9 @@ function Menu() {
                       setModalVisible(false);
                     }}
                   >
-                    <AppText style={styles.text}>{item.toUpperCase()}</AppText>
+                    <AppText style={styles.text}>
+                      {item.split(" ")[0].toUpperCase()}
+                    </AppText>
                     {isActive && (
                       <MaterialCommunityIcons
                         name="check"
