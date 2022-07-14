@@ -7,29 +7,29 @@ import {
   StyleSheet,
   View,
 } from "react-native";
-import * as Yup from "yup";
 import { LinearGradient } from "expo-linear-gradient";
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
+import * as Yup from "yup";
 
-import client from "../api/client";
-import useAuth from "../auth/useAuth";
-import ActivityIndicator from "../components/ActivityIndicator";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
+import ActivityIndicator from "../../components/ActivityIndicator";
 import {
   AppErrorMessage,
+  AppInfoMessage,
   AppForm,
   AppFormField,
   SubmitButton,
-} from "../components/forms";
-import useApi from "../hooks/useApi";
+} from "../../components/forms";
+import Screen from "../../components/Screen";
 
-import routes from "../navigation/routes";
-import Screen from "../components/Screen";
+import useApi from "../../hooks/useApi";
+import client from "../../api/client";
+import colors from "../../config/colors";
 
 /**
  * The login screen, allowing user to input their login details and handling the
  * login operation based on the user input.
- * @module screens/SignInScreen
+ * @module screens/ResetPasswordScreen
  */
 
 /**
@@ -37,30 +37,33 @@ import Screen from "../components/Screen";
  */
 const validationSchema = Yup.object().shape({
   email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().label("Password"),
 });
 
 /**
- * The login screen functional component
+ * The reset password screen functional component
  */
-const SignInScreen = ({ navigation }) => {
-  // const loginApi = useApi(authApi.login);
-  const { logIn } = useAuth();
+const ResetPasswordScreen = ({ navigation }) => {
   const [error, setError] = useState();
+  const [info, setInfo] = useState();
+
+  const endpoint = "auth/reset";
+  const resetPasswordApi = useApi(({ email }) =>
+    client.post(endpoint, { email })
+  );
 
   /**
    * Handles the submit operation
-   * @param {string} password - the user input in the password field
+   * @param {string} email - the user input in the email field
    */
-  const endpoint = "auth/login";
-  const loginApi = useApi(({ email, password }) =>
-    client.post(endpoint, { email, password })
-  );
-
-  const handleSubmit = async ({ email, password }) => {
-    const result = await loginApi.request({ email, password });
-    if (!result.ok) return setError(result.data.message);
-    logIn(result.data.token);
+  const handleSubmit = async ({ email }) => {
+    const result = await resetPasswordApi.request({ email });
+    if (!result.ok) {
+      setError(result.data.message);
+      setInfo(null);
+      return;
+    }
+    setError(null);
+    setInfo(result.data.message);
   };
 
   return (
@@ -70,7 +73,7 @@ const SignInScreen = ({ navigation }) => {
         style={styles.background}
       />
 
-      <ActivityIndicator visible={loginApi.loading} />
+      <ActivityIndicator visible={resetPasswordApi.loading} />
 
       <Screen>
         <KeyboardAvoidingView
@@ -83,12 +86,17 @@ const SignInScreen = ({ navigation }) => {
             centerContent
             contentContainerStyle={styles.scrollView}
           >
-            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <Image
+              style={styles.logo}
+              source={require("../../assets/logo.png")}
+            />
             <AppForm
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ email: "" }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
+              <AppErrorMessage error={error} visible={error} />
+              <AppInfoMessage info={info} visible={info} />
               <View style={styles.formFieldContainer}>
                 <AppText style={styles.fieldName}>Email</AppText>
                 <AppFormField
@@ -101,31 +109,12 @@ const SignInScreen = ({ navigation }) => {
                   color="white"
                 />
               </View>
-              <View style={styles.formFieldContainer}>
-                <AppText style={styles.fieldName}>Password</AppText>
-                <AppFormField
-                  autoCapitalize="none"
-                  autoCorrect={false}
-                  name="password"
-                  placeholder="Type Your Password"
-                  secureTextEntry
-                  textContentType="password"
-                  color="white"
-                />
-              </View>
 
-              <AppErrorMessage error={error} visible={error} />
-              <SubmitButton title="Sign in" style={{ marginTop: 30 }} />
-              <AppText
-                style={styles.forgetPassword}
-                onPress={() => navigation.navigate(routes.RESET_PASSWORD)}
-              >
-                Forget Password?
-              </AppText>
+              <SubmitButton title="Send Password Reset" />
               <AppButton
                 title="Back"
                 backgroundColor={null}
-                onPress={() => navigation.navigate(routes.WELCOME)}
+                onPress={() => navigation.goBack()}
               />
             </AppForm>
           </ScrollView>
@@ -151,25 +140,18 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logo: {
-    width: 224,
+    width: 226,
     height: 80,
     alignSelf: "center",
     marginVertical: 30,
   },
-  fieldName: {
-    color: "white",
-    fontWeight: "bold",
-  },
   formFieldContainer: {
     marginVertical: 15,
   },
-  forgetPassword: {
-    alignSelf: "center",
-    color: "white",
-    fontStyle: "italic",
-    marginTop: 10,
-    marginBottom: 20,
+  fieldName: {
+    color: colors.lightGrey,
+    fontWeight: "bold",
   },
 });
 
-export default SignInScreen;
+export default ResetPasswordScreen;

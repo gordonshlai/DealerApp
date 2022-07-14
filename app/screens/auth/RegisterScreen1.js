@@ -9,23 +9,23 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Yup from "yup";
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
 
-import ActivityIndicator from "../components/ActivityIndicator";
-import client from "../api/client";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
+import ActivityIndicator from "../../components/ActivityIndicator";
 import {
   AppErrorMessage,
   AppForm,
   AppFormField,
   AppFormCheckBox,
   SubmitButton,
-} from "../components/forms";
-import Screen from "../components/Screen";
-import useApi from "../hooks/useApi";
+} from "../../components/forms";
+import Screen from "../../components/Screen";
 
-import routes from "../navigation/routes";
-import colors from "../config/colors";
+import client from "../../api/client";
+import useApi from "../../hooks/useApi";
+import routes from "../../navigation/routes";
+import colors from "../../config/colors";
 
 /**
  * The register screen, allowing user to input their details for registrating a new account
@@ -104,7 +104,10 @@ function RegisterScreen1({ navigation }) {
             centerContent
             contentContainerStyle={styles.scrollView}
           >
-            <Image style={styles.logo} source={require("../assets/logo.png")} />
+            <Image
+              style={styles.logo}
+              source={require("../../assets/logo.png")}
+            />
             <AppForm
               initialValues={{
                 fullName: "",

@@ -2,12 +2,11 @@ import React from "react";
 import { Image, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
 
-import colors from "../config/colors";
-
-import routes from "../navigation/routes";
+import colors from "../../config/colors";
+import routes from "../../navigation/routes";
 
 /**
  * The welcome screen, the screen where the users sees when starting the application.
@@ -26,7 +25,7 @@ function WelcomeScreen({ navigation }) {
       />
 
       <View style={styles.container}>
-        <Image style={styles.logo} source={require("../assets/logo.png")} />
+        <Image style={styles.logo} source={require("../../assets/logo.png")} />
         <View style={styles.buttonsContainer}>
           <AppButton
             title="Sign in"

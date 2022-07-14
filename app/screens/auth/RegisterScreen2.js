@@ -1,12 +1,13 @@
 import React from "react";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
-import Screen from "../components/Screen";
 
-import colors from "../config/colors";
-import routes from "../navigation/routes";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
+import Screen from "../../components/Screen";
+
+import colors from "../../config/colors";
+import routes from "../../navigation/routes";
 
 /**
  * The register screen, allowing user to input their details for registrating a new account
@@ -27,7 +28,10 @@ function RegisterScreen2({ navigation }) {
           centerContent
           contentContainerStyle={styles.scrollView}
         >
-          <Image style={styles.logo} source={require("../assets/logo.png")} />
+          <Image
+            style={styles.logo}
+            source={require("../../assets/logo.png")}
+          />
           <AppText style={styles.message}>
             THANK YOU FOR REGISTERING, BEFORE YOU CAN LOGIN YOUR ACCOUNT WILL
             NEED TO BE A APPROVED BY A MEMBER OF THE WISE TEAM.

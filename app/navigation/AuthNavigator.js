@@ -1,14 +1,13 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import WelcomeScreen from "../screens/WelcomeScreen";
-import SignInScreen from "../screens/SignInScreen";
-import RegisterScreen1 from "../screens/RegisterScreen1";
-import RegisterScreen2 from "../screens/RegisterScreen2";
-import ResetPasswordScreen from "../screens/ResetPasswordScreen";
+import WelcomeScreen from "../screens/auth/WelcomeScreen";
+import SignInScreen from "../screens/auth/SignInScreen";
+import RegisterScreen1 from "../screens/auth/RegisterScreen1";
+import RegisterScreen2 from "../screens/auth/RegisterScreen2";
+import ResetPasswordScreen from "../screens/auth/ResetPasswordScreen";
 
 import routes from "./routes";
-
 import defaultStyles from "../config/styles";
 
 const Stack = createStackNavigator();
