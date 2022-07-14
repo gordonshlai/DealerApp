@@ -7,7 +7,8 @@ import Constants from "expo-constants";
  */
 const settings = {
   dev: {
-    apiUrl: "https://dev-dealer.warrantywise.co.uk/app/",
+    // apiUrl: "https://dev-dealer.warrantywise.co.uk/app/",
+    apiUrl: "https://dealer.warrantywise.co.uk/app/",
     tradeEnv: "1", // "1" means pulling data from the testing database.
   },
   staging: {
