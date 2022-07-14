@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import InventoryScreen from "../screens/InventoryScreen";
-import InventoryDetailScreen from "../screens/InventoryDetailScreen";
+import InventoryScreen from "../screens/inventory/InventoryScreen";
+import InventoryDetailScreen from "../screens/inventory/InventoryDetailScreen";
 import NewCarNavigator from "./NewCarNavigator";
 import Menu from "../components/Menu";
 

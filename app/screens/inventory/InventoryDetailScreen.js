@@ -15,29 +15,29 @@ import {
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 
-import ActivityIndicator from "../components/ActivityIndicator";
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
-import Info from "../components/Info";
-import Registration from "../components/Registration";
-import Slider from "../components/Slider";
-import SpecificationItem from "../components/SpecificationItem";
-import { ListItemSeparator } from "../components/lists";
-import Screen from "../components/Screen";
-import routes from "../navigation/routes";
-import { AppErrorMessage } from "../components/forms";
-import TermsAndConditions from "../components/TermsAndConditions";
-import AuthContext from "../auth/context";
-import Background from "../components/Background";
-import MotHistory from "../components/MotHistory";
-import AppSwitch from "../components/AppSwitch";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
+import Info from "../../components/Info";
+import Registration from "../../components/Registration";
+import Slider from "../../components/Slider";
+import SpecificationItem from "../../components/SpecificationItem";
+import { ListItemSeparator } from "../../components/lists";
+import Screen from "../../components/Screen";
+import routes from "../../navigation/routes";
+import { AppErrorMessage } from "../../components/forms";
+import TermsAndConditions from "../../components/TermsAndConditions";
+import AuthContext from "../../auth/context";
+import Background from "../../components/Background";
+import MotHistory from "../../components/MotHistory";
+import AppSwitch from "../../components/AppSwitch";
 
-import client from "../api/client";
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
-import useApi from "../hooks/useApi";
-import CoverOption from "./warranty/components/CoverOption";
-import WarrantyContext from "../warranty/context";
+import client from "../../api/client";
+import colors from "../../config/colors";
+import defaultStyles from "../../config/styles";
+import useApi from "../../hooks/useApi";
+import CoverOption from "../warranty/components/CoverOption";
+import WarrantyContext from "../../warranty/context";
 
 dayjs.extend(customParseFormat);
 
