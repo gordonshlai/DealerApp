@@ -22,10 +22,10 @@ import {
 } from "../../components/forms";
 import Screen from "../../components/Screen";
 
-import client from "../../api/client";
 import useApi from "../../hooks/useApi";
 import routes from "../../navigation/routes";
 import colors from "../../config/colors";
+import authApi from "../../api/auth";
 
 /**
  * The register screen, allowing user to input their details for registrating a new account
@@ -62,16 +62,7 @@ const validationSchema = Yup.object().shape({
 function RegisterScreen1({ navigation }) {
   const [error, setError] = useState();
 
-  const endpoint = "auth/register";
-  const registerApi = useApi(({ fullName, businessName, email, password }) =>
-    client.post(endpoint, {
-      name: fullName,
-      note: businessName,
-      email,
-      password_1: password,
-      password_2: password,
-    })
-  );
+  const registerApi = useApi((info) => authApi.register(info));
 
   const handleSubmit = async ({ fullName, businessName, email, password }) => {
     const result = await registerApi.request({

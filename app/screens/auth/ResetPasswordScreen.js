@@ -23,8 +23,8 @@ import {
 import Screen from "../../components/Screen";
 
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
 import colors from "../../config/colors";
+import authApi from "../../api/auth";
 
 /**
  * The login screen, allowing user to input their login details and handling the
@@ -46,10 +46,7 @@ const ResetPasswordScreen = ({ navigation }) => {
   const [error, setError] = useState();
   const [info, setInfo] = useState();
 
-  const endpoint = "auth/reset";
-  const resetPasswordApi = useApi(({ email }) =>
-    client.post(endpoint, { email })
-  );
+  const resetPasswordApi = useApi((info) => authApi.reset(info));
 
   /**
    * Handles the submit operation

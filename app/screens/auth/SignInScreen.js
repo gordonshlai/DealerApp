@@ -22,9 +22,9 @@ import {
 
 import useAuth from "../../auth/useAuth";
 import useApi from "../../hooks/useApi";
-import client from "../../api/client";
 import routes from "../../navigation/routes";
 import Screen from "../../components/Screen";
+import authApi from "../../api/auth";
 
 /**
  * The login screen, allowing user to input their login details and handling the
@@ -48,17 +48,14 @@ const SignInScreen = ({ navigation }) => {
   const { logIn } = useAuth();
   const [error, setError] = useState();
 
+  const loginApi = useApi((info) => authApi.login(info));
+
   /**
    * Handles the submit operation
-   * @param {string} password - the user input in the password field
+   * @param {object} info - the user input including the email and password field
    */
-  const endpoint = "auth/login";
-  const loginApi = useApi(({ email, password }) =>
-    client.post(endpoint, { email, password })
-  );
-
-  const handleSubmit = async ({ email, password }) => {
-    const result = await loginApi.request({ email, password });
+  const handleSubmit = async (info) => {
+    const result = await loginApi.request(info);
     if (!result.ok) return setError(result.data.message);
     logIn(result.data.token);
   };
