@@ -189,7 +189,9 @@ function TradeScreen({ navigation }) {
           </>
         ) : (
           <>
-            <NewCarButton onPress={() => navigation.navigate(routes.NEW_CAR)} />
+            <NewCarButton
+              onPress={() => navigation.navigate(routes.NEW_CAR_ROOT)}
+            />
             <ButtonGroup
               buttons={body_styleArray}
               selectedIndex={

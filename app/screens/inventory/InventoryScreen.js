@@ -137,7 +137,9 @@ function InventoryScreen({ navigation }) {
             }}
           />
           <Screen>
-            <NewCarButton onPress={() => navigation.navigate(routes.NEW_CAR)} />
+            <NewCarButton
+              onPress={() => navigation.navigate(routes.NEW_CAR_ROOT)}
+            />
 
             <View style={styles.optionBar}>
               <OptionButton

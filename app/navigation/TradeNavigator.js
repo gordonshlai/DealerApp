@@ -33,7 +33,7 @@ const TradeNavigator = () => (
       })}
     />
     <Stack.Screen
-      name={routes.NEW_CAR}
+      name={routes.NEW_CAR_ROOT}
       component={NewCarNavigator}
       options={{ headerShown: false }}
     />

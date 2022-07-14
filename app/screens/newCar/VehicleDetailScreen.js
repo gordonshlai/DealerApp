@@ -11,8 +11,8 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import dayjs from "dayjs";
 
-import AppButton from "../components/AppButton";
-import Screen from "../components/Screen";
+import AppButton from "../../components/AppButton";
+import Screen from "../../components/Screen";
 import {
   AppErrorMessage,
   AppFormDateTimePicker,
@@ -20,19 +20,19 @@ import {
   AppFormPicker,
   FormImagePicker,
   SubmitButton,
-} from "../components/forms";
-import ActivityIndicator from "../components/ActivityIndicator";
-import Background from "../components/Background";
-import UploadScreen from "./UploadScreen";
-import ToolTip from "../components/ToolTip";
-import AppText from "../components/AppText";
+} from "../../components/forms";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Background from "../../components/Background";
+import UploadScreen from "../UploadScreen";
+import ToolTip from "../../components/ToolTip";
+import AppText from "../../components/AppText";
 
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
-import routes from "../navigation/routes";
-import useApi from "../hooks/useApi";
-import client from "../api/client";
-import AuthContext from "../auth/context";
+import colors from "../../config/colors";
+import defaultStyles from "../../config/styles";
+import routes from "../../navigation/routes";
+import useApi from "../../hooks/useApi";
+import client from "../../api/client";
+import AuthContext from "../../auth/context";
 
 LogBox.ignoreLogs([
   "Non-serializable values were found in the navigation state",

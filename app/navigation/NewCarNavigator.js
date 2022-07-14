@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import NewCarScreen from "../screens/NewCarScreen";
-import VehicleDetailScreen from "../screens/VehicleDetailScreen";
+import NewCarScreen from "../screens/newCar/NewCarScreen";
+import VehicleDetailScreen from "../screens/newCar/VehicleDetailScreen";
 import Menu from "../components/Menu";
 
 import routes from "./routes";

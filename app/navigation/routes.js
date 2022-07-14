@@ -20,6 +20,7 @@ export default Object.freeze({
   INVENTORY: "My Inventory",
   INVENTORY_DETAIL: "Inventory Detail",
 
+  NEW_CAR_ROOT: "Add New Vehicle Root",
   NEW_CAR: "Add New Vehicle",
   VEHICLE_DETAIL: "Vehicle detail",
 

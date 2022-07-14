@@ -7,22 +7,22 @@ import {
 } from "react-native";
 import * as Yup from "yup";
 
-import client from "../api/client";
-import AppButton from "../components/AppButton";
-import Screen from "../components/Screen";
+import client from "../../api/client";
+import AppButton from "../../components/AppButton";
+import Screen from "../../components/Screen";
 import {
   AppErrorMessage,
   AppForm,
   RegistrationPlateInput,
   SubmitButton,
-} from "../components/forms";
-import ActivityIndicator from "../components/ActivityIndicator";
-import Background from "../components/Background";
+} from "../../components/forms";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Background from "../../components/Background";
 
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
-import useApi from "../hooks/useApi";
-import routes from "../navigation/routes";
+import colors from "../../config/colors";
+import defaultStyles from "../../config/styles";
+import useApi from "../../hooks/useApi";
+import routes from "../../navigation/routes";
 
 const validationSchema = Yup.object().shape({
   registration: Yup.string().required().label("Registration"),
