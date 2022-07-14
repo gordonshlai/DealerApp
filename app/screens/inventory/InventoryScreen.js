@@ -21,6 +21,7 @@ import defaultStyles from "../../config/styles";
 import routes from "../../navigation/routes";
 import AuthContext from "../../auth/context";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
+import inventoryApi from "../../api/inventory";
 
 const statusArray = ["", "stock", "listed", "sold"];
 const statusDisplayArray = ["All", "In Stock", "Trade Listed", "Sold"];
@@ -44,16 +45,9 @@ function InventoryScreen({ navigation }) {
 
   const [serachBarVisible, setSearchBarVisible] = useState(false);
 
-  let endpoint =
-    "api/inventory/vehicles?make=" +
-    make +
-    "&status=" +
-    status +
-    "&page=" +
-    pageCurrent +
-    "&search=" +
-    search;
-  const getVehiclesApi = useApi(() => client.get(endpoint));
+  const getVehiclesApi = useApi(() =>
+    inventoryApi.getInventory(make, status, pageCurrent, search)
+  );
 
   useEffect(() => {
     getData();
@@ -66,7 +60,6 @@ function InventoryScreen({ navigation }) {
 
   const getData = async () => {
     const result = await getVehiclesApi.request();
-    console.log(endpoint);
     if (!result.ok) return setError(result.data.message);
     const newVehicles = result.data.data;
     const newVehiclesArray = parseObjectToArray(newVehicles);
@@ -74,7 +67,7 @@ function InventoryScreen({ navigation }) {
   };
 
   const getMakes = async () => {
-    const result = await client.get("api/inventory/makes");
+    const result = await inventoryApi.getMakes();
     if (!result.ok) return setError(result.data.message);
     const makes = result.data;
     const makesArray = parseObjectToArray(makes);

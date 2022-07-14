@@ -31,6 +31,11 @@ import tradeApi from "../../api/trade";
 import inventory from "../../api/inventory";
 import ErrorScreen from "./components/ErrorScreen";
 
+const make = "all";
+const status = "";
+const pageCurrent = "1";
+const search = "";
+
 function HomeScreen({ navigation }) {
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -39,7 +44,9 @@ function HomeScreen({ navigation }) {
 
   const getUserApi = useApi(userApi.getUser);
   const getTradeVehiclesApi = useApi(tradeApi.getTrade);
-  const getInventoryVehiclesApi = useApi(inventory.getInventory);
+  const getInventoryVehiclesApi = useApi(() =>
+    inventory.getInventory(make, status, pageCurrent, search)
+  );
 
   const getUser = async () => {
     const result = await getUserApi.request();

@@ -8,15 +8,24 @@ import client from "./client";
 const endpoint = "api/inventory";
 
 /**
- * Send a GET request to the api/trade end point
+ * Send a GET request to the api/inventory/vehicles end point
+ *
+ * @param {string} make the make of the vehicles
+ * @param {string} status the status of the vehicles (in stock/ listed/ sold)
+ * @param {string|number} pageCurrent the current page for the pagination
+ * @param {string} search the string search against the vehicle title
+ * @returns list of vehicles in the inventory
  */
-const getInventory = () => client.get(`${endpoint}/vehicles?make=all&page=1`);
+const getInventory = (make, status, pageCurrent, search) =>
+  client.get(
+    `${endpoint}/vehicles?make=${make}&status=${status}page=${pageCurrent}&search=${search}`
+  );
 
 /**
- * Send a post request to the users end point, passing the information that the user
- * has input.
- * @param {object} userInfo - the information the user has input, sent from Formik.
+ * Send a GET request to the api/inventory/makes end point
+ *
+ * @returns a list of car makes
  */
-// const register = (userInfo) => client.post(endpoint, userInfo);
+const getMakes = () => client.get(`${endpoint}/makes`);
 
-export default { getInventory };
+export default { getInventory, getMakes };
