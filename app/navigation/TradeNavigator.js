@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import TradeScreen from "../screens/TradeScreen";
-import TradeDetailScreen from "../screens/TradeDetailScreen";
+import TradeScreen from "../screens/trade/TradeScreen";
+import TradeDetailScreen from "../screens/trade/TradeDetailScreen";
 import NewCarNavigator from "./NewCarNavigator";
 import Menu from "../components/Menu";
 

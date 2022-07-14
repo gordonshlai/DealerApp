@@ -10,26 +10,26 @@ import {
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import Constants from "expo-constants";
 
-import AppButton from "../components/AppButton";
-import Loading from "../components/Loading";
-import AppText from "../components/AppText";
-import Card from "../components/Card";
-import Screen from "../components/Screen";
-import NewCarButton from "../navigation/NewCarButton";
-import ButtonGroup from "../components/ButtonGroup";
-import ActivityIndicator from "../components/ActivityIndicator";
-import OptionButton from "../components/OptionButton";
-import AuthContext from "../auth/context";
-import { AppErrorMessage } from "../components/forms";
-import MultiplePicker from "../components/MultiplePicker";
+import AppButton from "../../components/AppButton";
+import Loading from "../../components/Loading";
+import AppText from "../../components/AppText";
+import Card from "../../components/Card";
+import Screen from "../../components/Screen";
+import NewCarButton from "../../navigation/NewCarButton";
+import ButtonGroup from "../../components/ButtonGroup";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import OptionButton from "../../components/OptionButton";
+import AuthContext from "../../auth/context";
+import { AppErrorMessage } from "../../components/forms";
+import MultiplePicker from "../../components/MultiplePicker";
 
-import colors from "../config/colors";
-import client from "../api/client";
-import useApi from "../hooks/useApi";
-import defaultStyle from "../config/styles";
-import routes from "../navigation/routes";
-import useDidMountEffect from "../hooks/useDidMountEffect";
-import settings from "../config/settings";
+import colors from "../../config/colors";
+import client from "../../api/client";
+import useApi from "../../hooks/useApi";
+import defaultStyle from "../../config/styles";
+import routes from "../../navigation/routes";
+import useDidMountEffect from "../../hooks/useDidMountEffect";
+import settings from "../../config/settings";
 
 const sortByQueryArray = [
   "listed-desc",

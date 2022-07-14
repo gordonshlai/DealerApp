@@ -15,8 +15,8 @@ import * as Yup from "yup";
 import { CheckBox } from "react-native-elements";
 import { Formik } from "formik";
 
-import AppButton from "../components/AppButton";
-import AppText from "../components/AppText";
+import AppButton from "../../components/AppButton";
+import AppText from "../../components/AppText";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import {
   AppErrorMessage,
@@ -24,22 +24,22 @@ import {
   AppFormCheckBox,
   AppFormField,
   SubmitButton,
-} from "../components/forms";
-import Background from "../components/Background";
-import ActivityIndicator from "../components/ActivityIndicator";
-import Registration from "../components/Registration";
-import Info from "../components/Info";
-import SpecificationItem from "../components/SpecificationItem";
-import { ListItemSeparator } from "../components/lists";
-import Slider from "../components/Slider";
-import Screen from "../components/Screen";
+} from "../../components/forms";
+import Background from "../../components/Background";
+import ActivityIndicator from "../../components/ActivityIndicator";
+import Registration from "../../components/Registration";
+import Info from "../../components/Info";
+import SpecificationItem from "../../components/SpecificationItem";
+import { ListItemSeparator } from "../../components/lists";
+import Slider from "../../components/Slider";
+import Screen from "../../components/Screen";
 
-import client from "../api/client";
-import useApi from "../hooks/useApi";
-import colors from "../config/colors";
-import defaultStyles from "../config/styles";
-import routes from "../navigation/routes";
-import AuthContext from "../auth/context";
+import client from "../../api/client";
+import useApi from "../../hooks/useApi";
+import colors from "../../config/colors";
+import defaultStyles from "../../config/styles";
+import routes from "../../navigation/routes";
+import AuthContext from "../../auth/context";
 
 const offerValidationSchema = Yup.object().shape({
   price: Yup.number().required().min(0).label("Price"),
