@@ -166,7 +166,7 @@ const AppNavigator = () => {
           options={{
             tabBarIcon: ({ color, size }) => <MessagesIcon color={color} />,
             tabBarLabel: "Messages",
-            tabBarBadge: unread ? unread : null,
+            tabBarBadge: unread || null,
             tabBarBadgeStyle: {
               backgroundColor: colors.primary,
               color: "white",

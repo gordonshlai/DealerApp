@@ -34,6 +34,9 @@ export default function App() {
     restoreToken();
   }, []);
 
+  /**
+   * restore the authentication json web token from the secure storage of the application.
+   */
   const restoreToken = async () => {
     try {
       // Keep the splash screen visible while we fetch resources
@@ -88,9 +91,27 @@ export default function App() {
   //   });
   // };
 
-  /**
-   * restore the authentication json web token from the secure storage of the application.
-   */
+  // useEffect(() => {
+  //   repeatRequest();
+  // }, [authToken]);
+
+  // const repeatRequest = async () => {
+  //   if (!authToken) return;
+
+  //   const storageToken = await authStorage.getToken();
+  //   if (!storageToken) return;
+
+  //   const user = await client.get("api/user");
+  //   if (!user.ok) return;
+
+  //   const result = await client.get("api/inbox/unread");
+  //   console.log(result.data);
+  //   setUnread(result.data);
+
+  //   setTimeout(() => {
+  //     repeatRequest();
+  //   }, 30000);
+  // };
 
   if (!isReady) return null;
   return (
