@@ -11,24 +11,24 @@ import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import dayjs from "dayjs";
 import * as Yup from "yup";
 
-import Conversation from "../components/Conversation";
-import Loading from "../components/Loading";
+import Conversation from "../../components/Conversation";
+import Loading from "../../components/Loading";
 import {
   AppErrorMessage,
   AppForm,
   AppFormField,
   SubmitButton,
-} from "../components/forms";
-import AppButton from "../components/AppButton";
-import Screen from "../components/Screen";
-import AppText from "../components/AppText";
-import Background from "../components/Background";
+} from "../../components/forms";
+import AppButton from "../../components/AppButton";
+import Screen from "../../components/Screen";
+import AppText from "../../components/AppText";
+import Background from "../../components/Background";
 
-import defaultStyles from "../config/styles";
-import colors from "../config/colors";
-import client from "../api/client";
-import useApi from "../hooks/useApi";
-import AuthContext from "../auth/context";
+import defaultStyles from "../../config/styles";
+import colors from "../../config/colors";
+import client from "../../api/client";
+import useApi from "../../hooks/useApi";
+import AuthContext from "../../auth/context";
 
 const validationSchema = Yup.object().shape({
   text: Yup.string().label("Text Message"),

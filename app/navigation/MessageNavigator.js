@@ -1,8 +1,8 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import MessagesScreen from "../screens/MessagesScreen";
-import MessageDetailScreen from "../screens/MessageDetailScreen";
+import MessagesScreen from "../screens/message/MessagesScreen";
+import MessageDetailScreen from "../screens/message/MessageDetailScreen";
 import Menu from "../components/Menu";
 
 import routes from "./routes";
