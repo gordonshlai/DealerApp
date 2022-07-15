@@ -2,22 +2,17 @@ import React, { memo, useContext, useEffect, useState } from "react";
 import { StyleSheet, FlatList, View, Platform } from "react-native";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
-import AppButton from "../../components/AppButton";
 import Loading from "../../components/Loading";
 import AppText from "../../components/AppText";
-import AppTextInput from "../../components/AppTextInput";
 import Card from "../../components/Card";
 import Screen from "../../components/Screen";
 import NewCarButton from "../../navigation/NewCarButton";
-import OptionButton from "../../components/OptionButton";
 import ButtonGroup from "../../components/ButtonGroup";
-import ActivityIndicator from "../../components/ActivityIndicator";
-import { AppErrorMessage } from "../../components/forms";
+import ErrorScreen from "./components/ErrorScreen";
+import OptionBar from "./components/OptionBar";
 
-import client from "../../api/client";
 import useApi from "../../hooks/useApi";
 import colors from "../../config/colors";
-import defaultStyles from "../../config/styles";
 import routes from "../../navigation/routes";
 import AuthContext from "../../auth/context";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
@@ -42,8 +37,6 @@ function InventoryScreen({ navigation }) {
   const [status, setStatus] = useState(statusArray[0]);
   const [pageCurrent, setPageCurrent] = useState(1);
   const [search, setSearch] = useState("");
-
-  const [serachBarVisible, setSearchBarVisible] = useState(false);
 
   const getVehiclesApi = useApi(() =>
     inventoryApi.getInventory(make, status, pageCurrent, search)
@@ -74,12 +67,6 @@ function InventoryScreen({ navigation }) {
     setMakesArray(["all", ...makesArray]);
   };
 
-  const handleRefresh = () => {
-    setVehicles([]);
-    setPageCurrent(1);
-    setReload(!reload);
-  };
-
   const parseObjectToArray = (obj) => {
     let arr = [];
     for (let x in obj) {
@@ -88,15 +75,10 @@ function InventoryScreen({ navigation }) {
     return arr;
   };
 
-  let searchCheck;
-  const handleSearch = (text) => {
-    searchCheck = text;
-    setTimeout(() => {
-      if (searchCheck == text) {
-        setSearch(text);
-        handleRefresh();
-      }
-    }, 500);
+  const handleRefresh = () => {
+    setVehicles([]);
+    setPageCurrent(1);
+    setReload(!reload);
   };
 
   const handleLazyLoading = () => {
@@ -109,16 +91,11 @@ function InventoryScreen({ navigation }) {
   return (
     <Screen>
       {getVehiclesApi.error ? (
-        <>
-          <ActivityIndicator visible={getVehiclesApi.loading} />
-          <View style={styles.errorContainer}>
-            <AppText style={styles.errorMessage}>
-              Couldn't retrieve the vehicles.
-            </AppText>
-            <AppErrorMessage visible={error} error={error} />
-            <AppButton title="RETRY" onPress={handleRefresh} />
-          </View>
-        </>
+        <ErrorScreen
+          loading={getVehiclesApi.loading}
+          handleRefresh={handleRefresh}
+          error={error}
+        />
       ) : (
         <>
           <ButtonGroup
@@ -134,53 +111,15 @@ function InventoryScreen({ navigation }) {
               onPress={() => navigation.navigate(routes.NEW_CAR_ROOT)}
             />
 
-            <View style={styles.optionBar}>
-              <OptionButton
-                title={make.toUpperCase()}
-                backgroundColor={null}
-                color={colors.primary}
-                border={false}
-                icon="car"
-                size={16}
-                modalTitle="Filter"
-                initialValue="all"
-                value={make}
-                queryArray={makesArray}
-                displayArray={makesArray}
-                onSelect={(query) => {
-                  setMake(query);
-                  handleRefresh();
-                }}
-              />
-              <AppButton
-                icon={serachBarVisible ? "magnify-close" : "magnify"}
-                backgroundColor={null}
-                color={colors.primary}
-                border={false}
-                size={20}
-                badge={search !== ""}
-                onPress={() => setSearchBarVisible(!serachBarVisible)}
-              />
-            </View>
-            <View
-              style={
-                serachBarVisible
-                  ? styles.searchBarVisible
-                  : styles.searchBarInvisible
-              }
-            >
-              <AppTextInput
-                icon="magnify"
-                placeholder="Enter Your Registration"
-                style={styles.searchBar}
-                onChangeText={handleSearch}
-              />
-            </View>
-            {vehicles.length === 0 && !getVehiclesApi.loading && (
-              <AppText style={styles.noMatchingVehicles}>
-                No matching vehicles
-              </AppText>
-            )}
+            <OptionBar
+              make={make}
+              setMake={setMake}
+              makesArray={makesArray}
+              search={search}
+              setSearch={setSearch}
+              handleRefresh={handleRefresh}
+            />
+
             <FlatList
               data={vehicles}
               keyExtractor={(vehicle, index) => index.toString()}
@@ -213,6 +152,11 @@ function InventoryScreen({ navigation }) {
                   <Loading visible={getVehiclesApi.loading} />
                 </View>
               }
+              ListEmptyComponent={
+                <AppText style={styles.noMatchingVehicles}>
+                  No matching vehicles
+                </AppText>
+              }
               columnWrapperStyle={styles.columnWrapper}
             />
           </Screen>
@@ -235,24 +179,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
     fontSize: 24,
-  },
-  optionBar: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 20,
-  },
-  searchBar: {
-    backgroundColor: "white",
-    borderRadius: 10,
-    ...defaultStyles.shadow,
-  },
-  searchBarVisible: {
-    opacity: 1,
-    marginHorizontal: 20,
-  },
-  searchBarInvisible: {
-    height: 0,
-    opacity: 0,
   },
   noMatchingVehicles: {
     fontSize: 24,
