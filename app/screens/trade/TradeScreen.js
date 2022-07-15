@@ -30,6 +30,7 @@ import defaultStyle from "../../config/styles";
 import routes from "../../navigation/routes";
 import useDidMountEffect from "../../hooks/useDidMountEffect";
 import settings from "../../config/settings";
+import ErrorScreen from "./components/ErrorScreen";
 
 const sortByQueryArray = [
   "listed-desc",
@@ -177,16 +178,11 @@ function TradeScreen({ navigation }) {
     <>
       <Screen>
         {getVehiclesApi.error ? (
-          <>
-            <ActivityIndicator visible={getVehiclesApi.loading} />
-            <View style={styles.errorContainer}>
-              <AppText style={styles.errorMessage}>
-                Couldn't retrieve the vehicles.
-              </AppText>
-              <AppErrorMessage visible={error} error={error} />
-              <AppButton title="RETRY" onPress={handleRefresh} />
-            </View>
-          </>
+          <ErrorScreen
+            loading={getVehiclesApi.loading}
+            handleRefresh={handleRefresh}
+            error={error}
+          />
         ) : (
           <>
             <NewCarButton
